@@ -16,7 +16,7 @@ const config = {
 		options: {},
 	},
 	stories: [
-		'../**/*.stories.js',
+		'../**/*.story.js',
 	],
 };
 export default config;
