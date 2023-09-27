@@ -1,5 +1,10 @@
 <script>
+import TeraFy from '#tera-fy';
+
 export default {
+	created() {
+		return TeraFy.init();
+	},
 }
 </script>
 
