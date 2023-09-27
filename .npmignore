@@ -1,0 +1,4 @@
+./.storybook/
+**/*.stories.js
+**/*.demo.vue
+test/
