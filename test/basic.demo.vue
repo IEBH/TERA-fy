@@ -1,9 +1,12 @@
 <script>
-import TeraFy from '#tera-fy';
+import tera from '#tera-fy';
 
 export default {
+	data() { return {
+		tera,
+	}},
 	created() {
-		return TeraFy.init();
+		return tera.init();
 	},
 }
 </script>
@@ -11,9 +14,18 @@ export default {
 <template>
 	<div>
 		<div class="card">
+			<div class="card-header">TERA messaging</div>
 			<div class="card-body">
-				Basic <em>Hello World</em> usage
+				<div class="list-group">
+					<a @click="tera.send({action: 'handshake'})" class="list-group-item list-group-item-action">Handshake</a>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
+
+<style>
+.list-group-item-action {
+	cursor: pointer;
+}
+</style>
