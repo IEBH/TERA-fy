@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "TERA client-site worker",
   "scripts": {
-    "dev": "serve .",
-    "build:docs": "concurrently 'npm:build:docs:*'",
+    "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap --serve --servedir=.",
+    "build": "concurrently 'npm:build:*'",
+    "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap",
     "build:docs:client": "jsdoc2md --files lib/terafy.client.js >docs/terafy.client.md",
     "build:docs:server": "jsdoc2md --files lib/terafy.server.js >docs/terafy.server.md"
   },
@@ -13,7 +14,8 @@
     "#terafy": "./lib/terafy.client.js"
   },
   "exports": {
-    ".": "./lib/terafy.client.js"
+    ".": "./lib/terafy.client.js",
+    "./server": "./lib/terafy.server.js"
   },
   "repository": {
     "type": "git",
@@ -50,12 +52,17 @@
   "engines": {
     "node": ">=18"
   },
+  "peerDependencies": {
+    "just-diff": "^6.0.2",
+    "nanoid": "^5.0.2",
+    "vue": "^3.3.7"
+  },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^1.0.7",
     "concurrently": "^8.2.2",
+    "esbuild": "^0.19.5",
     "eslint": "^8.47.0",
-    "jsdoc-to-markdown": "^8.0.0",
-    "serve": "^14.2.1"
+    "jsdoc-to-markdown": "^8.0.0"
   },
   "eslintConfig": {
     "extends": "@momsfriendlydevco",

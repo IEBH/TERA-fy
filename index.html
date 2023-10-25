@@ -20,8 +20,16 @@
 	</style>
 
 	<script type="module">
+		import TeraFy from './dist/terafy.js';
+
 		Vue.createApp({
 			data() { return {
+				/**
+				* Actual TeraFy instance to use in testing
+				* @type {TeraFy}
+				*/
+				terafy: TeraFy,
+
 				/**
 				* Last response from a method
 				* @type {String}
@@ -42,16 +50,20 @@
 				*/
 				run(method, ...args) {
 					Promise.resolve()
-						.then(()=> terafy[method](...args))
+						.then(()=> this.terafy[method](...args))
 						.then(res => {
 							this.response = res;
 							this.isError = false;
 						})
 						.catch(e => {
 							this.response = 'Error: ' + e.toString();
+							console.warn('TERA threw error', e);
 							this.isError = true;
 						})
 				},
+			},
+			mounted() {
+				return this.terafy.init();
 			},
 		}).mount('#app');
 	</script>
