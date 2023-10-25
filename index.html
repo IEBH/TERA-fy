@@ -28,7 +28,9 @@
 				* Actual TeraFy instance to use in testing
 				* @type {TeraFy}
 				*/
-				terafy: TeraFy,
+				terafy: new TeraFy({
+					devMode: true,
+				}),
 
 				/**
 				* Last response from a method
@@ -73,6 +75,29 @@
 		<div class="container pt-4">
 			<div class="row">
 				<div class="col-sm-12 col-md-6">
+
+					<!-- Client specifics {{{ -->
+					<div class="card mb-2">
+						<div class="card-header">Client Specifics</div>
+						<div class="card-body">
+							<div class="list-group">
+								<a
+									@click="run('toggleFullscreen')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.toggleFullscreen()
+								</a>
+
+								<a
+									@click="run('toggleDevMode')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.toggleDevMode()
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- }}} -->
 
 					<!-- Basics {{{ -->
 					<div class="card mb-2">
@@ -203,6 +228,7 @@
 					<!-- }}} -->
 
 				</div>
+				<!-- Result area {{{ -->
 				<div class="col-sm-12 col-md-6">
 					<div class="card">
 						<div class="card-header d-flex justify-content-between align-items-center">
@@ -224,6 +250,7 @@
 						</div>
 					</div>
 				</div>
+				<!-- }}} -->
 			</div>
 		</div>
 	</div>
