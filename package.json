@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "TERA client-site worker",
   "scripts": {
-    "build:docs": "jsdoc2md --files lib/terafy.client.js >docs/terafy.client.md"
+    "dev": "serve .",
+    "build:docs": "concurrently 'npm:build:docs:*'",
+    "build:docs:client": "jsdoc2md --files lib/terafy.client.js >docs/terafy.client.md",
+    "build:docs:server": "jsdoc2md --files lib/terafy.server.js >docs/terafy.server.md"
   },
   "type": "module",
   "imports": {
@@ -49,8 +52,10 @@
   },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^1.0.7",
+    "concurrently": "^8.2.2",
     "eslint": "^8.47.0",
-    "jsdoc-to-markdown": "^8.0.0"
+    "jsdoc-to-markdown": "^8.0.0",
+    "serve": "^14.2.1"
   },
   "eslintConfig": {
     "extends": "@momsfriendlydevco",

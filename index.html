@@ -1,0 +1,219 @@
+<html>
+<head>
+	<title>Tera-Fy documentation</title>
+
+	<!-- 3rd party libraries -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.6/vue.global.min.js" integrity="sha512-y5PnNJyq3UHlylzZhPzDDyrYC2pmfjBjlcaJL5fhzjj5EcUAYKeELoeCUT0Jc+r5IWzRgNGDE1XVxDAtkpdRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<style>
+	.list-group-item-action {
+		user-select: none;
+		cursor: pointer;
+
+	}
+
+	.list-group-item-action select.form-control {
+		display: inline-flex;
+		max-width: 150px;
+	}
+	</style>
+
+	<script type="module">
+		Vue.createApp({
+			data() { return {
+				/**
+				* Last response from a method
+				* @type {String}
+				*/
+				response: '(Nothing)',
+
+				/**
+				* Whether the last response was classed as an error
+				* @type {Boolean}
+				*/
+				isError: null,
+			}},
+			methods: {
+				/**
+				* Run a named TERA-fy method within a safe context and display the result
+				* @param {String} method The method to run
+				* @param {*} [args...] Additional method arguments
+				*/
+				run(method, ...args) {
+					Promise.resolve()
+						.then(()=> terafy[method](...args))
+						.then(res => {
+							this.response = res;
+							this.isError = false;
+						})
+						.catch(e => {
+							this.response = 'Error: ' + e.toString();
+							this.isError = true;
+						})
+				},
+			},
+		}).mount('#app');
+	</script>
+</head>
+<body>
+	<div id="app">
+		<div class="container pt-4">
+			<div class="row">
+				<div class="col-sm-12 col-md-6">
+
+					<!-- Basics {{{ -->
+					<div class="card mb-2">
+						<div class="card-header">Basic</div>
+						<div class="card-body">
+							<div class="list-group">
+								<a
+									@click="run('handshake')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.handshake()
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- }}} -->
+
+					<!-- Session {{{ -->
+					<div class="card mb-2">
+						<div class="card-header">Session / User</div>
+						<div class="card-body">
+							<div class="list-group">
+								<a
+									@click="run('getUser')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.getUser()
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- }}} -->
+
+					<!-- Projects {{{ -->
+					<div class="card mb-2">
+						<div class="card-header">Projects</div>
+						<div class="card-body">
+							<div class="list-group">
+								<a
+									@click="run('bindProject')"
+									class="list-group-item list-group-item-action disabled"
+								>
+									terafy.bindProject()
+								</a>
+								<a
+									@click="run('getProject')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.getProject()
+								</a>
+								<a
+									@click="run('getProjects')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.getProjects()
+								</a>
+								<a
+									@click="run('requireProject')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.requireProject()
+								</a>
+								<a
+									@click="run('selectProject')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.selectProject()
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- }}} -->
+
+					<!-- Project State {{{ -->
+					<div class="card mb-2">
+						<div class="card-header">Project State</div>
+						<div class="card-body">
+							<div class="list-group">
+								<a
+									@click="run('getProjectStateSnapshot')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.getProjectStateSnapshot()
+								</a>
+								<a
+									@click="run('bindProjectState')"
+									class="list-group-item list-group-item-action disabled"
+								>
+									terafy.bindProjectState()
+								</a>
+								<a
+									@click="run('applyProjectStatePatch')"
+									class="list-group-item list-group-item-action disabled"
+								>
+									terafy.applyProjectStatePatch()
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- }}} -->
+
+					<!-- Project Libraries {{{ -->
+					<div class="card mb-2">
+						<div class="card-header">Project Libraries</div>
+						<div class="card-body">
+							<div class="list-group">
+								<a
+									@click="run('getProjectLibrary')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.getProjectLibrary({multiple: false})
+								</a>
+								<a
+									@click="run('getProjectLibrary', {multiple: true})"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.getProjectLibrary({multiple: true})
+								</a>
+								<a
+									@click="run('setProjectLibrary')"
+									class="list-group-item list-group-item-action disabled"
+								>
+									terafy.setProjectLibrary()
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- }}} -->
+
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<div class="card">
+						<div class="card-header d-flex justify-content-between align-items-center">
+							<div>Response</div>
+							<div>
+								<div v-if="isError" class="badge bg-danger">Error!</div>
+								<div v-else-if="isError !== null" class="badge bg-success">Success</div>
+							</div>
+						</div>
+						<div class="card-body" :class="isError && 'bg-danger'">
+							<pre
+								class="bg-light border p-2 rounded m-0"
+								:class="
+									isError === true ? 'bg-danger'
+									: isError === false ? 'bg-success'
+									: 'bg-light'
+								"
+							>{{response}}</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
