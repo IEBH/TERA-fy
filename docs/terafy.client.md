@@ -1,100 +1,93 @@
+## Classes
+
+<dl>
+<dt><a href="#TeraFy">TeraFy</a></dt>
+<dd></dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#send">send(message)</a> ⇒ <code>Promise.&lt;*&gt;</code></dt>
+<dd><p>Send a message + wait for a response object</p>
+</dd>
+<dt><a href="#sendRaw">sendRaw(message)</a></dt>
+<dd><p>Send raw message content to the server
+This function does not return or wait for a reply - use <code>send()</code> for that</p>
+</dd>
+<dt><a href="#rpc">rpc(method)</a> ⇒ <code>Promise.&lt;*&gt;</code></dt>
+<dd><p>Call an RPC function in the server instance</p>
+</dd>
+<dt><a href="#acceptMessage">acceptMessage(Raw)</a></dt>
+<dd><p>Accept an incoming message</p>
+</dd>
+<dt><a href="#toggleDevMode">toggleDevMode([devModeEnabled])</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
+<dd><p>Set or toggle devMode</p>
+</dd>
+<dt><a href="#init">init()</a></dt>
+<dd><p>Initalize the TERA client singleton</p>
+</dd>
+<dt><a href="#injectMain">injectMain()</a></dt>
+<dd><p>Find an existing active TERA server OR initalize one</p>
+</dd>
+<dt><a href="#injectStylesheet">injectStylesheet()</a></dt>
+<dd><p>Inject a local stylesheet to handle TERA server functionality</p>
+</dd>
+<dt><a href="#injectMethods">injectMethods()</a></dt>
+<dd><p>Inject all server methods defined in <code>methods</code> as local functions wrapped in the <code>rpc</code> function</p>
+</dd>
+<dt><a href="#debug">debug()</a></dt>
+<dd><p>Debugging output function
+This function will only act if <code>settings.devMode</code> is truthy</p>
+</dd>
+<dt><a href="#bindProjectState">bindProjectState([options], Paths)</a> ⇒ <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code></dt>
+<dd><p>Return a Vue reactive object that can be read/written which whose changes will transparently be written back to the TERA server instance</p>
+</dd>
+<dt><a href="#toggleFocus">toggleFocus([isFocused])</a></dt>
+<dd><p>Fit the nested TERA server to a full-screen
+This is usually because the server component wants to perform some user activity like calling $prompt</p>
+</dd>
+</dl>
+
 <a name="TeraFy"></a>
 
 ## TeraFy
 **Kind**: global class  
-
-* [TeraFy](#TeraFy)
-    * [new TeraFy()](#new_TeraFy_new)
-    * [.settings](#TeraFy+settings) : <code>Object</code>
-    * [.dom](#TeraFy+dom) : <code>Object</code>
-    * [.methods](#TeraFy+methods) : <code>Array.&lt;String&gt;</code>
-    * [.acceptPostboxes](#TeraFy+acceptPostboxes)
-    * [.send(message)](#TeraFy+send) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [.sendRaw(message)](#TeraFy+sendRaw)
-    * [.rpc(method)](#TeraFy+rpc) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [.acceptMessage(Raw)](#TeraFy+acceptMessage)
-    * [.init()](#TeraFy+init)
-    * [.injectMain()](#TeraFy+injectMain)
-    * [.injectStylesheet()](#TeraFy+injectStylesheet)
-    * [.injectMethods()](#TeraFy+injectMethods)
-    * [.bindProjectState([options], Paths)](#TeraFy+bindProjectState) ⇒ <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code>
-
 <a name="new_TeraFy_new"></a>
 
 ### new TeraFy()
 Main Tera-Fy Client (class singleton) to be used in a frontend browser
 
-<a name="TeraFy+settings"></a>
+<a name="send"></a>
 
-### teraFy.settings : <code>Object</code>
-Various settings to configure behaviour
-
-**Kind**: instance property of [<code>TeraFy</code>](#TeraFy)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| devMode | <code>Boolean</code> | Operate in devMode - i.e. force outer refresh when encountering an existing TeraFy instance |
-| siteUrl | <code>String</code> | The TERA URL to connect to |
-| restrictOrigin | <code>String</code> | URL to restrict communications to |
-
-<a name="TeraFy+dom"></a>
-
-### teraFy.dom : <code>Object</code>
-DOMElements for this TeraFy instance
-
-**Kind**: instance property of [<code>TeraFy</code>](#TeraFy)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| el | <code>DOMElement</code> | The main tera-fy div wrapper |
-| iframe | <code>DOMElement</code> | The internal iFrame element |
-| stylesheet | <code>DOMElement</code> | The corresponding stylesheet |
-
-<a name="TeraFy+methods"></a>
-
-### teraFy.methods : <code>Array.&lt;String&gt;</code>
-List of function stubs mapped here from the server
-This array is forms the reference of `TeraFy.METHOD()` objects to provide locally which will be mapped via `TeraFy.rpc(METHOD, ...args)`
-
-**Kind**: instance property of [<code>TeraFy</code>](#TeraFy)  
-<a name="TeraFy+acceptPostboxes"></a>
-
-### teraFy.acceptPostboxes
-Listening postboxes, these correspond to outgoing message IDs that expect a response
-
-**Kind**: instance property of [<code>TeraFy</code>](#TeraFy)  
-<a name="TeraFy+send"></a>
-
-### teraFy.send(message) ⇒ <code>Promise.&lt;\*&gt;</code>
+## send(message) ⇒ <code>Promise.&lt;\*&gt;</code>
 Send a message + wait for a response object
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
+**Kind**: global function  
 **Returns**: <code>Promise.&lt;\*&gt;</code> - A promise which resolves when the operation has completed with the remote reply  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | message | <code>Object</code> | Message object to send |
 
-<a name="TeraFy+sendRaw"></a>
+<a name="sendRaw"></a>
 
-### teraFy.sendRaw(message)
+## sendRaw(message)
 Send raw message content to the server
 This function does not return or wait for a reply - use `send()` for that
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
+**Kind**: global function  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | message | <code>Object</code> | Message object to send |
 
-<a name="TeraFy+rpc"></a>
+<a name="rpc"></a>
 
-### teraFy.rpc(method) ⇒ <code>Promise.&lt;\*&gt;</code>
+## rpc(method) ⇒ <code>Promise.&lt;\*&gt;</code>
 Call an RPC function in the server instance
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
+**Kind**: global function  
 **Returns**: <code>Promise.&lt;\*&gt;</code> - The resolved output of the server function  
 
 | Param | Type | Description |
@@ -102,47 +95,71 @@ Call an RPC function in the server instance
 | method | <code>String</code> | The method name to call |
 | [...] | <code>\*</code> | Optional arguments to pass to the function |
 
-<a name="TeraFy+acceptMessage"></a>
+<a name="acceptMessage"></a>
 
-### teraFy.acceptMessage(Raw)
+## acceptMessage(Raw)
 Accept an incoming message
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
+**Kind**: global function  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | Raw | <code>MessageEvent</code> | message event to process |
 
-<a name="TeraFy+init"></a>
+<a name="toggleDevMode"></a>
 
-### teraFy.init()
+## toggleDevMode([devModeEnabled]) ⇒ [<code>TeraFy</code>](#TeraFy)
+Set or toggle devMode
+
+**Kind**: global function  
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [devModeEnabled] | <code>String</code> \| <code>Boolean</code> | <code>&#x27;toggle&#x27;</code> | Optional boolean to force dev mode |
+
+<a name="init"></a>
+
+## init()
 Initalize the TERA client singleton
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
-<a name="TeraFy+injectMain"></a>
+**Kind**: global function  
+<a name="injectMain"></a>
 
-### teraFy.injectMain()
+## injectMain()
 Find an existing active TERA server OR initalize one
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
-<a name="TeraFy+injectStylesheet"></a>
+**Kind**: global function  
+<a name="injectStylesheet"></a>
 
-### teraFy.injectStylesheet()
+## injectStylesheet()
 Inject a local stylesheet to handle TERA server functionality
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
-<a name="TeraFy+injectMethods"></a>
+**Kind**: global function  
+<a name="injectMethods"></a>
 
-### teraFy.injectMethods()
+## injectMethods()
 Inject all server methods defined in `methods` as local functions wrapped in the `rpc` function
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
-<a name="TeraFy+bindProjectState"></a>
+**Kind**: global function  
+<a name="debug"></a>
 
-### teraFy.bindProjectState([options], Paths) ⇒ <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code>
+## debug()
+Debugging output function
+This function will only act if `settings.devMode` is truthy
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [msg...] | <code>String</code> | Output to show |
+
+<a name="bindProjectState"></a>
+
+## bindProjectState([options], Paths) ⇒ <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code>
 Return a Vue reactive object that can be read/written which whose changes will transparently be written back to the TERA server instance
 
-**Kind**: instance method of [<code>TeraFy</code>](#TeraFy)  
+**Kind**: global function  
 **Returns**: <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code> - A reactive object representing the project state  
 
 | Param | Type | Default | Description |
@@ -151,4 +168,16 @@ Return a Vue reactive object that can be read/written which whose changes will t
 | [options.autoRequire] | <code>Boolean</code> | <code>true</code> | Run `requireProject()` automatically before continuing |
 | [options.write] | <code>Boolean</code> | <code>true</code> | Allow local reactivity to writes - send these to the server |
 | Paths | <code>Array.&lt;String&gt;</code> |  | to subscribe to e.g. ['/users/'], |
+
+<a name="toggleFocus"></a>
+
+## toggleFocus([isFocused])
+Fit the nested TERA server to a full-screen
+This is usually because the server component wants to perform some user activity like calling $prompt
+
+**Kind**: global function  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [isFocused] | <code>String</code> \| <code>Boolean</code> | <code>&#x27;toggle&#x27;</code> | Whether to fullscreen the embedded component |
 
