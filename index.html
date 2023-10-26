@@ -15,7 +15,7 @@
 
 	.list-group-item-action select.form-control {
 		display: inline-flex;
-		max-width: 150px;
+		max-width: 100%;
 	}
 	</style>
 
@@ -43,6 +43,17 @@
 				* @type {Boolean}
 				*/
 				isError: null,
+
+				/**
+				* Last project list from getProjects()
+				* @type {Array<Object>}
+				*/
+				projects: null,
+
+				/**
+				* Currently selected project
+				*/
+				project: null,
 			}},
 			methods: {
 				/**
@@ -54,9 +65,23 @@
 					Promise.resolve()
 						.then(()=> this.terafy[method](...args))
 						.then(res => {
-							this.response = res;
+							this.response = res === null ? '(null)'
+								: res === undefined ? '(undefined)'
+								: res;
+
 							this.isError = false;
 						})
+						.then(()=> { // Handle some API responses to populate local state {{{
+							switch (method) {
+								case 'getProjects':
+									this.projects = this.response;
+									break;
+								case 'getProject':
+								case 'requireProject':
+								case 'selectProject':
+									this.project = this.response;
+							}
+						}) // }}}
 						.catch(e => {
 							this.response = 'Error: ' + e.toString();
 							console.warn('TERA threw error', e);
@@ -82,10 +107,10 @@
 						<div class="card-body">
 							<div class="list-group">
 								<a
-									@click="run('toggleFullscreen')"
+									@click="run('toggleFocus')"
 									class="list-group-item list-group-item-action"
 								>
-									terafy.toggleFullscreen()
+									terafy.toggleFocus()
 								</a>
 
 								<a
@@ -153,6 +178,29 @@
 									class="list-group-item list-group-item-action"
 								>
 									terafy.getProjects()
+								</a>
+								<a
+									@click="run('setActiveProject', project)"
+									class="list-group-item list-group-item-action"
+									:class="!projects && 'disabled'"
+								>
+									<div>terafy.setActiveProject(</div>
+									<select
+										v-if="projects"
+										v-model="project"
+										class="form-control"
+										placeholder="Select project..."
+									>
+										<option
+											v-for="project in projects"
+											:key="project.id"
+											:value="project.id"
+										>
+											{{project.id}}
+											({{project.name}})
+										</option>
+									</select>
+									<div>)</div>
 								</a>
 								<a
 									@click="run('requireProject')"
