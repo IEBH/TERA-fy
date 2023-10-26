@@ -53,6 +53,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
+    "lodash-es": "^4.17.21",
     "just-diff": "^6.0.2",
     "nanoid": "^5.0.2",
     "vue": "^3.3.7"
