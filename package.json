@@ -6,8 +6,8 @@
     "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap --serve --servedir=.",
     "build": "concurrently 'npm:build:*'",
     "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap",
-    "build:docs:client": "jsdoc2md --files lib/terafy.client.js >docs/terafy.client.md",
-    "build:docs:server": "jsdoc2md --files lib/terafy.server.js >docs/terafy.server.md"
+    "build:docs": "jsdoc2md --files lib/terafy.*.js lib/plugins/*.js >api.md",
+    "lint": "eslint ./lib"
   },
   "type": "module",
   "imports": {
