@@ -310,8 +310,8 @@ This function will only act if `settings.devMode` is truthy
 Set or merge settings
 This function also routes 'special' keys like `devMode` to their internal handlers
 
-**Kind**: global function
-**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance
+**Kind**: global function  
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -324,7 +324,7 @@ This function also routes 'special' keys like `devMode` to their internal handle
 Include a TeraFy client plugin
 
 **Kind**: global function  
-**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -338,7 +338,7 @@ Fit the nested TERA server to a full-screen
 This is usually because the server component wants to perform some user activity like calling $prompt
 
 **Kind**: global function  
-**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
