@@ -9,7 +9,7 @@
 <dd></dd>
 <dt><a href="#Project">Project</a></dt>
 <dd></dd>
-<dt><a href="#TeraFyPluginBase">TeraFyPluginBase</a></dt>
+<dt><a href="#TeraFyPlugin">TeraFyPlugin</a></dt>
 <dd></dd>
 <dt><a href="#TeraFyPluginVue">TeraFyPluginVue</a></dt>
 <dd></dd>
@@ -50,10 +50,14 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 <dd><p>Debugging output function
 This function will only act if <code>settings.devMode</code> is truthy</p>
 </dd>
-<dt><a href="#use">use(The, [options])</a> ⇒ <code><a href="#TeraFy">Promise.&lt;TeraFy&gt;</a></code></dt>
+<dt><a href="#set">set(key, value)</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
+<dd><p>Set or merge settings
+This function also routes &#39;special&#39; keys like <code>devMode</code> to their internal handlers</p>
+</dd>
+<dt><a href="#use">use(The, [options])</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
 <dd><p>Include a TeraFy client plugin</p>
 </dd>
-<dt><a href="#toggleFocus">toggleFocus([isFocused])</a></dt>
+<dt><a href="#toggleFocus">toggleFocus([isFocused])</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
 <dd><p>Fit the nested TERA server to a full-screen
 This is usually because the server component wants to perform some user activity like calling $prompt</p>
 </dd>
@@ -182,13 +186,13 @@ User / active session within TERA
 ### new Project()
 Project entry within TERA
 
-<a name="TeraFyPluginBase"></a>
+<a name="TeraFyPlugin"></a>
 
-## TeraFyPluginBase
+## TeraFyPlugin
 **Kind**: global class  
-<a name="new_TeraFyPluginBase_new"></a>
+<a name="new_TeraFyPlugin_new"></a>
 
-### new TeraFyPluginBase()
+### new TeraFyPlugin()
 Base TeraFy plugin interface
 This is included as a documentation exanple only
 
@@ -300,13 +304,27 @@ This function will only act if `settings.devMode` is truthy
 | --- | --- | --- |
 | [msg...] | <code>String</code> | Output to show |
 
+<a name="set"></a>
+
+## set(key, value) ⇒ [<code>TeraFy</code>](#TeraFy)
+Set or merge settings
+This function also routes 'special' keys like `devMode` to their internal handlers
+
+**Kind**: global function
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>String</code> \| <code>Object</code> | Either a single setting key to set or an object to merge |
+| value | <code>\*</code> | The value to set if `key` is a string |
+
 <a name="use"></a>
 
-## use(The, [options]) ⇒ [<code>Promise.&lt;TeraFy&gt;</code>](#TeraFy)
+## use(The, [options]) ⇒ [<code>TeraFy</code>](#TeraFy)
 Include a TeraFy client plugin
 
 **Kind**: global function  
-**Returns**: [<code>Promise.&lt;TeraFy&gt;</code>](#TeraFy) - This eventual chainable terafy instance when the module has finished loading  
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -315,11 +333,12 @@ Include a TeraFy client plugin
 
 <a name="toggleFocus"></a>
 
-## toggleFocus([isFocused])
+## toggleFocus([isFocused]) ⇒ [<code>TeraFy</code>](#TeraFy)
 Fit the nested TERA server to a full-screen
 This is usually because the server component wants to perform some user activity like calling $prompt
 
 **Kind**: global function  
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
