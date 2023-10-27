@@ -56,7 +56,7 @@ Note that this function will percist in asking the uesr even if they try to canc
 <dt><a href="#selectProject">selectProject([options])</a> ⇒ <code><a href="#Project">Promise.&lt;Project&gt;</a></code></dt>
 <dd><p>Prompt the user to select a project from those available</p>
 </dd>
-<dt><a href="#getProjectStateSnapshot">getProjectStateSnapshot([options], Paths)</a> ⇒ <code>Promise.&lt;Object&gt;</code></dt>
+<dt><a href="#getProjectState">getProjectState([options], Paths)</a> ⇒ <code>Promise.&lt;Object&gt;</code></dt>
 <dd><p>Return the current, full snapshot state of the active project</p>
 </dd>
 <dt><a href="#applyProjectStatePatch">applyProjectStatePatch()</a></dt>
@@ -273,9 +273,9 @@ Prompt the user to select a project from those available
 | [options.title] | <code>String</code> | <code>&quot;Select a project to work with&quot;</code> | The title of the dialog to display |
 | [options.allowCancel] | <code>Boolean</code> | <code>true</code> | Advertise cancelling the operation, the dialog can still be cancelled by closing it |
 
-<a name="getProjectStateSnapshot"></a>
+<a name="getProjectState"></a>
 
-## getProjectStateSnapshot([options], Paths) ⇒ <code>Promise.&lt;Object&gt;</code>
+## getProjectState([options], Paths) ⇒ <code>Promise.&lt;Object&gt;</code>
 Return the current, full snapshot state of the active project
 
 **Kind**: global function  
