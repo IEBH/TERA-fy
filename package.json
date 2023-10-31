@@ -7,16 +7,21 @@
     "build": "concurrently 'npm:build:*'",
     "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap",
     "build:docs": "jsdoc2md --files lib/terafy.*.js lib/plugins/*.js >api.md",
-    "lint": "eslint ./lib"
+    "lint": "eslint ."
   },
   "type": "module",
   "imports": {
     "#terafy": "./lib/terafy.client.js"
   },
   "exports": {
-    ".": "./lib/terafy.client.js",
+    ".": {
+      "browser": "./dist/terafy.js",
+      "import": "./lib/terafy.client.js",
+      "require": "./dist/terafy.js",
+      "default": "./dist/terafy.js"
+    },
     "./server": "./lib/terafy.server.js",
-    "./plugins/*": "./lib/plugins/*.js"
+    "./plugins/*": "./plugins/*.js"
   },
   "repository": {
     "type": "git",
