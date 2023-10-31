@@ -15,7 +15,7 @@
   },
   "exports": {
     ".": {
-      "browser": "./dist/terafy.js",
+      "browser": "./lib/terafy.client.js",
       "import": "./lib/terafy.client.js",
       "require": "./dist/terafy.js",
       "default": "./dist/terafy.js"

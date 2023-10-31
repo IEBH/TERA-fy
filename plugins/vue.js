@@ -1,5 +1,5 @@
 import TeraFyPluginBase from './base.js';
-import diff from 'just-diff';
+import {diff} from 'just-diff';
 import {reactive, watch} from 'vue';
 
 /**
@@ -60,6 +60,43 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 				// Return Vue Reactive
 				return stateReactive;
 			})
+	}
+
+
+	/**
+	* Provide a Vue@3 compatible plugin
+	*/
+	vuePlugin() {
+		let context = this;
+
+		return {
+
+			/**
+			* Install into Vue as a generic Vue@3 plugin
+			*
+			* @param {Object} [options] Additional options to mutate behaviour
+			* @param {String} [options.globalName='$tera'] Globa property to allocate this service as
+			* @param {Objecct} [options.bindOptions] Options passed to `bindProjectState()`
+			*
+			* @returns {VuePlugin} A plugin matching the Vue@3 spec
+			*/
+			install(app, options) {
+				let settings = {
+					globalName: '$tera',
+					stateOptions: {
+						autoRequire: true,
+						write: true,
+					},
+					...options,
+				};
+
+				app.config.globalProperties[settings.globalName] = {
+					// Create project binding
+					// state: context.bindProjectState(settings.stateOptions),
+				};
+			},
+
+		};
 	}
 
 }
