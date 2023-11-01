@@ -67,7 +67,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	* Provide a Vue@3 compatible plugin
 	*/
 	vuePlugin() {
-		let context = this;
+		let $tera = this;
 
 		return {
 
@@ -90,9 +90,14 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 					...options,
 				};
 
-				app.config.globalProperties[settings.globalName] = {
-					// Create project binding
-					// state: context.bindProjectState(settings.stateOptions),
+				// Make this module available globally
+				app.config.globalProperties[settings.globalName] = $tera;
+
+				// Bind $tera.state to the active project
+				// TODO: context.bindProjectState(settings.stateOptions),
+				$tera.state = {
+					id: 'TERAPROJ',
+					name: 'A fake project',
 				};
 			},
 
