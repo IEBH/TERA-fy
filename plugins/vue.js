@@ -111,6 +111,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 			* Install into Vue as a generic Vue@3 plugin
 			*
 			* @param {Object} [options] Additional options to mutate behaviour
+			* @param {Boolean} [options.autoInit=true] Call Init() during the `statePromiseable` cycle if its not already been called
 			* @param {String} [options.globalName='$tera'] Globa property to allocate this service as
 			* @param {Objecct} [options.bindOptions] Options passed to `bindProjectState()`
 			*
@@ -118,9 +119,9 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 			*/
 			install(app, options) {
 				let settings = {
+					autoInit: true,
 					globalName: '$tera',
 					stateOptions: {
-						autoRequire: true,
 						write: true,
 					},
 					...options,
@@ -131,19 +132,20 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 				$tera.state = null;
 
 				// $tera.statePromisable becomes the promise we are waiting on to resolve
-				$tera.statePromisable = Promise.all([
+				$tera.statePromisable = Promise.resolve()
+					.then(()=> settings.autoInit && $tera.init())
+					.then(()=> Promise.all([
+						// Bind available project and wait on it
+						$tera.bindProjectState(settings.stateOptions)
+							.then(state => $tera.state = state)
+							.then(()=> $tera.debug('INFO', 'Loaded project state', $tera.state)),
 
-					// Bind available project and wait on it
-					$tera.bindProjectState(settings.stateOptions)
-						.then(state => $tera.state = state)
-						.then(()=> $tera.debug('INFO', 'Loaded project state', $tera.state)),
-
-					// Fetch available projects
-					// TODO: It would be nice if this was responsive to remote changes
-					$tera.getProjects()
-						.then(projects => $tera.projects = projects)
-						.then(()=> $tera.debug('INFO', 'Loaded projects', $tera.list)),
-				])
+						// Fetch available projects
+						// TODO: It would be nice if this was responsive to remote changes
+						$tera.getProjects()
+							.then(projects => $tera.projects = reactive(projects))
+							.then(()=> $tera.debug('INFO', 'Loaded projects', $tera.projects)),
+					]))
 
 
 				// Make this module available globally
