@@ -66,6 +66,40 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 
 
 	/**
+	* List of available projects for the current session
+	* @type {VueReactive<Array<Object>>}
+	*/
+	list = reactive([]);
+
+
+	/**
+	* The bound, reactive state of a Vue project
+	* When loaded this represents the state of a project as an object
+	* @type {Object}
+	*/
+	state = null;
+
+
+	/**
+	* Promise used when binding to state
+	* @type {Promise}
+	*/
+	statePromisable = null;
+
+
+	/**
+	* Utility function which returns an awaitable promise when the state is loading or being refreshed
+	* This is used in place of `statePromisable` as it has a slightly more logical syntax as a function
+	*
+	* @example Await the state loading
+	* await $tera.statePromise();
+	*/
+	statePromise() {
+		return this.statePromisable;
+	}
+
+
+	/**
 	* Provide a Vue@3 compatible plugin
 	*/
 	vuePlugin() {
@@ -92,15 +126,28 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 					...options,
 				};
 
+				// Bind $tera.state to the active project
+				// Initialize state to null
+				$tera.state = null;
+
+				// $tera.statePromisable becomes the promise we are waiting on to resolve
+				$tera.statePromisable = Promise.all([
+
+					// Bind available project and wait on it
+					$tera.bindProjectState(settings.stateOptions)
+						.then(state => $tera.state = state)
+						.then(()=> $tera.debug('INFO', 'Loaded project state', $tera.state)),
+
+					// Fetch available projects
+					// TODO: It would be nice if this was responsive to remote changes
+					$tera.getProjects()
+						.then(projects => $tera.list = projects)
+						.then(()=> $tera.debug('INFO', 'Loaded projects', $tera.list)),
+				])
+
+
 				// Make this module available globally
 				app.config.globalProperties[settings.globalName] = $tera;
-
-				// Bind $tera.state to the active project
-				// TODO: context.bindProjectState(settings.stateOptions),
-				$tera.state = {
-					id: 'TERAPROJ',
-					name: 'A fake project',
-				};
 			},
 
 		};
