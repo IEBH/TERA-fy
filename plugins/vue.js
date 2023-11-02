@@ -20,7 +20,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	* @param {Boolean} [options.write=true] Allow local reactivity to writes - send these to the server
 	* @param {Array<String>} Paths to subscribe to e.g. ['/users/'],
 	*
-	* @returns {Promies<Reactive<Object>>} A reactive object representing the project state
+	* @returns {Promie<Reactive<Object>>} A reactive object representing the project state
 	*/
 	bindProjectState(options) {
 		let settings = {
@@ -36,6 +36,8 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 				paths: settings.paths,
 			}))
 			.then(snapshot => {
+				this.debug('Got project snapshot', snapshot);
+
 				// Create initial reactive
 				let stateReactive = reactive(snapshot);
 
