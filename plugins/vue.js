@@ -69,7 +69,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	* List of available projects for the current session
 	* @type {VueReactive<Array<Object>>}
 	*/
-	list = reactive([]);
+	projects = reactive([]);
 
 
 	/**
@@ -141,7 +141,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 					// Fetch available projects
 					// TODO: It would be nice if this was responsive to remote changes
 					$tera.getProjects()
-						.then(projects => $tera.list = projects)
+						.then(projects => $tera.projects = projects)
 						.then(()=> $tera.debug('INFO', 'Loaded projects', $tera.list)),
 				])
 
