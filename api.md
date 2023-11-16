@@ -9,6 +9,8 @@
 <dd></dd>
 <dt><a href="#Project">Project</a></dt>
 <dd></dd>
+<dt><a href="#ProjectFile">ProjectFile</a></dt>
+<dd></dd>
 <dt><a href="#TeraFyPlugin">TeraFyPlugin</a></dt>
 <dd></dd>
 <dt><a href="#TeraFyPluginVue">TeraFyPluginVue</a></dt>
@@ -31,13 +33,19 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 <dt><a href="#acceptMessage">acceptMessage(Raw)</a></dt>
 <dd><p>Accept an incoming message</p>
 </dd>
-<dt><a href="#toggleDevMode">toggleDevMode([devModeEnabled])</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
-<dd><p>Set or toggle devMode</p>
+<dt><a href="#applyProjectStatePatchLocal">applyProjectStatePatchLocal(patch)</a> ⇒ <code>Promise</code></dt>
+<dd><p>Client function which accepts a patch from the server and applies it to local project state
+This function is expected to be sub-classed by a plugin</p>
 </dd>
-<dt><a href="#init">init()</a></dt>
-<dd><p>Initalize the TERA client singleton</p>
+<dt><a href="#init">init()</a> ⇒ <code><a href="#TeraFy">Promise.&lt;TeraFy&gt;</a></code></dt>
+<dd><p>Initalize the TERA client singleton
+This function can only be called once and will return the existing init() worker Promise if its called againt</p>
 </dd>
-<dt><a href="#injectMain">injectMain()</a></dt>
+<dt><a href="#detectMode">detectMode()</a> ⇒ <code>Promise.&lt;String&gt;</code></dt>
+<dd><p>Populate <code>settings.mode</code>
+Try to communicate with a parent frame, if none assume we need to fallback to child mode</p>
+</dd>
+<dt><a href="#injectComms">injectComms()</a> ⇒ <code>Promise</code></dt>
 <dd><p>Find an existing active TERA server OR initalize one</p>
 </dd>
 <dt><a href="#injectStylesheet">injectStylesheet()</a></dt>
@@ -46,7 +54,7 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 <dt><a href="#injectMethods">injectMethods()</a></dt>
 <dd><p>Inject all server methods defined in <code>methods</code> as local functions wrapped in the <code>rpc</code> function</p>
 </dd>
-<dt><a href="#debug">debug()</a></dt>
+<dt><a href="#debug">debug([status])</a></dt>
 <dd><p>Debugging output function
 This function will only act if <code>settings.devMode</code> is truthy</p>
 </dd>
@@ -57,7 +65,13 @@ This function also routes &#39;special&#39; keys like <code>devMode</code> to th
 <dt><a href="#use">use(The, [options])</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
 <dd><p>Include a TeraFy client plugin</p>
 </dd>
-<dt><a href="#toggleFocus">toggleFocus([isFocused])</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
+<dt><a href="#mixin">mixin(target, source)</a></dt>
+<dd><p>Internal function used by use() to merge an external declared singleton against this object</p>
+</dd>
+<dt><a href="#toggleDevMode">toggleDevMode([devModeEnabled])</a> ⇒ <code><a href="#TeraFy">TeraFy</a></code></dt>
+<dd><p>Set or toggle devMode</p>
+</dd>
+<dt><a href="#toggleFocus">toggleFocus([isFocused])</a></dt>
 <dd><p>Fit the nested TERA server to a full-screen
 This is usually because the server component wants to perform some user activity like calling $prompt</p>
 </dd>
@@ -75,7 +89,7 @@ This function only works if the context was sub-classed via <code>createContext(
 <dt><a href="#send">send(message)</a> ⇒ <code>Promise.&lt;*&gt;</code></dt>
 <dd><p>Send a message + wait for a response object</p>
 </dd>
-<dt><a href="#sendRaw">sendRaw(message)</a></dt>
+<dt><a href="#sendRaw">sendRaw(message, Window)</a></dt>
 <dd><p>Send raw message content to the client</p>
 </dd>
 <dt><a href="#acceptMessage">acceptMessage(Raw)</a></dt>
@@ -111,7 +125,15 @@ Note that this function will percist in asking the uesr even if they try to canc
 <dt><a href="#applyProjectStatePatch">applyProjectStatePatch()</a></dt>
 <dd><p>Apply a computed <code>just-diff</code> patch to the current project state</p>
 </dd>
-<dt><a href="#getProjectLibrary">getProjectLibrary([options])</a> ⇒ <code>Promise.&lt;Array.&lt;RefLibRef&gt;&gt;</code></dt>
+<dt><a href="#subscribeProjectState">subscribeProjectState()</a></dt>
+<dd><p>Subscribe to project state changes
+This will dispatch an RPC call to the source object <code>applyProjectStatePatchLocal()</code> function with the patch
+If the above call fails the subscriber is assumed as dead and unsubscribed from the polling list</p>
+</dd>
+<dt><a href="#getProjectFiles">getProjectFiles(options)</a> ⇒ <code><a href="#ProjectFile">Promise.&lt;ProjectFile&gt;</a></code></dt>
+<dd><p>Fetch the files associated with a given project</p>
+</dd>
+<dt><a href="#getProjectLibrary">getProjectLibrary([path], [options])</a> ⇒ <code>Promise.&lt;Array.&lt;ProjectFile&gt;&gt;</code></dt>
 <dd><p>Fetch the active projects citation library</p>
 </dd>
 <dt><a href="#setProjectLibrary">setProjectLibrary(Collection, [options])</a> ⇒ <code>Promise</code></dt>
@@ -127,8 +149,18 @@ This function will only act if <code>settings.devMode</code> is truthy</p>
 <dt><a href="#init">init()</a></dt>
 <dd><p>Optional function to be included when the main TeraFyClient is initalized</p>
 </dd>
-<dt><a href="#bindProjectState">bindProjectState([options], Paths)</a> ⇒ <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code></dt>
+<dt><a href="#bindProjectState">bindProjectState([options], Paths)</a> ⇒ <code>Promie.&lt;Reactive.&lt;Object&gt;&gt;</code></dt>
 <dd><p>Return a Vue reactive object that can be read/written which whose changes will transparently be written back to the TERA server instance</p>
+</dd>
+<dt><a href="#statePromise">statePromise()</a></dt>
+<dd><p>Utility function which returns an awaitable promise when the state is loading or being refreshed
+This is used in place of <code>statePromisable</code> as it has a slightly more logical syntax as a function</p>
+</dd>
+<dt><a href="#vuePlugin">vuePlugin()</a></dt>
+<dd><p>Provide a Vue@3 compatible plugin</p>
+</dd>
+<dt><a href="#install">install([options])</a> ⇒ <code>VuePlugin</code></dt>
+<dd><p>Install into Vue as a generic Vue@3 plugin</p>
 </dd>
 </dl>
 
@@ -185,6 +217,32 @@ User / active session within TERA
 
 ### new Project()
 Project entry within TERA
+
+<a name="ProjectFile"></a>
+
+## ProjectFile
+**Kind**: global class  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | <code>String</code> | A UUID string representing the unique ID of the file |
+| name | <code>String</code> | Relative name path (can contain prefix directories) for the human readable file name |
+| parsedName | <code>Object</code> | An object representing meta file parts of a file name |
+| parsedName.basename | <code>String</code> | The filename + extention (i.e. everything without directory name) |
+| parsedName.filename | <code>String</code> | The file portion of the name (basename without the extension) |
+| parsedName.ext | <code>String</code> | The extension portion of the name (always lower case) |
+| parsedName.dirName | <code>String</code> | The directory path portion of the name |
+| created | <code>Date</code> | A date representing when the file was created |
+| modified | <code>Date</code> | A date representing when the file was created |
+| accessed | <code>Date</code> | A date representing when the file was last accessed |
+| size | <code>Number</code> | Size, in bytes, of the file |
+| mime | <code>String</code> | The associated mime type for the file |
+
+<a name="new_ProjectFile_new"></a>
+
+### new ProjectFile()
+Data structure for a project file
 
 <a name="TeraFyPlugin"></a>
 
@@ -256,30 +314,42 @@ Accept an incoming message
 | --- | --- | --- |
 | Raw | <code>MessageEvent</code> | message event to process |
 
-<a name="toggleDevMode"></a>
+<a name="applyProjectStatePatchLocal"></a>
 
-## toggleDevMode([devModeEnabled]) ⇒ [<code>TeraFy</code>](#TeraFy)
-Set or toggle devMode
+## applyProjectStatePatchLocal(patch) ⇒ <code>Promise</code>
+Client function which accepts a patch from the server and applies it to local project state
+This function is expected to be sub-classed by a plugin
 
 **Kind**: global function  
-**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance  
+**Returns**: <code>Promise</code> - A promise which will resolve when the operation has completed  
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [devModeEnabled] | <code>String</code> \| <code>Boolean</code> | <code>&#x27;toggle&#x27;</code> | Optional boolean to force dev mode |
+| Param | Type | Description |
+| --- | --- | --- |
+| patch | <code>Object</code> | A just-diff compatible patch to apply |
 
 <a name="init"></a>
 
-## init()
+## init() ⇒ [<code>Promise.&lt;TeraFy&gt;</code>](#TeraFy)
 Initalize the TERA client singleton
+This function can only be called once and will return the existing init() worker Promise if its called againt
 
 **Kind**: global function  
-<a name="injectMain"></a>
+**Returns**: [<code>Promise.&lt;TeraFy&gt;</code>](#TeraFy) - An eventual promise which will resovle with this terafy instance  
+<a name="detectMode"></a>
 
-## injectMain()
+## detectMode() ⇒ <code>Promise.&lt;String&gt;</code>
+Populate `settings.mode`
+Try to communicate with a parent frame, if none assume we need to fallback to child mode
+
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;String&gt;</code> - A promise which will resolve with the detected mode to use  
+<a name="injectComms"></a>
+
+## injectComms() ⇒ <code>Promise</code>
 Find an existing active TERA server OR initalize one
 
 **Kind**: global function  
+**Returns**: <code>Promise</code> - A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child  
 <a name="injectStylesheet"></a>
 
 ## injectStylesheet()
@@ -294,7 +364,7 @@ Inject all server methods defined in `methods` as local functions wrapped in the
 **Kind**: global function  
 <a name="debug"></a>
 
-## debug()
+## debug([status])
 Debugging output function
 This function will only act if `settings.devMode` is truthy
 
@@ -302,6 +372,7 @@ This function will only act if `settings.devMode` is truthy
 
 | Param | Type | Description |
 | --- | --- | --- |
+| [status] | <code>&#x27;VERBOSE&#x27;</code> \| <code>&#x27;INFO&#x27;</code> \| <code>&#x27;LOG&#x27;</code> \| <code>&#x27;WARN&#x27;</code> \| <code>&#x27;ERROR&#x27;</code> | Optional prefixing level to mark the message as. 'WARN' and 'ERROR' will always show reguardless of devMode being enabled |
 | [msg...] | <code>String</code> | Output to show |
 
 <a name="set"></a>
@@ -331,14 +402,37 @@ Include a TeraFy client plugin
 | The | <code>Object</code> | module function to include. Invoked as `(teraClient:TeraFy, options:Object)` |
 | [options] | <code>Object</code> | Additional options to mutate behaviour |
 
+<a name="mixin"></a>
+
+## mixin(target, source)
+Internal function used by use() to merge an external declared singleton against this object
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| target | <code>Object</code> | Initalied class instance to extend |
+| source | <code>Object</code> | Initalized source object to extend from |
+
+<a name="toggleDevMode"></a>
+
+## toggleDevMode([devModeEnabled]) ⇒ [<code>TeraFy</code>](#TeraFy)
+Set or toggle devMode
+
+**Kind**: global function  
+**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [devModeEnabled] | <code>String</code> \| <code>Boolean</code> | <code>&#x27;toggle&#x27;</code> | Optional boolean to force dev mode |
+
 <a name="toggleFocus"></a>
 
-## toggleFocus([isFocused]) ⇒ [<code>TeraFy</code>](#TeraFy)
+## toggleFocus([isFocused])
 Fit the nested TERA server to a full-screen
 This is usually because the server component wants to perform some user activity like calling $prompt
 
 **Kind**: global function  
-**Returns**: [<code>TeraFy</code>](#TeraFy) - This chainable terafy instance  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -398,7 +492,7 @@ Send a message + wait for a response object
 
 <a name="sendRaw"></a>
 
-## sendRaw(message)
+## sendRaw(message, Window)
 Send raw message content to the client
 
 **Kind**: global function  
@@ -406,6 +500,7 @@ Send raw message content to the client
 | Param | Type | Description |
 | --- | --- | --- |
 | message | <code>Object</code> | Message object to send |
+| Window | <code>Window</code> | context to dispatch the message via if its not the same as the regular window |
 
 <a name="acceptMessage"></a>
 
@@ -494,6 +589,7 @@ Prompt the user to select a project from those available
 | [options] | <code>Object</code> |  | Additional options to mutate behaviour |
 | [options.title] | <code>String</code> | <code>&quot;Select a project to work with&quot;</code> | The title of the dialog to display |
 | [options.allowCancel] | <code>Boolean</code> | <code>true</code> | Advertise cancelling the operation, the dialog can still be cancelled by closing it |
+| [options.setActive] | <code>Boolean</code> | <code>false</code> | Also set the project as active when selected |
 
 <a name="getProjectState"></a>
 
@@ -515,19 +611,44 @@ Return the current, full snapshot state of the active project
 Apply a computed `just-diff` patch to the current project state
 
 **Kind**: global function  
-<a name="getProjectLibrary"></a>
+<a name="subscribeProjectState"></a>
 
-## getProjectLibrary([options]) ⇒ <code>Promise.&lt;Array.&lt;RefLibRef&gt;&gt;</code>
-Fetch the active projects citation library
+## subscribeProjectState()
+Subscribe to project state changes
+This will dispatch an RPC call to the source object `applyProjectStatePatchLocal()` function with the patch
+If the above call fails the subscriber is assumed as dead and unsubscribed from the polling list
 
 **Kind**: global function  
-**Returns**: <code>Promise.&lt;Array.&lt;RefLibRef&gt;&gt;</code> - Collection of references for the selected library  
+<a name="getProjectFiles"></a>
+
+## getProjectFiles(options) ⇒ [<code>Promise.&lt;ProjectFile&gt;</code>](#ProjectFile)
+Fetch the files associated with a given project
+
+**Kind**: global function  
+**Returns**: [<code>Promise.&lt;ProjectFile&gt;</code>](#ProjectFile) - A collection of project files for the given project  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
+| options | <code>Object</code> |  | Options which mutate behaviour |
+| [options.autoRequire] | <code>Boolean</code> | <code>true</code> | Run `requireProject()` automatically before continuing |
+| [options.meta] | <code>Boolean</code> | <code>true</code> | Pull meta information for each file entity |
+
+<a name="getProjectLibrary"></a>
+
+## getProjectLibrary([path], [options]) ⇒ <code>Promise.&lt;Array.&lt;ProjectFile&gt;&gt;</code>
+Fetch the active projects citation library
+
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;Array.&lt;ProjectFile&gt;&gt;</code> - Collection of references for the selected library matching the given hint + filter, this could be a zero length array  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [path] | <code>String</code> |  | Optional file path to use, if omitted the contents of `options` are used to guess at a suitable file |
 | [options] | <code>Object</code> |  | Additional options to mutate behaviour |
 | [options.autoRequire] | <code>Boolean</code> | <code>true</code> | Run `requireProject()` automatically before continuing |
 | [options.multiple] | <code>Boolean</code> | <code>false</code> | Allow selection of multiple libraries |
+| [options.filter] | <code>function</code> |  | Optional async file filter, called each time as `(File:ProjectFile)` |
+| [options.find] | <code>function</code> |  | Optional async final stage file filter to reduce all candidates down to one subject file |
 | [options.hint] | <code>String</code> \| <code>Array.&lt;String&gt;</code> |  | Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'dedisputed' |
 
 <a name="setProjectLibrary"></a>
@@ -571,11 +692,11 @@ Optional function to be included when the main TeraFyClient is initalized
 **Kind**: global function  
 <a name="bindProjectState"></a>
 
-## bindProjectState([options], Paths) ⇒ <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code>
+## bindProjectState([options], Paths) ⇒ <code>Promie.&lt;Reactive.&lt;Object&gt;&gt;</code>
 Return a Vue reactive object that can be read/written which whose changes will transparently be written back to the TERA server instance
 
 **Kind**: global function  
-**Returns**: <code>Promies.&lt;Reactive.&lt;Object&gt;&gt;</code> - A reactive object representing the project state  
+**Returns**: <code>Promie.&lt;Reactive.&lt;Object&gt;&gt;</code> - A reactive object representing the project state  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -583,4 +704,37 @@ Return a Vue reactive object that can be read/written which whose changes will t
 | [options.autoRequire] | <code>Boolean</code> | <code>true</code> | Run `requireProject()` automatically before continuing |
 | [options.write] | <code>Boolean</code> | <code>true</code> | Allow local reactivity to writes - send these to the server |
 | Paths | <code>Array.&lt;String&gt;</code> |  | to subscribe to e.g. ['/users/'], |
+
+<a name="statePromise"></a>
+
+## statePromise()
+Utility function which returns an awaitable promise when the state is loading or being refreshed
+This is used in place of `statePromisable` as it has a slightly more logical syntax as a function
+
+**Kind**: global function  
+**Example**  
+```js
+Await the state loading
+await $tera.statePromise();
+```
+<a name="vuePlugin"></a>
+
+## vuePlugin()
+Provide a Vue@3 compatible plugin
+
+**Kind**: global function  
+<a name="install"></a>
+
+## install([options]) ⇒ <code>VuePlugin</code>
+Install into Vue as a generic Vue@3 plugin
+
+**Kind**: global function  
+**Returns**: <code>VuePlugin</code> - A plugin matching the Vue@3 spec  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [options] | <code>Object</code> |  | Additional options to mutate behaviour |
+| [options.autoInit] | <code>Boolean</code> | <code>true</code> | Call Init() during the `statePromiseable` cycle if its not already been called |
+| [options.globalName] | <code>String</code> | <code>&#x27;$tera&#x27;</code> | Globa property to allocate this service as |
+| [options.bindOptions] | <code>Objecct</code> |  | Options passed to `bindProjectState()` |
 
