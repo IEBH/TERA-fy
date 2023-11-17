@@ -50,7 +50,6 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 						stateReactive,
 						(newVal, oldVal) => {
 							let diff = diff(newVal, oldVal);
-							this.debug('APPLY DIFF', diff);
 							this.applyProjectStatePatch(diff);
 						},
 						{
