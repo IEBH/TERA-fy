@@ -6,8 +6,8 @@
     "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap --serve --servedir=.",
     "build": "concurrently 'npm:build:*'",
     "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap",
-    "build:docs:markdown": "jsdoc2md --files lib/terafy.*.js plugins/*.js >api.md",
-    "build:docs:explorer": "jsdoc --destination docs lib/terafy.client.js",
+    "build:docs:markdown": "documentation build lib/terafy.client.js --format html --output docs/",
+    "build:docs:explorer": "documentation build lib/terafy.client.js --format md --markdown-toc --output api.md",
     "lint": "eslint ."
   },
   "type": "module",
@@ -71,10 +71,8 @@
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^1.0.7",
     "concurrently": "^8.2.2",
-    "esbuild": "^0.19.5",
-    "eslint": "^8.47.0",
-    "jsdoc": "^4.0.2",
-    "jsdoc-to-markdown": "^8.0.0"
+    "documentation": "^14.0.2",
+    "esbuild": "^0.19.5"
   },
   "eslintConfig": {
     "extends": "@momsfriendlydevco",
