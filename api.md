@@ -37,33 +37,33 @@
         *   [Parameters][33]
     *   [toggleFocus][34]
         *   [Parameters][35]
-    *   [handshake][36]
-        *   [Properties][37]
-    *   [getUser][38]
-    *   [getProject][39]
-    *   [getProjects][40]
-    *   [setActiveProject][41]
-        *   [Parameters][42]
-    *   [requireProject][43]
-        *   [Parameters][44]
-    *   [selectProject][45]
-        *   [Parameters][46]
-    *   [getProjectState][47]
-        *   [Parameters][48]
-    *   [applyProjectStatePatch][49]
-        *   [Parameters][50]
-    *   [subscribeProjectState][51]
-    *   [getProjectFiles][52]
-        *   [Parameters][53]
-    *   [getProjectLibrary][54]
-        *   [Parameters][55]
-    *   [setProjectLibrary][56]
-        *   [Parameters][57]
-*   [User][58]
-    *   [Properties][59]
-*   [Project][60]
-*   [ProjectFile][61]
-    *   [Properties][62]
+*   [handshake][36]
+    *   [Properties][37]
+*   [User][38]
+    *   [Properties][39]
+*   [getUser][40]
+*   [Project][41]
+*   [getProject][42]
+*   [getProjects][43]
+*   [setActiveProject][44]
+    *   [Parameters][45]
+*   [requireProject][46]
+    *   [Parameters][47]
+*   [selectProject][48]
+    *   [Parameters][49]
+*   [getProjectState][50]
+    *   [Parameters][51]
+*   [applyProjectStatePatch][52]
+    *   [Parameters][53]
+*   [][54]
+*   [ProjectFile][55]
+    *   [Properties][56]
+*   [getProjectFiles][57]
+    *   [Parameters][58]
+*   [getProjectLibrary][59]
+    *   [Parameters][60]
+*   [setProjectLibrary][61]
+    *   [Parameters][62]
 
 ## TeraFy
 
@@ -252,144 +252,15 @@ This is usually because the server component wants to perform some user activity
 
 *   `isFocused` **([String][66] | [Boolean][64])** Whether to fullscreen the embedded component (optional, default `'toggle'`)
 
-### handshake
+## handshake
 
 Return basic server information as a form of validation
 
-#### Properties
+### Properties
 
 *   `date` **[Date][70]** Server date
 
 Returns **[Promise][68]<[Object][63]>** Basic promise result
-
-### getUser
-
-Fetch the current session user
-
-Returns **[Promise][68]<[User][58]>** The current logged in user or null if none
-
-### getProject
-
-Get the currently active project, if any
-
-Returns **[Promise][68]<([Project][60] | null)>** The currently active project, if any
-
-### getProjects
-
-Get a list of projects the current session user has access to
-
-Returns **[Promise][68]<[Array][67]<[Project][60]>>** Collection of projects the user has access to
-
-### setActiveProject
-
-Set the currently active project within TERA
-
-#### Parameters
-
-*   `project` **([Object][63] | [String][66])** The project to set as active - either the full Project object or its ID
-
-### requireProject
-
-Ask the user to select a project from those available - if one isn't already active
-Note that this function will percist in asking the uesr even if they try to cancel
-
-#### Parameters
-
-*   `options` **[Object][63]?** Additional options to mutate behaviour
-
-    *   `options.autoSetActiveProject` **[Boolean][64]** After selecting a project set that project as active in TERA (optional, default `true`)
-    *   `options.title` **[String][66]** The title of the dialog to display (optional, default `"Select a project to work with"`)
-    *   `options.noSelectTitle` **[String][66]** Dialog title when warning the user they need to select something (optional, default `'Select project'`)
-    *   `options.noSelectBody` **[String][66]** Dialog body when warning the user they need to select something (optional, default `'A project needs to be selected to continue'`)
-
-Returns **[Promise][68]<[Project][60]>** The active project
-
-### selectProject
-
-Prompt the user to select a project from those available
-
-#### Parameters
-
-*   `options` **[Object][63]?** Additional options to mutate behaviour
-
-    *   `options.title` **[String][66]** The title of the dialog to display (optional, default `"Select a project to work with"`)
-    *   `options.allowCancel` **[Boolean][64]** Advertise cancelling the operation, the dialog can still be cancelled by closing it (optional, default `true`)
-    *   `options.setActive` **[Boolean][64]** Also set the project as active when selected (optional, default `false`)
-
-Returns **[Promise][68]<[Project][60]>** The active project
-
-### getProjectState
-
-Return the current, full snapshot state of the active project
-
-#### Parameters
-
-*   `options` **[Object][63]?** Additional options to mutate behaviour
-
-    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
-*   `Paths` **[Array][67]<[String][66]>** to subscribe to e.g. \['/users/'],
-
-Returns **[Promise][68]<[Object][63]>** The current project state snapshot
-
-### applyProjectStatePatch
-
-Apply a computed `just-diff` patch to the current project state
-
-#### Parameters
-
-*   `Patch` **[Object][63]** to apply
-
-Returns **[Promise][68]** A promise which resolves when the operation has completed
-
-### subscribeProjectState
-
-Subscribe to project state changes
-This will dispatch an RPC call to the source object `applyProjectStatePatchLocal()` function with the patch
-If the above call fails the subscriber is assumed as dead and unsubscribed from the polling list
-
-### getProjectFiles
-
-Fetch the files associated with a given project
-
-#### Parameters
-
-*   `options` **[Object][63]** Options which mutate behaviour
-
-    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.meta` **[Boolean][64]** Pull meta information for each file entity (optional, default `true`)
-
-Returns **[Promise][68]<[ProjectFile][61]>** A collection of project files for the given project
-
-### getProjectLibrary
-
-Fetch the active projects citation library
-
-#### Parameters
-
-*   `path` **[String][66]?** Optional file path to use, if omitted the contents of `options` are used to guess at a suitable file
-*   `options` **[Object][63]?** Additional options to mutate behaviour
-
-    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.multiple` **[Boolean][64]** Allow selection of multiple libraries (optional, default `false`)
-    *   `options.filter` **[Function][71]?** Optional async file filter, called each time as `(File:ProjectFile)`
-    *   `options.find` **[Function][71]?** Optional async final stage file filter to reduce all candidates down to one subject file
-    *   `options.hint` **([String][66] | [Array][67]<[String][66]>)?** Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'dedisputed'
-
-Returns **[Promise][68]<[Array][67]<[ProjectFile][61]>>** Collection of references for the selected library matching the given hint + filter, this could be a zero length array
-
-### setProjectLibrary
-
-Save back a projects citation library
-
-#### Parameters
-
-*   `Collection` **[Array][67]\<RefLibRef>** of references for the selected library
-*   `options` **[Object][63]?** Additional options to mutate behaviour
-
-    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.hint` **[String][66]?** Hint to store against the library. Generally corresponds to the current operation being performed - e.g. 'deduped'
-
-Returns **[Promise][68]** A promise which resolves when the save operation has completed
 
 ## User
 
@@ -402,9 +273,90 @@ User / active session within TERA
 *   `name` **[String][66]** The provided full name of the user
 *   `isSubscribed` **[Boolean][64]** Whether the active user has a TERA subscription
 
+## getUser
+
+Fetch the current session user
+
+Returns **[Promise][68]<[User][38]>** The current logged in user or null if none
+
 ## Project
 
 Project entry within TERA
+
+## getProject
+
+Get the currently active project, if any
+
+Returns **[Promise][68]<([Project][41] | null)>** The currently active project, if any
+
+## getProjects
+
+Get a list of projects the current session user has access to
+
+Returns **[Promise][68]<[Array][67]<[Project][41]>>** Collection of projects the user has access to
+
+## setActiveProject
+
+Set the currently active project within TERA
+
+### Parameters
+
+*   `project` **([Object][63] | [String][66])** The project to set as active - either the full Project object or its ID
+
+## requireProject
+
+Ask the user to select a project from those available - if one isn't already active
+Note that this function will percist in asking the uesr even if they try to cancel
+
+### Parameters
+
+*   `options` **[Object][63]?** Additional options to mutate behaviour
+
+    *   `options.autoSetActiveProject` **[Boolean][64]** After selecting a project set that project as active in TERA (optional, default `true`)
+    *   `options.title` **[String][66]** The title of the dialog to display (optional, default `"Select a project to work with"`)
+    *   `options.noSelectTitle` **[String][66]** Dialog title when warning the user they need to select something (optional, default `'Select project'`)
+    *   `options.noSelectBody` **[String][66]** Dialog body when warning the user they need to select something (optional, default `'A project needs to be selected to continue'`)
+
+Returns **[Promise][68]<[Project][41]>** The active project
+
+## selectProject
+
+Prompt the user to select a project from those available
+
+### Parameters
+
+*   `options` **[Object][63]?** Additional options to mutate behaviour
+
+    *   `options.title` **[String][66]** The title of the dialog to display (optional, default `"Select a project to work with"`)
+    *   `options.allowCancel` **[Boolean][64]** Advertise cancelling the operation, the dialog can still be cancelled by closing it (optional, default `true`)
+    *   `options.setActive` **[Boolean][64]** Also set the project as active when selected (optional, default `false`)
+
+Returns **[Promise][68]<[Project][41]>** The active project
+
+## getProjectState
+
+Return the current, full snapshot state of the active project
+
+### Parameters
+
+*   `options` **[Object][63]?** Additional options to mutate behaviour
+
+    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
+*   `Paths` **[Array][67]<[String][66]>** to subscribe to e.g. \['/users/'],
+
+Returns **[Promise][68]<[Object][63]>** The current project state snapshot
+
+## applyProjectStatePatch
+
+Apply a computed `just-diff` patch to the current project state
+
+### Parameters
+
+*   `Patch` **[Object][63]** to apply
+
+Returns **[Promise][68]** A promise which resolves when the operation has completed
+
+##
 
 ## ProjectFile
 
@@ -425,6 +377,50 @@ Data structure for a project file
 *   `accessed` **[Date][70]** A date representing when the file was last accessed
 *   `size` **[Number][65]** Size, in bytes, of the file
 *   `mime` **[String][66]** The associated mime type for the file
+
+## getProjectFiles
+
+Fetch the files associated with a given project
+
+### Parameters
+
+*   `options` **[Object][63]** Options which mutate behaviour
+
+    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.meta` **[Boolean][64]** Pull meta information for each file entity (optional, default `true`)
+
+Returns **[Promise][68]<[ProjectFile][55]>** A collection of project files for the given project
+
+## getProjectLibrary
+
+Fetch the active projects citation library
+
+### Parameters
+
+*   `path` **[String][66]?** Optional file path to use, if omitted the contents of `options` are used to guess at a suitable file
+*   `options` **[Object][63]?** Additional options to mutate behaviour
+
+    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.multiple` **[Boolean][64]** Allow selection of multiple libraries (optional, default `false`)
+    *   `options.filter` **[Function][71]?** Optional async file filter, called each time as `(File:ProjectFile)`
+    *   `options.find` **[Function][71]?** Optional async final stage file filter to reduce all candidates down to one subject file
+    *   `options.hint` **([String][66] | [Array][67]<[String][66]>)?** Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'dedisputed'
+
+Returns **[Promise][68]<[Array][67]<[ProjectFile][55]>>** Collection of references for the selected library matching the given hint + filter, this could be a zero length array
+
+## setProjectLibrary
+
+Save back a projects citation library
+
+### Parameters
+
+*   `Collection` **[Array][67]\<RefLibRef>** of references for the selected library
+*   `options` **[Object][63]?** Additional options to mutate behaviour
+
+    *   `options.autoRequire` **[Boolean][64]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.hint` **[String][66]?** Hint to store against the library. Generally corresponds to the current operation being performed - e.g. 'deduped'
+
+Returns **[Promise][68]** A promise which resolves when the save operation has completed
 
 [1]: #terafy
 
@@ -500,55 +496,55 @@ Data structure for a project file
 
 [37]: #properties-2
 
-[38]: #getuser
+[38]: #user
 
-[39]: #getproject
+[39]: #properties-3
 
-[40]: #getprojects
+[40]: #getuser
 
-[41]: #setactiveproject
+[41]: #project
 
-[42]: #parameters-11
+[42]: #getproject
 
-[43]: #requireproject
+[43]: #getprojects
 
-[44]: #parameters-12
+[44]: #setactiveproject
 
-[45]: #selectproject
+[45]: #parameters-11
 
-[46]: #parameters-13
+[46]: #requireproject
 
-[47]: #getprojectstate
+[47]: #parameters-12
 
-[48]: #parameters-14
+[48]: #selectproject
 
-[49]: #applyprojectstatepatch
+[49]: #parameters-13
 
-[50]: #parameters-15
+[50]: #getprojectstate
 
-[51]: #subscribeprojectstate
+[51]: #parameters-14
 
-[52]: #getprojectfiles
+[52]: #applyprojectstatepatch
 
-[53]: #parameters-16
+[53]: #parameters-15
 
-[54]: #getprojectlibrary
+[54]: #
 
-[55]: #parameters-17
+[55]: #projectfile
 
-[56]: #setprojectlibrary
+[56]: #properties-4
 
-[57]: #parameters-18
+[57]: #getprojectfiles
 
-[58]: #user
+[58]: #parameters-16
 
-[59]: #properties-3
+[59]: #getprojectlibrary
 
-[60]: #project
+[60]: #parameters-17
 
-[61]: #projectfile
+[61]: #setprojectlibrary
 
-[62]: #properties-4
+[62]: #parameters-18
 
 [63]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
