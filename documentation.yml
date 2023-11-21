@@ -1,0 +1,12 @@
+toc:
+  - name: TeraFy Playground
+    description: |
+      See [the TeraFy Playground](./playground.html) to expriment with the various TeraFy API calls.
+  - name: Data entities
+    children:
+      - User
+      - Project
+      - ProjectFile
+  - name: TeraFy
+    description: |
+      API reference for all methods exposed by the TeraFy client library.
