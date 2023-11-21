@@ -206,7 +206,7 @@
 								>
 									<div>terafy.setActiveProject(</div>
 									<select
-										v-if="projects"
+										v-if="projects && projects.length > 0"
 										v-model="project"
 										class="form-control"
 										placeholder="Select project..."
