@@ -55,7 +55,7 @@
     *   [Parameters][51]
 *   [applyProjectStatePatch][52]
     *   [Parameters][53]
-*   [][54]
+*   [subscribeProjectState][54]
 *   [ProjectFile][55]
     *   [Properties][56]
 *   [getProjectFiles][57]
@@ -356,7 +356,13 @@ Apply a computed `just-diff` patch to the current project state
 
 Returns **[Promise][68]** A promise which resolves when the operation has completed
 
-##
+## subscribeProjectState
+
+Subscribe to project state changes
+This will dispatch an RPC call to the source object `applyProjectStatePatchLocal()` function with the patch
+If the above call fails the subscriber is assumed as dead and unsubscribed from the polling list
+
+Returns **[Promise][68]<[Function][71]>** A promise which resolves when a subscription has been created, call the resulting function to unsubscribe
 
 ## ProjectFile
 
@@ -528,7 +534,7 @@ Returns **[Promise][68]** A promise which resolves when the save operation has c
 
 [53]: #parameters-15
 
-[54]: #
+[54]: #subscribeprojectstate
 
 [55]: #projectfile
 
