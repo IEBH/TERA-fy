@@ -188,12 +188,6 @@
 						<div class="card-body">
 							<div class="list-group">
 								<a
-									@click="run('bindProject')"
-									class="list-group-item list-group-item-action disabled"
-								>
-									terafy.bindProject()
-								</a>
-								<a
 									@click="run('getProject')"
 									class="list-group-item list-group-item-action"
 								>
@@ -257,16 +251,32 @@
 									terafy.getProjectState()
 								</a>
 								<a
-									@click="run('bindProjectState')"
-									class="list-group-item list-group-item-action disabled"
-								>
-									terafy.bindProjectState()
-								</a>
-								<a
 									@click="run('applyProjectStatePatch')"
 									class="list-group-item list-group-item-action disabled"
 								>
 									terafy.applyProjectStatePatch()
+								</a>
+								<a
+									@click="run('subscribeProjectState')"
+									class="list-group-item list-group-item-action disabled"
+								>
+									terafy.subscribeProjectState()
+								</a>
+							</div>
+						</div>
+					</div>
+					<!-- }}} -->
+
+					<!-- Project Files {{{ -->
+					<div class="card mb-2">
+						<div class="card-header">Project Files</div>
+						<div class="card-body">
+							<div class="list-group">
+								<a
+									@click="run('getProjectFiles')"
+									class="list-group-item list-group-item-action"
+								>
+									terafy.getProjectFiles()
 								</a>
 							</div>
 						</div>
