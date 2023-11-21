@@ -20,7 +20,7 @@
 	</style>
 
 	<script type="module">
-		import TeraFy from 'https://raw.github.com/IEBH/TERA-fy/blob/master/dist/terafy.js';
+		import TeraFy from 'https://raw.githubusercontent.com/IEBH/TERA-fy/master/dist/terafy.js';
 
 		Vue.createApp({
 			data() { return {
@@ -97,6 +97,30 @@
 </head>
 <body>
 	<div id="app">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+			<a href="https://github.com/IEBH/TERA-fy" class="navbar-brand">TERA-fy</a>
+			<button type="button" data-toggle="collapse" data-target="#navbarAreas" class="navbar-toggler">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div id="navbarAreas" class="collapse navbar-collapse">
+				<ul class="navbar-nav">
+					<li class="navbar-item me-1">
+						<a href="https://iebh.github.io/TERA-fy" class="btn btn-light">API docs</a>
+					</li>
+					<li class="navbar-item mr-1">
+						<a href="https://iebh.github.io/TERA-fy/playground.html" class="btn btn-primary text-white">Playground</a>
+					</li>
+				</ul>
+			</div>
+			<ul class="navbar-nav">
+				<li class="navbar-item">
+					<a href="https://github.com/IEBH/TERA-fy" class="btn btn-light">
+						GitHub
+					</a>
+				</li>
+			</ul>
+		</nav>
+
 		<div class="container pt-4">
 			<div class="row">
 				<div class="col-sm-12 col-md-6">
