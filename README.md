@@ -2,9 +2,9 @@ TERA-fy
 =======
 TERA website worker, intended to be embedded with TERA tools.
 
-* [API workbench](https://iebh.github.io/TERA-fy/)
-* [TERA-fy API (API explorer)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/IEBH/TERA-fy/master/docs/TeraFy.html)
+* [TERA-fy API (API explorer)](https://iebh.github.io/TERA-fy/)
 * [TERA-fy API (Markdown, single page)](./api.md)
+* [API playground](https://iebh.github.io/TERA-fy/playground.html)
 
 
 TERA-fy is a component intended to be dropped into a sub-site / tool used with in the main [TERA](https://tera-tools.com) project. It provides various functionality like data sync with the parent TERA instance.
