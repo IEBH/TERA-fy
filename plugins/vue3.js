@@ -1,5 +1,4 @@
 import TeraFyPluginBase from './base.js';
-import {diff} from 'just-diff';
 import {reactive, watch} from 'vue';
 
 /**
@@ -18,7 +17,6 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	* @param {Object} [options] Additional options to mutate behaviour
 	* @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
 	* @param {Boolean} [options.write=true] Allow local reactivity to writes - send these to the server
-	* @param {Array<String>} Paths to subscribe to e.g. ['/users/'],
 	*
 	* @returns {Promie<Reactive<Object>>} A reactive object representing the project state
 	*/
@@ -30,10 +28,8 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 		};
 
 		return Promise.resolve()
-			.then(()=> settings.autoRequire && this.requireProject())
 			.then(()=> this.getProjectState({
-				autoRequire: false, // already handled this
-				paths: settings.paths,
+				autoRequire: settings.autoRequire ,
 			}))
 			.then(snapshot => {
 				this.debug('Got project snapshot', snapshot);
@@ -49,8 +45,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 					watch(
 						stateReactive,
 						(newVal, oldVal) => {
-							let diff = diff(newVal, oldVal);
-							this.applyProjectStatePatch(diff);
+							this.createProojectStatePatch(newVal, oldVal);
 						},
 						{
 							deep: true,
@@ -120,6 +115,8 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 				let settings = {
 					autoInit: true,
 					globalName: '$tera',
+					subscribeState: true,
+					subscribeProjects: true,
 					stateOptions: {
 						write: true,
 					},
@@ -135,13 +132,12 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 					.then(()=> settings.autoInit && $tera.init())
 					.then(()=> Promise.all([
 						// Bind available project and wait on it
-						$tera.bindProjectState(settings.stateOptions)
+						settings.subscribeState && $tera.bindProjectState(settings.stateOptions)
 							.then(state => $tera.state = state)
 							.then(()=> $tera.debug('INFO', 'Loaded project state', $tera.state)),
 
 						// Fetch available projects
-						// TODO: It would be nice if this was responsive to remote changes
-						$tera.getProjects()
+						settings.subscribeProjects && $tera.getProjects()
 							.then(projects => $tera.projects = reactive(projects))
 							.then(()=> $tera.debug('INFO', 'Loaded projects', $tera.projects)),
 					]))
