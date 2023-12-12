@@ -8,6 +8,20 @@ import {reactive, watch} from 'vue';
 * This function is expected to be included via the `terafy.use(MODULE, OPTIONS)` syntax rather than directly
 *
 * @class TeraFyPluginVue
+*
+* @example Implementation within a Vue3 / Vite project within `src/main.js`:
+* import TeraFy from '@iebh/tera-fy';
+* import TerafyVue from '@iebh/tera-fy/plugins/vue';
+* let terafy = new TeraFy()
+*   .set('devMode', import.meta.env.DEV)
+*   .set('siteUrl', 'http://localhost:8000/embed') // Uncomment this line if running TERA locally
+*   .use(TerafyVue) // Add the Vue plugin
+*
+* terafy.init(); // Initialize everything
+*
+* app.use(terafy.vuePlugin({
+*   globalName: '$tera', // Install as vm.$tera into every component
+* }));
 */
 export default class TeraFyPluginVue extends TeraFyPluginBase {
 

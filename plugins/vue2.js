@@ -8,6 +8,20 @@ import Vue from 'vue';
 * This function is expected to be included via the `terafy.use(MODULE, OPTIONS)` syntax rather than directly
 *
 * @class TeraFyPluginVue
+*
+* @example Implementation within a Vue2 project `src/main.js`:
+* // Include the main Tera-Fy core
+* import TeraFy from '@iebh/tera-fy';
+* import TerafyVue from '@iebh/tera-fy/plugins/vue2';
+* let terafy = new TeraFy()
+*   .set('devMode', true) // Uncomment this line if you want TeraFy to be chatty
+*   .set('siteUrl', 'http://localhost:8000/embed') // Uncomment this line if running TERA locally
+*   .use(TerafyVue) // Add the Vue plugin
+*
+* // Include after app boot
+* const app = new Vue({ ... })
+* app.$mount("#app");
+* await terafy.init({app});
 */
 export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 
@@ -44,7 +58,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 					if (settings.componentKey) return; // Already allocated by user
 					for (let x = 0; x < 50; x++) {
 						let key = `terafy_${x}`;
-						if (!Object.hasOwnProperty(settings.component, key)) {
+						if (!Object.hasOwnProperty(settings.component, key)) { // eslint-disable-line
 							settings.componentKey = key;
 							return;
 						}
