@@ -1,3 +1,4 @@
+import {cloneDeep} from 'lodash-es';
 import TeraFyPluginBase from './base.js';
 import Vue from 'vue';
 
@@ -83,10 +84,15 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				if (settings.write) {
 					if (!settings.component) throw new Error('bindProjectState requires a VueComponent specified as `component`');
 
+					// NOTE: The below $watch function returns two copies of the new value of the observed so we have to keep track
+					//       of what changed ourselves by initalizing against the snapshot
+					let oldVal = cloneDeep(snapshot);
+
 					settings.component.$watch(
 						settings.componentKey,
-						(newVal, oldVal) => {
-							this.createProojectStatePatch(newVal, oldVal);
+						newVal => {
+							this.createProjectStatePatch(newVal, oldVal);
+							oldVal = cloneDeep(snapshot);
 						},
 						{
 							deep: true,
