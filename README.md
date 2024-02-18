@@ -5,9 +5,11 @@ TERA website worker, intended to be embedded with TERA tools.
 * [TERA-fy API (API explorer)](https://iebh.github.io/TERA-fy/)
 * [TERA-fy API (Markdown, single page)](./api.md)
 * [API playground](https://iebh.github.io/TERA-fy/playground.html)
+* [TERA-Explorer](https://github.com/IEBH/TERA-explorer) - A simple example project using TERA-fy
+ 	- [Live standalone version](https://explorer.tera-tools.com/)
+  	- [Live Embedded version](https://tera-tools.com/explorer)
 
-
-TERA-fy is a component intended to be dropped into a sub-site / tool used with in the main [TERA](https://tera-tools.com) project. It provides various functionality like data sync with the parent TERA instance.
+TERA-fy is a add-on module which extends 3rd party tools with functionality from the [TERA](https://tera-tools.com) project. It provides various functionality like data sync with the parent TERA instance, file upload/download, citation library access and other utilities.
 
 
 Quick Start
@@ -28,4 +30,6 @@ await terafy.requireProject();
 
 // Go fetch the state of the active project
 let projectState = await terafy.getProjectState(); //= Object representing the active project
+
+// See https://iebh.github.io/TERA-fy/ for a full API list
 ```
