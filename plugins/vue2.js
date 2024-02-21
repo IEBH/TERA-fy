@@ -78,19 +78,31 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				settings.component[settings.componentKey] = stateObservable;
 
 				// Watch for remote changes and update
-				// FIXME: Not yet supported
+				let skipUpdate = 0; // How many subsequent WRITE operations to ignore (set when reading)
+				if (settings.read) {
+					this.events.on(`update:projects/${stateReactive.id}`, newState => {
+						skipUpdate++; // Skip next update as we're updating our own state anyway
+						Object.assign(stateReactive, newState);
+					});
+				}
 
 				// Watch for local writes and react
 				if (settings.write) {
 					if (!settings.component) throw new Error('bindProjectState requires a VueComponent specified as `component`');
 
-					// NOTE: The below $watch function returns two copies of the new value of the observed so we have to keep track
-					//       of what changed ourselves by initalizing against the snapshot
+					// NOTE: The below $watch function returns two copies of the new value of the observed
+					//       so we have to keep track of what changed ourselves by initalizing against the
+					//       snapshot
 					let oldVal = cloneDeep(snapshot);
 
 					settings.component.$watch(
 						settings.componentKey,
 						newVal => {
+							if (skipUpdate > 0) {
+								skipUpdate--;
+								return;
+							}
+
 							this.createProjectStatePatch(newVal, oldVal);
 							oldVal = cloneDeep(snapshot);
 						},

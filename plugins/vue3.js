@@ -30,6 +30,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	*
 	* @param {Object} [options] Additional options to mutate behaviour
 	* @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
+	* @param {Boolean} [options.read=true] Allow remote reactivity - update the local state when the server changes
 	* @param {Boolean} [options.write=true] Allow local reactivity to writes - send these to the server
 	*
 	* @returns {Promie<Reactive<Object>>} A reactive object representing the project state
@@ -37,6 +38,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	bindProjectState(options) {
 		let settings = {
 			autoRequire: true,
+			read: true,
 			write: true,
 			...options,
 		};
@@ -46,19 +48,30 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 				autoRequire: settings.autoRequire ,
 			}))
 			.then(snapshot => {
-				this.debug('Got project snapshot', snapshot);
+				this.debug('Fetched project snapshot', snapshot);
 
 				// Create initial reactive
 				let stateReactive = reactive(snapshot);
 
 				// Watch for remote changes and update
-				// FIXME: Not yet supported
+				let skipUpdate = 0; // How many subsequent WRITE operations to ignore (set when reading)
+				if (settings.read) {
+					this.events.on(`update:projects/${stateReactive.id}`, newState => {
+						skipUpdate++; // Skip next update as we're updating our own state anyway
+						Object.assign(stateReactive, newState);
+					});
+				}
 
 				// Watch for local writes and react
 				if (settings.write) {
 					watch(
 						stateReactive,
 						(newVal, oldVal) => {
+							if (skipUpdate > 0) {
+								skipUpdate--;
+								return;
+							}
+
 							this.createProojectStatePatch(newVal, oldVal);
 						},
 						{
