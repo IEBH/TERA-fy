@@ -85,5 +85,9 @@
       "ecmaVersion": 13,
       "sourceType": "module"
     }
+  },
+  "dependencies": {
+    "@momsfriendlydevco/supabase-reactive": "^1.0.7",
+    "mitt": "^3.0.1"
   }
 }
