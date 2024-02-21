@@ -1,5 +1,5 @@
-./.storybook/
-./docs/
-./test/
+.storybook/
+docs/
+test/
 **/*.story.js
 **/*.demo.vue
