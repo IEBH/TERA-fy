@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.0.9 | Documentation</title>
+  <title>@iebh/tera-fy 1.0.11 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.0.9</code></div>
+          <div class='mb1'><code>1.0.11</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -98,6 +98,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#events'
+                        class='regular pre-open'>
+                        #events
+                      </a></li>
+                      
+                      <li><a
                         href='#dom'
                         class='regular pre-open'>
                         #dom
@@ -197,6 +203,12 @@
                         href='#set'
                         class='regular pre-open'>
                         #set
+                      </a></li>
+                      
+                      <li><a
+                        href='#setifdev'
+                        class='regular pre-open'>
+                        #setIfDev
                       </a></li>
                       
                       <li><a
@@ -252,6 +264,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#events'
+                        class='regular pre-open'>
+                        #events
+                      </a></li>
+                      
+                      <li><a
                         href='#dom'
                         class='regular pre-open'>
                         #dom
@@ -351,6 +369,12 @@
                         href='#set'
                         class='regular pre-open'>
                         #set
+                      </a></li>
+                      
+                      <li><a
+                        href='#setifdev'
+                        class='regular pre-open'>
+                        #setIfDev
                       </a></li>
                       
                       <li><a
@@ -460,6 +484,36 @@
                   href='#getprojectstate'
                   class="">
                   getProjectState
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setprojectstate'
+                  class="">
+                  setProjectState
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#saveprojectstate'
+                  class="">
+                  saveProjectState
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#replaceprojectstate'
+                  class="">
+                  replaceProjectState
                   
                 </a>
                 
@@ -989,6 +1043,60 @@
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='events'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>events</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Event emitter subscription endpoint</p>
+
+    <div class='pre p1 fill-light mt0'>events</div>
+  
+    <p>
+      Type:
+      Mitt
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
   
 
   
@@ -2132,6 +2240,96 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
       </div>
     </div>
   
+    <div class='border-bottom' id='setifdev'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setIfDev(key, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set or merge settings - but only in dev mode</p>
+
+    <div class='pre p1 fill-light mt0'>setIfDev(key: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>), value: any): <a href="#terafy">TeraFy</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>key</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</code>
+	    Either a single setting key to set or an object to merge
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(any)</code>
+	    The value to set if 
+<code>key</code>
+ is a string
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#terafy">TeraFy</a></code>:
+        This chainable terafy instance
+
+      
+    
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        set()
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='use'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -3096,6 +3294,277 @@ Note that this function will percist in asking the uesr even if they try to canc
     
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setprojectstate'>
+      setProjectState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Set a nested value within the project state
+Paths can be any valid Lodash.set() value such as:</p>
+<pre><code>- Dotted notation - e.g. `foo.bar.1.baz`
+- Array path segments e.g. `['foo', 'bar', 1, 'baz']`
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>setProjectState(path: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>>), value: any, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>>))</code>
+	    The sub-path within the project state to set
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(any)</code>
+	    The value to set
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.save</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span>Save the changes to the server immediately, disable to queue up multiple writes
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.sync</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>Wait for the server to acknowledge the write, you almost never need to do this
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which resolves when the operation has synced with the server
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='saveprojectstate'>
+      saveProjectState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Force-Save the currently active project state</p>
+
+    <div class='pre p1 fill-light mt0'>saveProjectState(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which resolves when the operation has completed
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='replaceprojectstate'>
+      replaceProjectState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Overwrite the entire project state with a new object
+You almost never want to use this function directly, see <code>setProjectState(path, value)</code> for a nicer wrapper</p>
+
+    <div class='pre p1 fill-light mt0'>replaceProjectState(newState: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>newState</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    The new state to replace the current state with
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which resolves when the operation has completed
+
+      
+    
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        setProjectState()
+
+      
+    
   
 
   
