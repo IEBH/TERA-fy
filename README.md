@@ -33,3 +33,15 @@ let projectState = await terafy.getProjectState(); //= Object representing the a
 
 // See https://iebh.github.io/TERA-fy/ for a full API list
 ```
+
+Included Files
+--------------
+Generally importing the source code TERA-fy client (`import terafy from '@iebh/tera-fy';`) should be sufficient but multiple versions of this client are shipped for compatibility with older or more annoying build systems:
+
+| Import                                     | Standard     | Description                                                        |
+|--------------------------------------------|--------------|--------------------------------------------------------------------|
+| `@iebh/tera-fy`                            | Source Code  | Basic, plain JS to be transformed however your build path requires |
+| `@iebh/tera-fy/dist/terafy.es2019.js`      | ESM + ES2019 | `@vue/cli-service` compatible version for older versions of Babel  |
+| `@iebh/tera-fy/dist/plugin.vue2.es2019.js` | ESM + ES2019 | `@vue/cli-service` compatible version of the Vue@2 plugin          |
+
+More versions can be added upon request or PR of the build command in the scripts section of `package.json`.

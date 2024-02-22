@@ -1,6 +1,5 @@
 import {cloneDeep} from 'lodash-es';
 import TeraFyPluginBase from './base.js';
-import Vue from 'vue';
 
 /**
 * Vue2 observables plugin
@@ -9,6 +8,8 @@ import Vue from 'vue';
 * This function is expected to be included via the `terafy.use(MODULE, OPTIONS)` syntax rather than directly
 *
 * @class TeraFyPluginVue
+* @param {Object} options Options when initalizing
+* @param {Vue} options.Vue Vue instance to bind against
 *
 * @example Implementation within a Vue2 project `src/main.js`:
 * // Include the main Tera-Fy core
@@ -17,7 +18,9 @@ import Vue from 'vue';
 * let terafy = new TeraFy()
 *   .set('devMode', true) // Uncomment this line if you want TeraFy to be chatty
 *   .set('siteUrl', 'http://localhost:8000/embed') // Uncomment this line if running TERA locally
-*   .use(TerafyVue) // Add the Vue plugin
+*   .use(TerafyVue, { // Add the Vue plugin
+*   	vue: window.Vue, // Assumes Vue is available on the window object
+*   })
 *
 * // Include after app boot
 * const app = new Vue({ ... })
@@ -25,6 +28,13 @@ import Vue from 'vue';
 * await terafy.init({app});
 */
 export default class TeraFyPluginVue2 extends TeraFyPluginBase {
+
+	/**
+	* Local Vue@2 library to use, set during constuctor
+	* @type {Vue}
+	*/
+	Vue;
+
 
 	/**
 	* Return a Vue Observable object that can be read/written which whose changes will transparently be written back to the TERA server instance
@@ -72,7 +82,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				this.debug('Got project snapshot', snapshot);
 
 				// Create initial Observable
-				let stateObservable = Vue.observable(snapshot);
+				let stateObservable = this.Vue.observable(snapshot);
 
 				// Allocate to component
 				settings.component[settings.componentKey] = stateObservable;
@@ -120,9 +130,10 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 
 	/**
 	* List of available projects for the current session
+	* Initalized during constructor
 	* @type {VueReactive<Array<Object>>}
 	*/
-	projects = Vue.observable([]);
+	projects;
 
 
 	/**
@@ -136,7 +147,9 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 	/**
 	* Install into Vue@2
 	*
-	* @param {Object} [options] Additional options to mutate behaviour (defaults to the main teraFy settings)
+	* @param {Object} options Additional options to mutate behaviour (defaults to the main teraFy settings)
+	* @param {Object} options.app Root level Vue app to bind against
+	* @param {Vue} options.Vue Vue@2 instance to bind against
 	* @param {String} [options.globalName='$tera'] Global property to allocate this service as within Vue2
 	* @param {Boolean} [options.subscribeState=true] Setup `vm.$tera.state` as a live binding on init
 	* @param {Boolean} [options.subscribeList=true] Setup `vm.$tera.projects` as a list of accesible projects on init
@@ -146,6 +159,8 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 	*/
 	init(options) {
 		let settings = {
+			app: null,
+			Vue: null,
 			globalName: '$tera',
 			subscribeState: true,
 			subscribeProjects: true,
@@ -154,12 +169,19 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 			},
 			...options,
 		};
+
+		if (!settings.Vue) throw new Error('Vue instance to use must be specified in constructor as `Vue`');
+		this.Vue = options.Vue;
+
 		if (!this.settings.app) throw new Error('Need to specify the root level Vue2 app during init');
 		settings.stateOptions.app = this.settings.app;
 
+		// Create observable binding for projects
+		this.projects = this.Vue.observable([])
+
 		// Make this module available globally
 		if (settings.globalName)
-			Vue.prototype[settings.globalName] = this;
+			this.Vue.prototype[settings.globalName] = this;
 
 		// Bind `state` to the active project
 		// Initialize state to null
@@ -178,7 +200,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 
 				// Fetch available projects
 				settings.subscribeProjects && this.getProjects()
-					.then(projects => this.projects = Vue.observable(projects))
+					.then(projects => this.projects = this.Vue.observable(projects))
 					.then(()=> this.debug('INFO', 'Loaded projects', this.projects)),
 			]))
 	}
