@@ -95,6 +95,7 @@ Type: [Object][76]
 *   `modeTimeout` **[Number][78]** How long entities have in 'detect' mode to identify themselves
 *   `siteUrl` **[String][79]** The TERA URL to connect to
 *   `restrictOrigin` **[String][79]** URL to restrict communications to
+*   `List` **[Array][80]<[String][79]>** of sandbox allowables for the embedded if in embed mode
 
 ### events
 
@@ -269,7 +270,7 @@ Include a TeraFy client plugin
 #### Parameters
 
 *   `mod` &#x20;
-*   `options` **[Object][76]?** Additional options to mutate behaviour
+*   `options` **[Object][76]?** Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
 *   `The` **[Object][76]** module function to include. Invoked as `(teraClient:TeraFy, options:Object)`
 
 Returns **[TeraFy][1]** This chainable terafy instance
