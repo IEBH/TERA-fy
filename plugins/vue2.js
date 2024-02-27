@@ -90,9 +90,9 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				// Watch for remote changes and update
 				let skipUpdate = 0; // How many subsequent WRITE operations to ignore (set when reading)
 				if (settings.read) {
-					this.events.on(`update:projects/${stateReactive.id}`, newState => {
+					this.events.on(`update:projects/${stateObservable.id}`, newState => {
 						skipUpdate++; // Skip next update as we're updating our own state anyway
-						Object.assign(stateReactive, newState);
+						Object.assign(stateObservable, newState);
 					});
 				}
 
@@ -165,12 +165,13 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 			subscribeState: true,
 			subscribeProjects: true,
 			stateOptions: {
+				read: true,
 				write: true,
 			},
 			...options,
 		};
 
-		if (!settings.Vue) throw new Error('Vue instance to use must be specified in constructor as `Vue`');
+		if (!settings.Vue) throw new Error('Vue instance to use must be specified in init options as `Vue`');
 		this.Vue = options.Vue;
 
 		if (!this.settings.app) throw new Error('Need to specify the root level Vue2 app during init');
