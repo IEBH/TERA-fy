@@ -6,8 +6,9 @@ TERA website worker, intended to be embedded with TERA tools.
 * [TERA-fy API (Markdown, single page)](./api.md)
 * [API playground](https://iebh.github.io/TERA-fy/playground.html)
 * [TERA-Explorer](https://github.com/IEBH/TERA-explorer) - A simple example project using TERA-fy
- 	- [Live standalone version](https://explorer.tera-tools.com/)
-  	- [Live Embedded version](https://tera-tools.com/explorer)
+	- [Live standalone version](https://explorer.tera-tools.com/)
+	- [Live Embedded version](https://tera-tools.com/explorer)
+* [File Hints reference](./hints.md)
 
 TERA-fy is a add-on module which extends 3rd party tools with functionality from the [TERA](https://tera-tools.com) project. It provides various functionality like data sync with the parent TERA instance, file upload/download, citation library access and other utilities.
 
