@@ -62,20 +62,22 @@
   "engines": {
     "node": ">=18"
   },
-  "peerDependencies": {
-    "lodash-es": "^4.17.21",
-    "nanoid": "^5.0.2"
-  },
-  "optionalDependencies": {
+  "dependencies": {
     "just-diff": "^6.0.2",
-    "just-diff-apply": "^5.5.0",
-    "vue": "^3.3.7"
+    "lodash-es": "^4.17.21",
+    "mitt": "^3.0.1",
+    "nanoid": "^5.0.2"
   },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^1.0.7",
     "concurrently": "^8.2.2",
     "documentation": "^14.0.2",
     "esbuild": "^0.19.5"
+  },
+  "optionalDependencies": {
+    "@iebh/reflib": "^2.2.2",
+    "just-diff-apply": "^5.5.0",
+    "vue": "^3.3.7"
   },
   "eslintConfig": {
     "extends": "@momsfriendlydevco",
@@ -87,9 +89,5 @@
       "ecmaVersion": 13,
       "sourceType": "module"
     }
-  },
-  "dependencies": {
-    "@momsfriendlydevco/supabase-reactive": "^1.0.7",
-    "mitt": "^3.0.1"
   }
 }
