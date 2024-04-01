@@ -151,6 +151,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 	* @param {Object} options.app Root level Vue app to bind against
 	* @param {Vue} options.Vue Vue@2 instance to bind against
 	* @param {String} [options.globalName='$tera'] Global property to allocate this service as within Vue2
+	* @param {Boolean} [options.requireProject=true] Automatically call requireProject() prior to any operation
 	* @param {Boolean} [options.subscribeState=true] Setup `vm.$tera.state` as a live binding on init
 	* @param {Boolean} [options.subscribeList=true] Setup `vm.$tera.projects` as a list of accesible projects on init
 	* @param {Objecct} [options.stateOptions] Options passed to `bindProjectState()` when setting up the main state
@@ -162,6 +163,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 			app: null,
 			Vue: null,
 			globalName: '$tera',
+			requireProject: true,
 			subscribeState: true,
 			subscribeProjects: true,
 			stateOptions: {
@@ -190,6 +192,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 
 		// this.statePromisable becomes the promise we are waiting on to resolve
 		return Promise.resolve()
+			.then(()=> settings.requireProject && this.requireProject())
 			.then(()=> Promise.all([
 				// Bind available project and wait on it
 				settings.subscribeState && this.bindProjectState({
