@@ -3,11 +3,11 @@
   "version": "1.0.18",
   "description": "TERA website worker",
   "scripts": {
-    "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap --serve --servedir=.",
+    "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --serve --servedir=.",
     "build": "concurrently 'npm:build:*'",
-    "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --sourcemap",
-    "build:client:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle lib/terafy.client.js --outfile=dist/terafy.es2019.js --minify --sourcemap",
-    "build:plugins-vue2:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle plugins/vue2.js --outfile=dist/plugin.vue2.es2019.js --minify --sourcemap",
+    "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify",
+    "build:client:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle lib/terafy.client.js --outfile=dist/terafy.es2019.js --minify",
+    "build:plugins-vue2:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle plugins/vue2.js --outfile=dist/plugin.vue2.es2019.js --minify",
     "build:docs:api": "documentation build lib/terafy.client.js --format html --config documentation.yml --output docs/",
     "build:docs:markdown": "documentation build lib/terafy.client.js --format md --markdown-toc --output api.md",
     "watch": "nodemon --watch lib/terafy.client.js --exec npm run build",
@@ -26,7 +26,8 @@
       "default": "./dist/terafy.js"
     },
     "./server": "./lib/terafy.server.js",
-    "./plugins/*": "./plugins/*.js"
+    "./plugins/*": "./plugins/*.js",
+    "./widgets/*": "./widgets/*.js"
   },
   "repository": {
     "type": "git",
