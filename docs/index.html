@@ -649,6 +649,26 @@
                 
                 </li>
               
+                
+                <li><a
+                  href='#uisplat'
+                  class="">
+                  uiSplat
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#uiwindow'
+                  class="">
+                  uiWindow
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -1095,8 +1115,17 @@
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>How</span> <code class='quiet'>((<code>"detect"</code> | <code>"parent"</code> | <code>"child"</code>))</code>
-          : to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and fallsback to 'child'
+          <span class='code bold'>mode</span> <code class='quiet'>((<code>"detect"</code> | <code>"parent"</code> | <code>"child"</code> | <code>"popup"</code>))</code>
+          : How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to 
+<code>modeFallback</code>
+ if communication fails
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>modeFallback</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+          : Method to use when all method detection fails
 
           
         </div>
@@ -1125,6 +1154,13 @@
         <div class='space-bottom0'>
           <span class='code bold'>List</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>>)</code>
           : of sandbox allowables for the embedded if in embed mode
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>handshakeInterval</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+          : Interval in milliseconds when sanning for a handshake
 
           
         </div>
@@ -1251,7 +1287,18 @@
       
         <div class='space-bottom0'>
           <span class='code bold'>iframe</span> <code class='quiet'>(DOMElement)</code>
-          : The internal iFrame element
+          : The internal iFrame element  (if 
+<code>settings.mode == 'child'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>popup</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Window">Window</a>)</code>
+          : The popup window context (if 
+<code>settings.mode == 'popup'</code>
+)
 
           
         </div>
@@ -2872,7 +2919,7 @@ This is usually because the server component wants to perform some user activity
 If there is no user OR they are not logged in a prompt is shown to go and do so
 This is an pre-requisite step for requireProject()</p>
 
-    <div class='pre p1 fill-light mt0'>requireUser(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>requireUser(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#user">User</a>></div>
   
   
 
@@ -2883,6 +2930,47 @@ This is an pre-requisite step for requireProject()</p>
   
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.forceRetry</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>Forcabily try to refresh the user state
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -2890,8 +2978,8 @@ This is an pre-requisite step for requireProject()</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        A promise which will resolve if the there is a user and they are logged in
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#user">User</a>></code>:
+        The current logged in user or null if none
 
       
     
@@ -5092,6 +5180,248 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
         A promise which resolves when the alert has been dismissed
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='uisplat'>
+      uiSplat
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Display HTML content full-screen within TERA
+This function is ideally called within a requestFocus() wrapper</p>
+
+    <div class='pre p1 fill-light mt0'>uiSplat(content: (DOMElement | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <code>false</code>), options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>content</span> <code class='quiet'>((DOMElement | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <code>false</code>))</code>
+	    Either a prepared DOM element or string to compile, set to falsy to remove existing content
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.logo</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>Add a logo to the output, if boolean true the Tera-tools logo is used otherwise specify a path or URL
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='uiwindow'>
+      uiWindow
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Open a popup window containing a new site</p>
+
+    <div class='pre p1 fill-light mt0'>uiWindow(url: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): WindowProxy</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>url</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The URL to open
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.width</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></code>
+  
+    (default <code>500</code>)
+  </td>
+  <td class='break-word'><span>The desired width of the window
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.height</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></code>
+  
+    (default <code>600</code>)
+  </td>
+  <td class='break-word'><span>The desired height of the window
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.center</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span>Attempt to center the window on the screen
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.permissions</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?</code>
+  </td>
+  <td class='break-word'><span>Additional permissions to set on opening, defaults to a suitable set of permission for popups (see code)
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>WindowProxy</code>:
+        The opened window object (if 
+<code>noopener</code>
+ is not set in permissions)
 
       
     
