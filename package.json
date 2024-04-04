@@ -86,7 +86,7 @@
   },
   "commit-and-tag-version": {
     "scripts": {
-      "prerelease": "npm run build && git add dist"
+      "prerelease": "npm run build && git add docs dist"
     }
   },
   "eslintConfig": {

@@ -9,6 +9,7 @@ TERA website worker, intended to be embedded with TERA tools.
 	- [Live standalone version](https://explorer.tera-tools.com/)
 	- [Live Embedded version](https://tera-tools.com/explorer)
 * [File Hints reference](./hints.md)
+* [Changelog](./CHANGELOG.md)
 
 TERA-fy is a add-on module which extends 3rd party tools with functionality from the [TERA](https://tera-tools.com) project. It provides various functionality like data sync with the parent TERA instance, file upload/download, citation library access and other utilities.
 
