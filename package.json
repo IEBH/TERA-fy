@@ -87,7 +87,7 @@
   "commit-and-tag-version": {
     "scripts": {
       "prerelease": "npm run build && git add docs dist",
-      "postbump": "npm publish"
+      "postcommit": "npm publish"
     }
   },
   "eslintConfig": {
