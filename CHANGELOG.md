@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.24](https://github.com/IEBH/TERA-fy/compare/v1.0.23...v1.0.24) (2024-04-05)
+
+
+### Bug Fixes
+
+* Yet another fix for setProjectState() throwing when trying to save + remove defunct {sync:Boolean} option ([4e320ec](https://github.com/IEBH/TERA-fy/commit/4e320ec8f171237387db7404a7209b4ca51898c8))
+
 ## [1.0.23](https://github.com/IEBH/TERA-fy/compare/v1.0.22...v1.0.23) (2024-04-04)
 
 ## <small>1.0.22 (2024-04-04)</small>
