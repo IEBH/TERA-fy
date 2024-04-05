@@ -646,9 +646,8 @@ Paths can be any valid Lodash.set() value such as:
 *   `options` **[Object][120]?** Additional options to mutate behaviour
 
     *   `options.save` **[Boolean][127]** Save the changes to the server immediately, disable to queue up multiple writes (optional, default `true`)
-    *   `options.sync` **[Boolean][127]** Wait for the server to acknowledge the write, you almost never need to do this (optional, default `false`)
 
-Returns **[Promise][126]** A promise which resolves when the operation has synced with the server
+Returns **[Promise][126]** A promise which resolves when the operation has been dispatched to the server
 
 ## setProjectStateDefaults
 
