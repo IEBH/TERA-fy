@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.0](https://github.com/IEBH/TERA-fy/compare/v1.0.24...v1.1.0) (2024-04-09)
+
+
+### Features
+
+* File saving UI ([b2f8809](https://github.com/IEBH/TERA-fy/commit/b2f8809a960880b951072127d7492b31aa29b03a))
+
+
+### Bug Fixes
+
+* Yet more files added to prerelease step ([399c6f8](https://github.com/IEBH/TERA-fy/commit/399c6f8d6c5080238c079c12b16add7eebeb1d7e))
+
 ## [1.0.24](https://github.com/IEBH/TERA-fy/compare/v1.0.23...v1.0.24) (2024-04-05)
 
 
