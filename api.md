@@ -721,6 +721,7 @@ Prompt the user to select a library to operate on
 
     *   `options.title` **[String][119]** The title of the dialog to display (optional, default `"Select a file"`)
     *   `options.hint` **([String][119] | [Array][125]<[String][119]>)?** Hints to identify the file to select in array order of preference
+    *   `options.save` **[Boolean][127]** Set to truthy if saving a new file, UI will adjust to allowing overwrite OR new file name input (optional, default `false`)
     *   `options.filters` **[FileFilters][99]?** Optional file filters
     *   `options.allowUpload` **[Boolean][127]** Allow uploading new files (optional, default `true`)
     *   `options.allowRefresh` **[Boolean][127]** Allow the user to manually refresh the file list (optional, default `true`)
