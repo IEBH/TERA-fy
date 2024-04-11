@@ -1,7 +1,3 @@
-# Changelog
-
-## [1.2.2](https://github.com/IEBH/TERA-fy/compare/v1.2.1...v1.2.2) (2024-04-11)
-
 ## [1.2.1](https://github.com/IEBH/TERA-fy/compare/v1.2.0...v1.2.1) (2024-04-11)
 
 
@@ -337,3 +333,6 @@
 ### Features
 
 * DevMode toggling + better stylesheet handling + toggleFullscreen() ([cc96e76](https://github.com/IEBH/TERA-fy/commit/cc96e7659e02bee4410a07f319d34a1acdb001ec))
+
+
+
