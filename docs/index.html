@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.0.24 | Documentation</title>
+  <title>@iebh/tera-fy 1.1.0 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.0.24</code></div>
+          <div class='mb1'><code>1.1.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -637,19 +637,9 @@
               
                 
                 <li><a
-                  href='#parseprojectlibrary'
+                  href='#getprojectlibrary'
                   class="">
-                  parseProjectLibrary
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#setprojectlibrary'
-                  class="">
-                  setProjectLibrary
+                  getProjectLibrary
                   
                 </a>
                 
@@ -1912,7 +1902,7 @@ This is also used as the unique identifier within the project</p>
     <div class='py1 quiet mt1 prose-big'>Related</div>
     
       
-        parseProjectLibrary()
+        getProjectLibrary()
 
       
     
@@ -2379,7 +2369,7 @@ This is also used as the unique identifier within the project</p>
 
   
 
-  <p>List of function stubs mapped here from the server
+  <p>List of function stubs mapped from the server to here
 This array is forms the reference of <code>TeraFy.METHOD()</code> objects to provide locally which will be mapped via <code>TeraFy.rpc(METHOD, ...args)</code></p>
 
     <div class='pre p1 fill-light mt0'>methods</div>
@@ -5866,17 +5856,17 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='parseprojectlibrary'>
-      parseProjectLibrary
+    <h3 class='fl m0' id='getprojectlibrary'>
+      getProjectLibrary
     </h3>
     
     
   </div>
   
 
-  <p>Convert a project file into a library of citations</p>
+  <p>Fetch + convert a project file into a library of citations</p>
 
-    <div class='pre p1 fill-light mt0'>parseProjectLibrary(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;Ref>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any>)</div>
+    <div class='pre p1 fill-light mt0'>getProjectLibrary(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;Ref>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any>)</div>
   
   
 
@@ -6018,7 +6008,7 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
 
   <p>Save back a citation library from some input</p>
 
-    <div class='pre p1 fill-light mt0'>setProjectLibrary(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?, Collection: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>setProjectLibrary(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?, refs: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef> | <a href="https://developer.mozilla.org/docs/Web/API/Blob">Blob</a> | File)?, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -6036,7 +6026,7 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
-	    File path to save back to
+	    File path to save back to, if omitted one will be prompted for
 
           </div>
           
@@ -6044,8 +6034,8 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>Collection</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>)</code>
-	    of references for the selected library
+            <span class='code bold'>refs</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef> | <a href="https://developer.mozilla.org/docs/Web/API/Blob">Blob</a> | File)?)</code>
+	    Collection of references for the selected library or the raw Blob/File
 
           </div>
           
@@ -6070,6 +6060,24 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
               </tr>
             </thead>
             <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.path</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
+  </td>
+  <td class='break-word'><span>Alternate method to specify the path to save as, if omitted one will be prompted for
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.refs</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef> | <a href="https://developer.mozilla.org/docs/Web/API/Blob">Blob</a> | File)?</code>
+  </td>
+  <td class='break-word'><span>Alternate method to specify the refs to save as an array or raw Blob/File
+</span></td>
+</tr>
+
+
               
                 <tr>
   <td class='break-word'><span class='code bold'>options.format</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
@@ -6105,6 +6113,26 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
 
               
                 <tr>
+  <td class='break-word'><span class='code bold'>options.filename</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
+  </td>
+  <td class='break-word'><span>Suggested filename if path is unspecified
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  
+    (default <code>&#39;Save citation library&#39;</code>)
+  </td>
+  <td class='break-word'><span>Dialog title if path is unspecified and we need to prompt
+</span></td>
+</tr>
+
+
+              
+                <tr>
   <td class='break-word'><span class='code bold'>options.overwrite</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
   
     (default <code>true</code>)
@@ -6119,125 +6147,6 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
   <td class='break-word'><span class='code bold'>options.meta</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?</code>
   </td>
   <td class='break-word'><span>Optional meta data to merge into the file data
-</span></td>
-</tr>
-
-
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        A promise which resolves when the save operation has completed
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='setprojectlibrary'>
-      setProjectLibrary
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Save back a projects citation library</p>
-
-    <div class='pre p1 fill-light mt0'>setProjectLibrary(Collection: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>Collection</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>)</code>
-	    of references for the selected library
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
-	    Additional options to mutate behaviour
-
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.autoRequire</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
-  
-    (default <code>true</code>)
-  </td>
-  <td class='break-word'><span>Run 
-<code>requireProject()</code>
- automatically before continuing
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.hint</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
-  </td>
-  <td class='break-word'><span>Hint to store against the library. Generally corresponds to the current operation being performed - e.g. 'deduped'
 </span></td>
 </tr>
 
