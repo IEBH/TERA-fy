@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/IEBH/TERA-fy/compare/v1.1.0...v1.2.0) (2024-04-11)
+
+
+### Features
+
+* <tera-file-select> now supports save functionality ([e60b63e](https://github.com/IEBH/TERA-fy/commit/e60b63e36a5f757fec74922577ec701ae2f42d5e))
+* More fixes and UX for file saving UI/UX ([7c4e1af](https://github.com/IEBH/TERA-fy/commit/7c4e1af0b5569af7a1c1aa1df29f47b24d464dc8))
+* setProjectLibrary() can now prompt for a file path if none is specified ([62a5f03](https://github.com/IEBH/TERA-fy/commit/62a5f031c0b6ef9f8b72dfee335e4fa79fdffdfb))
+
+
+### Bug Fixes
+
+* Wrong inherited argument when running setProjectLibrary() ([aaaca64](https://github.com/IEBH/TERA-fy/commit/aaaca641847aae9e7a72b4423282002e3b125e70))
+
 ## [1.1.0](https://github.com/IEBH/TERA-fy/compare/v1.0.24...v1.1.0) (2024-04-09)
 
 
