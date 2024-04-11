@@ -1,6 +1,6 @@
 {
   "name": "@iebh/tera-fy",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "TERA website worker",
   "scripts": {
     "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --serve --servedir=.",
@@ -11,7 +11,7 @@
     "build:docs:api": "documentation build lib/terafy.client.js lib/projectFile.js --format html --config documentation.yml --output docs/",
     "build:docs:markdown": "documentation build lib/terafy.client.js lib/projectFile.js --format md --markdown-toc --output api.md",
     "lint": "eslint .",
-    "release": "commit-and-tag-version --release-as patch",
+    "release": "release-it",
     "watch": "nodemon --watch lib --exec npm run build"
   },
   "type": "module",
@@ -66,15 +66,16 @@
     "node": ">=18"
   },
   "dependencies": {
-    "commit-and-tag-version": "^12.2.0",
     "filesize": "^10.1.1",
     "just-diff": "^6.0.2",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
-    "nanoid": "^5.0.2"
+    "nanoid": "^5.0.2",
+    "release-it": "^17.1.1"
   },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^1.0.7",
+    "@release-it/conventional-changelog": "^8.0.1",
     "concurrently": "^8.2.2",
     "documentation": "^14.0.2",
     "esbuild": "^0.19.5"
@@ -83,12 +84,6 @@
     "@iebh/reflib": "^2.2.2",
     "just-diff-apply": "^5.5.0",
     "vue": "^3.3.7"
-  },
-  "commit-and-tag-version": {
-    "scripts": {
-      "prerelease": "npm run build && git add api.md docs dist",
-      "postcommit": "npm publish"
-    }
   },
   "eslintConfig": {
     "extends": "@momsfriendlydevco",
@@ -99,6 +94,30 @@
     "parserOptions": {
       "ecmaVersion": 13,
       "sourceType": "module"
+    }
+  },
+  "release-it": {
+    "git": {
+      "addUntrackedFiles": false,
+      "commit": true,
+      "commitMessage": "chore: release v${version}",
+      "push": true,
+      "requireCleanWorkingDir": false,
+      "tag": true
+    },
+    "hooks": {
+      "before:init": "git reset HEAD -- api.md docs/ dist/",
+      "after:bump": "npm run build && git add api.md docs/ dist/"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular",
+        "infile": "CHANGELOG.md",
+        "header": "# Changelog"
+      }
+    },
+    "npm": {
+      "publish": true
     }
   }
 }
