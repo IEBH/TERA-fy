@@ -15,12 +15,3 @@ Hint Reference
 The following is a non-definitive list of hints that can be associated with files. In all cases the hint should be a lower-case single, past-tense word. Upper-case indicates a variable.
 
 This list should also be mirrored in the main tera-tools.com/api/tools.json meta-list.
-
-
-| Hint         | Description                                                                                                                                                  |
-|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `search`     | The product of a search design stage                                                                                                                         |
-| `deduped`    | One or more files, that are the product of a deduplication stage                                                                                             |
-| `screened-X` | One or more files from the screening stage, generally there will be one file per reviewer where `X` indicates the reviewer number starting with the number 1 |
-| `disputed`   | Generally a single file which is the product of a resolved dispute stage which merges in multiple `screened-X` files                                         |
-| `snowballed` | A file which has been through the snowballing stage                                                                                                          |
