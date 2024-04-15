@@ -1,3 +1,19 @@
+# Changelog
+
+# [1.3.0](https://github.com/IEBH/TERA-fy/compare/v1.2.2...v1.3.0) (2024-04-15)
+
+
+### Bug Fixes
+
+* Export projectFile ([d4940f3](https://github.com/IEBH/TERA-fy/commit/d4940f3dfcb7c5da5b9a6fbfb2a600be60703ed8))
+
+
+### Features
+
+* ProjectFile.{serialize,deserialize}() functions ([d6c69f5](https://github.com/IEBH/TERA-fy/commit/d6c69f5a225b819d6fd63e7fc13670cadc8478e9))
+
+## [1.2.2](https://github.com/IEBH/TERA-fy/compare/v1.2.1...v1.2.2) (2024-04-11)
+
 ## [1.2.1](https://github.com/IEBH/TERA-fy/compare/v1.2.0...v1.2.1) (2024-04-11)
 
 
@@ -333,6 +349,3 @@
 ### Features
 
 * DevMode toggling + better stylesheet handling + toggleFullscreen() ([cc96e76](https://github.com/IEBH/TERA-fy/commit/cc96e7659e02bee4410a07f319d34a1acdb001ec))
-
-
-
