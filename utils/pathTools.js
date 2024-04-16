@@ -115,17 +115,20 @@ export function merge(target, path, value) {
 * Internal recursive path defaulter
 *
 * @param {Object} target The target to operate on, this is likly to be mutated
-* @param {String|Array} path The path within the target to merge, in dotted or array notation
+* @param {String|Array} [path] The path within the target to merge, in dotted or array notation
 * @param {*} value The value to merge
 *
-* @returns {*} The merged value
+* @returns {*} The resulting object with defaults applied
 */
 export function defaults(target, path, value) {
-	_defaults(get(target, path), value);
-	return value;
+	if (typeof path == 'string' || Array.isArray(path)) { // Called as (target, path, value)
+		return _defaults(get(target, path), value);
+	} else { // Called as (target, value)
+		return _defaults(target, path);
+	}
 }
 
-
+// Export all functions as a lookup object
 export default {
 	set,
 	get,
