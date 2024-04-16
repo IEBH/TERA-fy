@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.1](https://github.com/IEBH/TERA-fy/compare/v1.3.0...v1.3.1) (2024-04-16)
+
+
+### Bug Fixes
+
+* Various missing fields for the ProjectFile interface ([8858a9f](https://github.com/IEBH/TERA-fy/commit/8858a9f1a523a9bb86b74e831b752f3fd562f02a))
+
+
+### Features
+
+* setProjectStateDefaults() can now accept an entire object to default-merge ([5d9a1f5](https://github.com/IEBH/TERA-fy/commit/5d9a1f5383c2d6de9ffa818b380c9cc669d42b85))
+
 # [1.3.0](https://github.com/IEBH/TERA-fy/compare/v1.2.2...v1.3.0) (2024-04-15)
 
 
