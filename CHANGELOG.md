@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.2](https://github.com/IEBH/TERA-fy/compare/v1.3.1...v1.3.2) (2024-04-18)
+
+
+### Bug Fixes
+
+* Various minor tweaks to keep ESLint happy ([c7e7f0d](https://github.com/IEBH/TERA-fy/commit/c7e7f0d26aff283acc85dd9f42f24015194f369d))
+* Wrong API endpoint when setting file Blobs ([45aa6df](https://github.com/IEBH/TERA-fy/commit/45aa6df2bc3dafe056dfd9591c8b770bf0f66835))
+
 ## [1.3.1](https://github.com/IEBH/TERA-fy/compare/v1.3.0...v1.3.1) (2024-04-16)
 
 
