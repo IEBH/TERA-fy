@@ -31,6 +31,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 
 	/**
 	* Local Vue@2 library to use, set during constuctor
+	*
 	* @type {Vue}
 	*/
 	Vue;
@@ -92,7 +93,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				if (settings.read) {
 					this.events.on(`update:projects/${stateObservable.id}`, newState => {
 						skipUpdate++; // Skip next update as we're updating our own state anyway
-						Object.assign(stateObservable, newState);
+						this.merge(stateObservable, newState);
 					});
 				}
 
@@ -129,8 +130,29 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 
 
 	/**
+	* Internal function to merge an existing Vue2 Observable with an incomming object
+	*
+	* @param {VueObservable} target The target object to merge with
+	* @param {Object} payload The sub-objects to merge into the Observable
+	* @returns {VueObservable} The input target with all payloads merged
+	*/
+	merge(target, payload) {
+		payload.forEach(pl =>
+			Object.keys(pl)
+				.forEach(k =>
+					this.Vue.set(target, k, pl[k])
+				)
+		);
+
+		return target;
+	}
+
+
+
+	/**
 	* List of available projects for the current session
 	* Initalized during constructor
+	*
 	* @type {VueReactive<Array<Object>>}
 	*/
 	projects;
@@ -139,6 +161,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 	/**
 	* The bound, reactive state of a Vue project
 	* When loaded this represents the state of a project as an object
+	*
 	* @type {Object}
 	*/
 	state = null;
