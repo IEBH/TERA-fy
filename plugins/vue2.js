@@ -136,7 +136,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 	* @param {Object} payload The sub-objects to merge into the Observable
 	* @returns {VueObservable} The input target with all payloads merged
 	*/
-	merge(target, payload) {
+	merge(target, ...payload) {
 		payload.forEach(pl =>
 			Object.keys(pl)
 				.forEach(k =>
