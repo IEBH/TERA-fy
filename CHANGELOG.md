@@ -1,5 +1,18 @@
 # Changelog
 
+# [1.4.0](https://github.com/IEBH/TERA-fy/compare/v1.3.2...v1.4.0) (2024-04-26)
+
+
+### Bug Fixes
+
+* Let release-it figure out the release increment ([a2be698](https://github.com/IEBH/TERA-fy/commit/a2be698edf902e61139864405fda1a55b764fa34))
+* merge() subclassed method should take an iterative, not a single object ([4a33aca](https://github.com/IEBH/TERA-fy/commit/4a33aca4d39191249b7dca3a0a80b65ebdb2a7d2))
+
+
+### Features
+
+* TeraFy.projectLog() ([6207188](https://github.com/IEBH/TERA-fy/commit/6207188af85b481d020f57b50b103b1785094c10))
+
 ## [1.3.2](https://github.com/IEBH/TERA-fy/compare/v1.3.1...v1.3.2) (2024-04-18)
 
 
