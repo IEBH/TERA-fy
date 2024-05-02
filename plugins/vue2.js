@@ -80,7 +80,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				// }}}
 			]))
 			.then(([snapshot]) => {
-				this.debug('Got project snapshot', snapshot);
+				this.debug('INFO', 2, 'Got project snapshot', snapshot);
 
 				// Create initial Observable
 				let stateObservable = this.Vue.observable(snapshot);
@@ -223,12 +223,13 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 					component: this.settings.app.$root,
 				})
 					.then(state => this.state = state)
-					.then(()=> this.debug('INFO', 'Loaded project state', this.state)),
+					.then(()=> this.debug('INFO', 1, 'Loaded initial project state', this.state)),
 
 				// Fetch available projects
 				settings.subscribeProjects && this.getProjects()
 					.then(projects => this.projects = this.Vue.observable(projects))
-					.then(()=> this.debug('INFO', 'Loaded projects', this.projects)),
+					.then(()=> this.debug('INFO', 2, 'Loaded project list', this.projects)),
 			]))
+			.then(()=> this.debug('INFO', 1, 'Ready'))
 	}
 }

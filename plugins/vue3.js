@@ -48,8 +48,6 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 				autoRequire: settings.autoRequire ,
 			}))
 			.then(snapshot => {
-				this.debug('Fetched project snapshot', snapshot);
-
 				// Create initial reactive
 				let stateReactive = reactive(snapshot);
 
@@ -161,13 +159,14 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 						// Bind available project and wait on it
 						settings.subscribeState && $tera.bindProjectState(settings.stateOptions)
 							.then(state => $tera.state = state)
-							.then(()=> $tera.debug('INFO', 'Loaded project state', $tera.state)),
+							.then(()=> $tera.debug('INFO', 1, 'Loaded initial project state', $tera.state)),
 
 						// Fetch available projects
 						settings.subscribeProjects && $tera.getProjects()
 							.then(projects => $tera.projects = reactive(projects))
-							.then(()=> $tera.debug('INFO', 'Loaded projects', $tera.projects)),
+							.then(()=> $tera.debug('INFO', 2, 'Loaded project list', $tera.projects)),
 					]))
+					.then(()=> this.debug('INFO', 1, 'Ready'))
 
 
 				// Make this module available globally
