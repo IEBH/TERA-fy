@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/IEBH/TERA-fy/compare/v1.4.1...v1.4.2) (2024-05-02)
+
+
+### Bug Fixes
+
+* **plugins/vue2:** Deep Vue.set() for recursive objects ([9321d6f](https://github.com/IEBH/TERA-fy/commit/9321d6fbc54e4cf113c6fdce861a4a52d0a4b983))
+
 ## [1.4.1](https://github.com/IEBH/TERA-fy/compare/v1.4.0...v1.4.1) (2024-05-02)
 
 # [1.4.0](https://github.com/IEBH/TERA-fy/compare/v1.3.2...v1.4.0) (2024-04-26)
