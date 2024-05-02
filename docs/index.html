@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.4.0 | Documentation</title>
+  <title>@iebh/tera-fy 1.4.1 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.4.0</code></div>
+          <div class='mb1'><code>1.4.1</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -2349,6 +2349,15 @@ By default this computes a Structured Clone which can be stringified</p>
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>verbosity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+          : Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all 
+<code>debug()</code>
+ call output
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>mode</span> <code class='quiet'>((<code>"detect"</code> | <code>"parent"</code> | <code>"child"</code> | <code>"popup"</code>))</code>
           : How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to 
 <code>modeFallback</code>
@@ -3465,7 +3474,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>debug(msg, status?)</span>
+            <span class='code strong strong truncate'>debug(msg, method, verboseLevel)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3476,7 +3485,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
   <p>Debugging output function
 This function will only act if <code>settings.devMode</code> is truthy</p>
 
-    <div class='pre p1 fill-light mt0'>debug(msg: ...any, status: (<code>"VERBOSE"</code> | <code>"INFO"</code> | <code>"LOG"</code> | <code>"WARN"</code> | <code>"ERROR"</code>)?)</div>
+    <div class='pre p1 fill-light mt0'>debug(msg: ...any, method: (<code>"INFO"</code> | <code>"LOG"</code> | <code>"WARN"</code> | <code>"ERROR"</code>), verboseLevel: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
   
   
 
@@ -3501,8 +3510,21 @@ This function will only act if <code>settings.devMode</code> is truthy</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>status</span> <code class='quiet'>((<code>"VERBOSE"</code> | <code>"INFO"</code> | <code>"LOG"</code> | <code>"WARN"</code> | <code>"ERROR"</code>)?)</code>
-	    Optional prefixing level to mark the message as. 'WARN' and 'ERROR' will always show reguardless of devMode being enabled
+            <span class='code bold'>method</span> <code class='quiet'>((<code>"INFO"</code> | <code>"LOG"</code> | <code>"WARN"</code> | <code>"ERROR"</code>)
+            = <code>&#39;LOG&#39;</code>)</code>
+	    Logging method to use
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>verboseLevel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>
+            = <code>1</code>)</code>
+	    The verbosity level to trigger at. If 
+<code>settings.verbosity</code>
+ is lower than this, the message is ignored
 
           </div>
           

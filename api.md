@@ -309,6 +309,7 @@ Type: [Object][125]
 #### Properties
 
 *   `devMode` **[Boolean][133]** Operate in devMode - i.e. force outer refresh when encountering an existing TeraFy instance
+*   `verbosity` **[Number][127]** Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
 *   `mode` **(`"detect"` | `"parent"` | `"child"` | `"popup"`)** How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to `modeFallback` if communication fails
 *   `modeFallback` **[String][124]** Method to use when all method detection fails
 *   `modeTimeout` **[Number][127]** How long entities have in 'detect' mode to identify themselves
@@ -459,7 +460,8 @@ This function will only act if `settings.devMode` is truthy
 #### Parameters
 
 *   `msg` **...any**&#x20;
-*   `status` **(`"VERBOSE"` | `"INFO"` | `"LOG"` | `"WARN"` | `"ERROR"`)?** Optional prefixing level to mark the message as. 'WARN' and 'ERROR' will always show reguardless of devMode being enabled
+*   `method` **(`"INFO"` | `"LOG"` | `"WARN"` | `"ERROR"`)** Logging method to use (optional, default `'LOG'`)
+*   `verboseLevel` **[Number][127]** The verbosity level to trigger at. If `settings.verbosity` is lower than this, the message is ignored (optional, default `1`)
 
 ### set
 
