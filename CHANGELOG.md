@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.5.0](https://github.com/IEBH/TERA-fy/compare/v1.4.4...v1.5.0) (2024-05-07)
+
+
+### Features
+
+* setPage{Url,Title}() functionality ([bc6d00f](https://github.com/IEBH/TERA-fy/commit/bc6d00f0ea7212587248b49ecefe839c9637ea33))
+
 ## [1.4.4](https://github.com/IEBH/TERA-fy/compare/v1.4.3...v1.4.4) (2024-05-07)
 
 
