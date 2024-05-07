@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.4](https://github.com/IEBH/TERA-fy/compare/v1.4.3...v1.4.4) (2024-05-07)
+
+
+### Bug Fixes
+
+* Allow raw access to the /dist/ directory for weirder imports ([42a3a85](https://github.com/IEBH/TERA-fy/commit/42a3a8535980efbed44b25460b37b271be3b818e))
+* Mark setPageUrl as fixme ([f481e08](https://github.com/IEBH/TERA-fy/commit/f481e08d2ad3e4c8e78504ca9fa4c54b13ce23f0))
+
 ## [1.4.3](https://github.com/IEBH/TERA-fy/compare/v1.4.2...v1.4.3) (2024-05-07)
 
 ## [1.4.2](https://github.com/IEBH/TERA-fy/compare/v1.4.1...v1.4.2) (2024-05-02)
