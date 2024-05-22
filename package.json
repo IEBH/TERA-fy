@@ -109,7 +109,10 @@
     },
     "hooks": {
       "before:init": "git reset HEAD -- api.md docs/ dist/",
-      "after:bump": "npm run build && git add api.md docs/ dist/"
+      "before:bump": [
+        "npm run build",
+        "git add api.md docs/ dist/"
+      ]
     },
     "plugins": {
       "@release-it/conventional-changelog": {
