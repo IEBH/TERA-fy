@@ -93,6 +93,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				if (settings.read) {
 					this.events.on(`update:projects/${stateObservable.id}`, newState => {
 						skipUpdate++; // Skip next update as we're updating our own state anyway
+						this.debug('INFO', 5, 'Update Vue2 Remote->Local', {new: newState, old: stateObservable});
 						this.merge(stateObservable, newState);
 					});
 				}
@@ -114,6 +115,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 								return;
 							}
 
+							this.debug('INFO', 5, 'Update Vue2 Local->Remote', {new: newVal, old: oldVal});
 							this.createProjectStatePatch(newVal, oldVal);
 							oldVal = cloneDeep(snapshot);
 						},
