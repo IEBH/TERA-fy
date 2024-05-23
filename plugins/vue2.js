@@ -142,9 +142,9 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 		payload.forEach(pl =>
 			Object.keys(pl)
 				.forEach(k => {
-					if (isPlainObject(pl[k]) || Array.isArray(pl[k])) { // Setting sub-objects - need to recurse these in Vue2
+					if (isPlainObject(pl[k])) { // Setting sub-objects - we need to recurse these in Vue2 in case a sub-key gets glued on
 						if (!(k in target)) // Destination to merge doesn't exist yet - create it
-							this.Vue.set(target, k, Array.isArray(pl[k]) ? [] : {});
+							this.Vue.set(target, k, {});
 
 						this.merge(target[k], pl[k]);
 					} else {
