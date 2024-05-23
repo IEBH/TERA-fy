@@ -1,5 +1,24 @@
 # Changelog
 
+# [1.6.0](https://github.com/IEBH/TERA-fy/compare/v1.5.0...v1.6.0) (2024-05-23)
+
+
+### Bug Fixes
+
+* Also watch plugins/ with `npm run watch` ([30b0f2f](https://github.com/IEBH/TERA-fy/commit/30b0f2f9121b7224ae2c8434ce0d1db62245978d))
+* Better is-pojo detection when deep merging with Vue2 / $set ([6f14991](https://github.com/IEBH/TERA-fy/commit/6f149915e9fa995c99aa2406b57c5f6ac8ef87f9))
+* Less noisy errors when trying to set the URL on an inactive tool session / embedded TERA iframe ([7a73e32](https://github.com/IEBH/TERA-fy/commit/7a73e329563338f9c4f40b7d77e4dc03fed0f5b3))
+* Slight fixes for release-it scripting ([2a1c0b1](https://github.com/IEBH/TERA-fy/commit/2a1c0b120295a1c953ed676fed65d7e4988f7d54))
+* Typo when syncing local->remote writes ([aed4511](https://github.com/IEBH/TERA-fy/commit/aed4511f901f3d589cf52603166c9e8adcbb1fc6))
+* Vue2 handling for Array syncing ([6449261](https://github.com/IEBH/TERA-fy/commit/6449261aa0e6859aa7963c27ca899be1c31c740f))
+
+
+### Features
+
+* Much more verbosity during init() if its called for ([1a56267](https://github.com/IEBH/TERA-fy/commit/1a562671cd559948fa7b89fa40da2ee040990e58))
+* setProjectState{Flush,Refresh}() ([c404a3d](https://github.com/IEBH/TERA-fy/commit/c404a3d63e1e40ebc9277c34b7e30f295d83fcb2))
+* Yet more error reporting during client init() ([930e8cb](https://github.com/IEBH/TERA-fy/commit/930e8cbb4dec5d69e2593f7fb3401f8146cc8cb4))
+
 # [1.5.0](https://github.com/IEBH/TERA-fy/compare/v1.4.4...v1.5.0) (2024-05-07)
 
 
