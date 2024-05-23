@@ -1,4 +1,4 @@
-import {cloneDeep} from 'lodash-es';
+import {cloneDeep, isPlainObject} from 'lodash-es';
 import TeraFyPluginBase from './base.js';
 
 /**
@@ -142,7 +142,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 		payload.forEach(pl =>
 			Object.keys(pl)
 				.forEach(k => {
-					if (typeof pl[k] == 'object') { // Setting sub-objects - need to recurse these in Vue2
+					if (isPlainObject(pl[k]) || Array.isArray(pl[k])) { // Setting sub-objects - need to recurse these in Vue2
 						if (!(k in target)) // Destination to merge doesn't exist yet - create it
 							this.Vue.set(target, k, Array.isArray(pl[k]) ? [] : {});
 
