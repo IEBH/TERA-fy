@@ -7,130 +7,132 @@
     *   [name][3]
     *   [icon][4]
     *   [path][5]
-    *   [parsedName][6]
-        *   [Properties][7]
-    *   [created][8]
-    *   [createdFormatted][9]
-    *   [modified][10]
-    *   [modifiedFormatted][11]
-    *   [accessed][12]
-    *   [accessedFormatted][13]
-    *   [size][14]
-    *   [sizeFormatted][15]
-    *   [mime][16]
-    *   [meta][17]
-    *   [getContents][18]
-    *   [setContents][19]
-        *   [Parameters][20]
-    *   [getRefs][21]
-    *   [setRefs][22]
-        *   [Parameters][23]
-    *   [serialize][24]
-    *   [deserialize][25]
-        *   [Parameters][26]
-*   [tera][27]
-    *   [Parameters][28]
-*   [TeraFy][29]
-    *   [settings][30]
-        *   [Properties][31]
-    *   [events][32]
-    *   [dom][33]
-        *   [Properties][34]
-    *   [methods][35]
-    *   [plugins][36]
-    *   [send][37]
-        *   [Parameters][38]
-    *   [sendRaw][39]
+    *   [url][6]
+    *   [teraUrl][7]
+    *   [parsedName][8]
+        *   [Properties][9]
+    *   [created][10]
+    *   [createdFormatted][11]
+    *   [modified][12]
+    *   [modifiedFormatted][13]
+    *   [accessed][14]
+    *   [accessedFormatted][15]
+    *   [size][16]
+    *   [sizeFormatted][17]
+    *   [mime][18]
+    *   [meta][19]
+    *   [getContents][20]
+    *   [setContents][21]
+        *   [Parameters][22]
+    *   [getRefs][23]
+    *   [setRefs][24]
+        *   [Parameters][25]
+    *   [serialize][26]
+    *   [deserialize][27]
+        *   [Parameters][28]
+*   [tera][29]
+    *   [Parameters][30]
+*   [TeraFy][31]
+    *   [settings][32]
+        *   [Properties][33]
+    *   [events][34]
+    *   [dom][35]
+        *   [Properties][36]
+    *   [methods][37]
+    *   [plugins][38]
+    *   [send][39]
         *   [Parameters][40]
-    *   [rpc][41]
+    *   [sendRaw][41]
         *   [Parameters][42]
-    *   [acceptMessage][43]
+    *   [rpc][43]
         *   [Parameters][44]
-    *   [acceptPostboxes][45]
-    *   [createProjectStatePatch][46]
-        *   [Parameters][47]
-    *   [applyProjectStatePatchLocal][48]
+    *   [acceptMessage][45]
+        *   [Parameters][46]
+    *   [acceptPostboxes][47]
+    *   [createProjectStatePatch][48]
         *   [Parameters][49]
-    *   [init][50]
+    *   [applyProjectStatePatchLocal][50]
         *   [Parameters][51]
-    *   [detectMode][52]
-    *   [injectComms][53]
-    *   [injectStylesheet][54]
-    *   [injectMethods][55]
-    *   [debug][56]
-        *   [Parameters][57]
-    *   [set][58]
+    *   [init][52]
+        *   [Parameters][53]
+    *   [detectMode][54]
+    *   [injectComms][55]
+    *   [injectStylesheet][56]
+    *   [injectMethods][57]
+    *   [debug][58]
         *   [Parameters][59]
-    *   [setIfDev][60]
+    *   [set][60]
         *   [Parameters][61]
-    *   [use][62]
+    *   [setIfDev][62]
         *   [Parameters][63]
-    *   [mixin][64]
+    *   [use][64]
         *   [Parameters][65]
-    *   [toggleDevMode][66]
+    *   [mixin][66]
         *   [Parameters][67]
-    *   [toggleFocus][68]
+    *   [toggleDevMode][68]
         *   [Parameters][69]
-    *   [selectProjectFile][70]
+    *   [toggleFocus][70]
         *   [Parameters][71]
-    *   [getProjectFiles][72]
+    *   [selectProjectFile][72]
         *   [Parameters][73]
-    *   [getProjectFile][74]
+    *   [getProjectFiles][74]
         *   [Parameters][75]
-*   [handshake][76]
-    *   [Properties][77]
-*   [User][78]
+    *   [getProjectFile][76]
+        *   [Parameters][77]
+*   [handshake][78]
     *   [Properties][79]
-*   [getUser][80]
-*   [requireUser][81]
-    *   [Parameters][82]
-*   [Project][83]
-*   [getProject][84]
-*   [getProjects][85]
-*   [setActiveProject][86]
-    *   [Parameters][87]
-*   [requireProject][88]
+*   [User][80]
+    *   [Properties][81]
+*   [getUser][82]
+*   [requireUser][83]
+    *   [Parameters][84]
+*   [Project][85]
+*   [getProject][86]
+*   [getProjects][87]
+*   [setActiveProject][88]
     *   [Parameters][89]
-*   [selectProject][90]
+*   [requireProject][90]
     *   [Parameters][91]
-*   [getProjectState][92]
+*   [selectProject][92]
     *   [Parameters][93]
-*   [setProjectState][94]
+*   [getProjectState][94]
     *   [Parameters][95]
-*   [setProjectStateDefaults][96]
+*   [setProjectState][96]
     *   [Parameters][97]
-*   [setProjectStateFlush][98]
-*   [setProjectStateRefresh][99]
-*   [saveProjectState][100]
-*   [replaceProjectState][101]
-    *   [Parameters][102]
-*   [applyProjectStatePatch][103]
+*   [setProjectStateDefaults][98]
+    *   [Parameters][99]
+*   [setProjectStateFlush][100]
+*   [setProjectStateRefresh][101]
+*   [saveProjectState][102]
+*   [replaceProjectState][103]
     *   [Parameters][104]
-*   [subscribeProjectState][105]
-*   [FileFilters][106]
-    *   [Properties][107]
-*   [selectProjectFile][108]
-    *   [Parameters][109]
-*   [setProjectFile][110]
+*   [applyProjectStatePatch][105]
+    *   [Parameters][106]
+*   [subscribeProjectState][107]
+*   [FileFilters][108]
+    *   [Properties][109]
+*   [selectProjectFile][110]
     *   [Parameters][111]
-*   [selectProjectLibrary][112]
+*   [setProjectFile][112]
     *   [Parameters][113]
-*   [getProjectLibrary][114]
+*   [selectProjectLibrary][114]
     *   [Parameters][115]
-*   [setProjectLibrary][116]
+*   [getProjectLibrary][116]
     *   [Parameters][117]
-*   [projectLog][118]
+*   [setProjectLibrary][118]
     *   [Parameters][119]
-*   [setPageUrl][120]
+*   [projectLog][120]
     *   [Parameters][121]
-*   [setPageTitle][122]
+*   [setPageUrl][122]
     *   [Parameters][123]
-*   [uiAlert][124]
+*   [setPageTitle][124]
     *   [Parameters][125]
-*   [uiSplat][126]
+*   [uiAlert][126]
     *   [Parameters][127]
-*   [uiWindow][128]
+*   [uiSplat][128]
     *   [Parameters][129]
+*   [uiWindow][130]
+    *   [Parameters][131]
 
 ## ProjectFile
 
@@ -140,99 +142,113 @@ A project file fetched from TERA
 
 A UUID string representing the unique ID of the file
 
-Type: [String][130]
+Type: [String][132]
 
 ### name
 
 Relative name path (can contain prefix directories) for the human readable file name
 
-Type: [String][130]
+Type: [String][132]
 
 ### icon
 
 CSS class to use as the file icon
 
-Type: [String][130]
+Type: [String][132]
 
 ### path
 
 Full path to the file
 This is also used as the unique identifier within the project
 
-Type: [String][130]
+Type: [String][132]
+
+### url
+
+Fully qualified URL to view / access / download the file from TERA
+This will usually open an edit UI within the TERA site
+
+Type: [String][132]
+
+### teraUrl
+
+Rewrite of the URL where the absolute URL has been removed in place of a relative path, assuming the owner project is active
+This is used to direct to the edit/view/download UI when the files project is active and is usually used in place of URL for TERA related operations
+
+Type: [String][132]
 
 ### parsedName
 
 An object representing meta file parts of a file name
 
-Type: [Object][131]
+Type: [Object][133]
 
 #### Properties
 
-*   `basename` **[String][130]** The filename + extention (i.e. everything without directory name)
-*   `filename` **[String][130]** The file portion of the name (basename without the extension)
-*   `ext` **[String][130]** The extension portion of the name (always lower case)
-*   `dirName` **[String][130]** The directory path portion of the name
+*   `basename` **[String][132]** The filename + extention (i.e. everything without directory name)
+*   `filename` **[String][132]** The file portion of the name (basename without the extension)
+*   `ext` **[String][132]** The extension portion of the name (always lower case)
+*   `dirName` **[String][132]** The directory path portion of the name
 
 ### created
 
 A date representing when the file was created
 
-Type: [Date][132]
+Type: [Date][134]
 
 ### createdFormatted
 
 A human readable, formatted version of "created"
 
-Type: [String][130]
+Type: [String][132]
 
 ### modified
 
 A date representing when the file was created
 
-Type: [Date][132]
+Type: [Date][134]
 
 ### modifiedFormatted
 
 A human readable, formatted version of "modified"
 
-Type: [String][130]
+Type: [String][132]
 
 ### accessed
 
 A date representing when the file was last accessed
 
-Type: [Date][132]
+Type: [Date][134]
 
 ### accessedFormatted
 
 A human readable, formatted version of "accessed"
 
-Type: [String][130]
+Type: [String][132]
 
 ### size
 
 Size, in bytes, of the file
 
-Type: [Number][133]
+Type: [Number][135]
 
 ### sizeFormatted
 
 A human readable, formatted version of the file size
 
-Type: [String][130]
+Type: [String][132]
 
 ### mime
 
 The associated mime type for the file
 
-Type: [String][130]
+Type: [String][132]
 
 ### meta
 
 Additional meta information for the file
 
-Type: [Object][131]
+Type: [Object][133]
 
 ### getContents
 
@@ -250,9 +266,9 @@ Overwrite the contents of a file with new content
 
 #### Parameters
 
-*   `contents` **(File | [Blob][134] | [FormData][135] | [Object][131] | [Array][136])** The new file contents
+*   `contents` **(File | [Blob][136] | [FormData][137] | [Object][133] | [Array][138])** The new file contents
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ### getRefs
 
@@ -260,7 +276,7 @@ Returns **[Promise][137]** A promise which resolves when the operation has compl
 
 Fetch the file contents as an array of Reflib refs
 
-Returns **[Promise][137]<[Array][136]\<Ref>>** An eventual array of RefLib references
+Returns **[Promise][139]<[Array][138]\<Ref>>** An eventual array of RefLib references
 
 ### setRefs
 
@@ -271,18 +287,18 @@ Overwrite the contents of a file with a new collection of Reflib refs
 #### Parameters
 
 *   `refs` &#x20;
-*   `Collection` **[Array][136]\<RefLibRef>** of references for the selected library
+*   `Collection` **[Array][138]\<RefLibRef>** of references for the selected library
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ### serialize
 
-*   **See**: [https://developer.mozilla.org/en-US/docs/Web/API/Web\_Workers\_API/Structured\_clone\_algorithm][138]
+*   **See**: [https://developer.mozilla.org/en-US/docs/Web/API/Web\_Workers\_API/Structured\_clone\_algorithm][140]
 
 Compress a file state down into a serializable entity
 By default this computes a Structured Clone which can be stringified
 
-Returns **[Object][131]** A Structured Clone compatible representation of this ProjectFile instance
+Returns **[Object][133]** A Structured Clone compatible representation of this ProjectFile instance
 
 ### deserialize
 
@@ -290,7 +306,7 @@ Restore an entity created with serialize
 
 #### Parameters
 
-*   `data` **[Object][131]** An input object created via `ProjectFiles.serialize()`
+*   `data` **[Object][133]** An input object created via `ProjectFiles.serialize()`
 
 Returns **[ProjectFile][1]** A ProjectFile instance setup against the deserializzed data
 
@@ -310,19 +326,19 @@ Main Tera-Fy Client (class singleton) to be used in a frontend browser
 
 Various settings to configure behaviour
 
-Type: [Object][131]
+Type: [Object][133]
 
 #### Properties
 
-*   `devMode` **[Boolean][139]** Operate in devMode - i.e. force outer refresh when encountering an existing TeraFy instance
-*   `verbosity` **[Number][133]** Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
+*   `devMode` **[Boolean][141]** Operate in devMode - i.e. force outer refresh when encountering an existing TeraFy instance
+*   `verbosity` **[Number][135]** Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
 *   `mode` **(`"detect"` | `"parent"` | `"child"` | `"popup"`)** How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to `modeFallback` if communication fails
-*   `modeFallback` **[String][130]** Method to use when all method detection fails
-*   `modeTimeout` **[Number][133]** How long entities have in 'detect' mode to identify themselves
-*   `siteUrl` **[String][130]** The TERA URL to connect to
-*   `restrictOrigin` **[String][130]** URL to restrict communications to
-*   `List` **[Array][136]<[String][130]>** of sandbox allowables for the embedded if in embed mode
-*   `handshakeInterval` **[Number][133]** Interval in milliseconds when sanning for a handshake
+*   `modeFallback` **[String][132]** Method to use when all method detection fails
+*   `modeTimeout` **[Number][135]** How long entities have in 'detect' mode to identify themselves
+*   `siteUrl` **[String][132]** The TERA URL to connect to
+*   `restrictOrigin` **[String][132]** URL to restrict communications to
+*   `List` **[Array][138]<[String][132]>** of sandbox allowables for the embedded if in embed mode
+*   `handshakeInterval` **[Number][135]** Interval in milliseconds when sanning for a handshake
 
 ### events
 
@@ -334,13 +350,13 @@ Type: Mitt
 
 DOMElements for this TeraFy instance
 
-Type: [Object][131]
+Type: [Object][133]
 
 #### Properties
 
 *   `el` **DOMElement** The main tera-fy div wrapper
 *   `iframe` **DOMElement** The internal iFrame element  (if `settings.mode == 'child'`)
-*   `popup` **[Window][140]** The popup window context (if `settings.mode == 'popup'`)
+*   `popup` **[Window][142]** The popup window context (if `settings.mode == 'popup'`)
 *   `stylesheet` **DOMElement** The corresponding stylesheet
 
 ### methods
@@ -348,13 +364,13 @@ Type: [Object][131]
 List of function stubs mapped from the server to here
 This array is forms the reference of `TeraFy.METHOD()` objects to provide locally which will be mapped via `TeraFy.rpc(METHOD, ...args)`
 
-Type: [Array][136]<[String][130]>
+Type: [Array][138]<[String][132]>
 
 ### plugins
 
 Loaded plugins via Use()
 
-Type: [Array][136]\<TeraFyPlugin>
+Type: [Array][138]\<TeraFyPlugin>
 
 ### send
 
@@ -362,9 +378,9 @@ Send a message + wait for a response object
 
 #### Parameters
 
-*   `message` **[Object][131]** Message object to send
+*   `message` **[Object][133]** Message object to send
 
-Returns **[Promise][137]\<any>** A promise which resolves when the operation has completed with the remote reply
+Returns **[Promise][139]\<any>** A promise which resolves when the operation has completed with the remote reply
 
 ### sendRaw
 
@@ -373,7 +389,7 @@ This function does not return or wait for a reply - use `send()` for that
 
 #### Parameters
 
-*   `message` **[Object][131]** Message object to send
+*   `message` **[Object][133]** Message object to send
 
 ### rpc
 
@@ -381,10 +397,10 @@ Call an RPC function in the server instance
 
 #### Parameters
 
-*   `method` **[String][130]** The method name to call
+*   `method` **[String][132]** The method name to call
 *   `args` **...any**&#x20;
 
-Returns **[Promise][137]\<any>** The resolved output of the server function
+Returns **[Promise][139]\<any>** The resolved output of the server function
 
 ### acceptMessage
 
@@ -393,7 +409,7 @@ Accept an incoming message
 #### Parameters
 
 *   `rawMessage` &#x20;
-*   `Raw` **[MessageEvent][141]** message event to process
+*   `Raw` **[MessageEvent][143]** message event to process
 
 ### acceptPostboxes
 
@@ -402,27 +418,27 @@ Listening postboxes, these correspond to outgoing message IDs that expect a resp
 ### createProjectStatePatch
 
 Create + transmit a new project state patch base on the current and previous states
-The transmitted patch follows the [JSPatch][142] standard
+The transmitted patch follows the [JSPatch][144] standard
 This function accepts an entire projectState instance, computes the delta and transmits that to the server for merging
 
 #### Parameters
 
-*   `newState` **[Object][131]** The local projectState to accept
-*   `oldState` **[Object][131]** The previous projectState to examine against
+*   `newState` **[Object][133]** The local projectState to accept
+*   `oldState` **[Object][133]** The previous projectState to examine against
 
-Returns **[Promise][137]** A promise which will resolve when the operation has completed
+Returns **[Promise][139]** A promise which will resolve when the operation has completed
 
 ### applyProjectStatePatchLocal
 
 Client function which accepts a patch from the server and applies it to local project state
-The patch should follow the [JSPatch][142] standard
+The patch should follow the [JSPatch][144] standard
 This function is expected to be sub-classed by a plugin
 
 #### Parameters
 
-*   `patch` **[Array][136]** A JSPatch patch to apply
+*   `patch` **[Array][138]** A JSPatch patch to apply
 
-Returns **[Promise][137]** A promise which will resolve when the operation has completed
+Returns **[Promise][139]** A promise which will resolve when the operation has completed
 
 ### init
 
@@ -431,28 +447,28 @@ This function can only be called once and will return the existing init() worker
 
 #### Parameters
 
-*   `options` **[Object][131]?** Additional options to merge into `settings` via `set`
+*   `options` **[Object][133]?** Additional options to merge into `settings` via `set`
 
-Returns **[Promise][137]<[TeraFy][29]>** An eventual promise which will resovle with this terafy instance
+Returns **[Promise][139]<[TeraFy][31]>** An eventual promise which will resovle with this terafy instance
 
 ### detectMode
 
 Populate `settings.mode`
 Try to communicate with a parent frame, if none assume we need to fallback to child mode
 
-Returns **[Promise][137]<[String][130]>** A promise which will resolve with the detected mode to use
+Returns **[Promise][139]<[String][132]>** A promise which will resolve with the detected mode to use
 
 ### injectComms
 
 Find an existing active TERA server OR initalize one
 
-Returns **[Promise][137]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+Returns **[Promise][139]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
 
 ### injectStylesheet
 
 Inject a local stylesheet to handle TERA server functionality
 
-Returns **[Promise][137]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+Returns **[Promise][139]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
 
 ### injectMethods
 
@@ -467,7 +483,7 @@ This function will only act if `settings.devMode` is truthy
 
 *   `msg` **...any**&#x20;
 *   `method` **(`"INFO"` | `"LOG"` | `"WARN"` | `"ERROR"`)** Logging method to use (optional, default `'LOG'`)
-*   `verboseLevel` **[Number][133]** The verbosity level to trigger at. If `settings.verbosity` is lower than this, the message is ignored (optional, default `1`)
+*   `verboseLevel` **[Number][135]** The verbosity level to trigger at. If `settings.verbosity` is lower than this, the message is ignored (optional, default `1`)
 
 ### set
 
@@ -476,10 +492,10 @@ This function also routes 'special' keys like `devMode` to their internal handle
 
 #### Parameters
 
-*   `key` **([String][130] | [Object][131])** Either a single setting key to set or an object to merge
+*   `key` **([String][132] | [Object][133])** Either a single setting key to set or an object to merge
 *   `value` **any** The value to set if `key` is a string
 
-Returns **[TeraFy][29]** This chainable terafy instance
+Returns **[TeraFy][31]** This chainable terafy instance
 
 ### setIfDev
 
@@ -489,10 +505,10 @@ Set or merge settings - but only in dev mode and only if the value is not undefi
 
 #### Parameters
 
-*   `key` **([String][130] | [Object][131])** Either a single setting key to set or an object to merge
+*   `key` **([String][132] | [Object][133])** Either a single setting key to set or an object to merge
 *   `value` **any** The value to set if `key` is a string
 
-Returns **[TeraFy][29]** This chainable terafy instance
+Returns **[TeraFy][31]** This chainable terafy instance
 
 ### use
 
@@ -501,10 +517,10 @@ Include a TeraFy client plugin
 #### Parameters
 
 *   `mod` &#x20;
-*   `options` **[Object][131]?** Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
-*   `The` **[Object][131]** module function to include. Invoked as `(teraClient:TeraFy, options:Object)`
+*   `options` **[Object][133]?** Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
+*   `The` **[Object][133]** module function to include. Invoked as `(teraClient:TeraFy, options:Object)`
 
-Returns **[TeraFy][29]** This chainable terafy instance
+Returns **[TeraFy][31]** This chainable terafy instance
 
 ### mixin
 
@@ -512,8 +528,8 @@ Internal function used by use() to merge an external declared singleton against 
 
 #### Parameters
 
-*   `target` **[Object][131]** Initalied class instance to extend
-*   `source` **[Object][131]** Initalized source object to extend from
+*   `target` **[Object][133]** Initalied class instance to extend
+*   `source` **[Object][133]** Initalized source object to extend from
 
 ### toggleDevMode
 
@@ -521,9 +537,9 @@ Set or toggle devMode
 
 #### Parameters
 
-*   `devModeEnabled` **([String][130] | [Boolean][139])** Optional boolean to force dev mode (optional, default `'toggle'`)
+*   `devModeEnabled` **([String][132] | [Boolean][141])** Optional boolean to force dev mode (optional, default `'toggle'`)
 
-Returns **[TeraFy][29]** This chainable terafy instance
+Returns **[TeraFy][31]** This chainable terafy instance
 
 ### toggleFocus
 
@@ -532,7 +548,7 @@ This is usually because the server component wants to perform some user activity
 
 #### Parameters
 
-*   `isFocused` **([String][130] | [Boolean][139])** Whether to fullscreen the embedded component (optional, default `'toggle'`)
+*   `isFocused` **([String][132] | [Boolean][141])** Whether to fullscreen the embedded component (optional, default `'toggle'`)
 
 ### selectProjectFile
 
@@ -544,7 +560,7 @@ This is an pre-requisite step for requireProject()
 
 *   `options` &#x20;
 
-Returns **[Promise][137]** A promise which will resolve if the there is a user and they are logged in
+Returns **[Promise][139]** A promise which will resolve if the there is a user and they are logged in
 
 ### getProjectFiles
 
@@ -552,12 +568,12 @@ Fetch the files associated with a given project
 
 #### Parameters
 
-*   `options` **[Object][131]** Options which mutate behaviour
+*   `options` **[Object][133]** Options which mutate behaviour
 
-    *   `options.autoRequire` **[Boolean][139]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.meta` **[Boolean][139]** Pull meta information for each file entity (optional, default `true`)
+    *   `options.autoRequire` **[Boolean][141]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.meta` **[Boolean][141]** Pull meta information for each file entity (optional, default `true`)
 
-Returns **[Promise][137]<[Array][136]<[ProjectFile][1]>>** A collection of project files for the given project
+Returns **[Promise][139]<[Array][138]<[ProjectFile][1]>>** A collection of project files for the given project
 
 ### getProjectFile
 
@@ -565,9 +581,9 @@ Fetch a project file
 
 #### Parameters
 
-*   `path` **[String][130]** File path to read
+*   `id` **[String][132]** File ID to read
 
-Returns **[Promise][137]<[Blob][134]>** The eventual fetched file as a blob
+Returns **[Promise][139]<[Blob][136]>** The eventual fetched file as a blob
 
 ## handshake
 
@@ -575,9 +591,9 @@ Return basic server information as a form of validation
 
 ### Properties
 
-*   `date` **[Date][132]** Server date
+*   `date` **[Date][134]** Server date
 
-Returns **[Promise][137]<[Object][131]>** Basic promise result
+Returns **[Promise][139]<[Object][133]>** Basic promise result
 
 ## User
 
@@ -585,16 +601,16 @@ User / active session within TERA
 
 ### Properties
 
-*   `id` **[String][130]** Unique identifier of the user
-*   `email` **[String][130]** The email address of the current user
-*   `name` **[String][130]** The provided full name of the user
-*   `isSubscribed` **[Boolean][139]** Whether the active user has a TERA subscription
+*   `id` **[String][132]** Unique identifier of the user
+*   `email` **[String][132]** The email address of the current user
+*   `name` **[String][132]** The provided full name of the user
+*   `isSubscribed` **[Boolean][141]** Whether the active user has a TERA subscription
 
 ## getUser
 
 Fetch the current session user
 
-Returns **[Promise][137]<[User][78]>** The current logged in user or null if none
+Returns **[Promise][139]<[User][80]>** The current logged in user or null if none
 
 ## requireUser
 
@@ -604,11 +620,11 @@ This is an pre-requisite step for requireProject()
 
 ### Parameters
 
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.forceRetry` **[Boolean][139]** Forcabily try to refresh the user state (optional, default `false`)
+    *   `options.forceRetry` **[Boolean][141]** Forcabily try to refresh the user state (optional, default `false`)
 
-Returns **[Promise][137]<[User][78]>** The current logged in user or null if none
+Returns **[Promise][139]<[User][80]>** The current logged in user or null if none
 
 ## Project
 
@@ -618,13 +634,13 @@ Project entry within TERA
 
 Get the currently active project, if any
 
-Returns **[Promise][137]<([Project][83] | null)>** The currently active project, if any
+Returns **[Promise][139]<([Project][85] | null)>** The currently active project, if any
 
 ## getProjects
 
 Get a list of projects the current session user has access to
 
-Returns **[Promise][137]<[Array][136]<[Project][83]>>** Collection of projects the user has access to
+Returns **[Promise][139]<[Array][138]<[Project][85]>>** Collection of projects the user has access to
 
 ## setActiveProject
 
@@ -632,7 +648,7 @@ Set the currently active project within TERA
 
 ### Parameters
 
-*   `project` **([Object][131] | [String][130])** The project to set as active - either the full Project object or its ID
+*   `project` **([Object][133] | [String][132])** The project to set as active - either the full Project object or its ID
 
 ## requireProject
 
@@ -641,14 +657,14 @@ Note that this function will percist in asking the uesr even if they try to canc
 
 ### Parameters
 
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.autoSetActiveProject` **[Boolean][139]** After selecting a project set that project as active in TERA (optional, default `true`)
-    *   `options.title` **[String][130]** The title of the dialog to display (optional, default `"Select a project to work with"`)
-    *   `options.noSelectTitle` **[String][130]** Dialog title when warning the user they need to select something (optional, default `'Select project'`)
-    *   `options.noSelectBody` **[String][130]** Dialog body when warning the user they need to select something (optional, default `'A project needs to be selected to continue'`)
+    *   `options.autoSetActiveProject` **[Boolean][141]** After selecting a project set that project as active in TERA (optional, default `true`)
+    *   `options.title` **[String][132]** The title of the dialog to display (optional, default `"Select a project to work with"`)
+    *   `options.noSelectTitle` **[String][132]** Dialog title when warning the user they need to select something (optional, default `'Select project'`)
+    *   `options.noSelectBody` **[String][132]** Dialog body when warning the user they need to select something (optional, default `'A project needs to be selected to continue'`)
 
-Returns **[Promise][137]<[Project][83]>** The active project
+Returns **[Promise][139]<[Project][85]>** The active project
 
 ## selectProject
 
@@ -656,13 +672,13 @@ Prompt the user to select a project from those available
 
 ### Parameters
 
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.title` **[String][130]** The title of the dialog to display (optional, default `"Select a project to work with"`)
-    *   `options.allowCancel` **[Boolean][139]** Advertise cancelling the operation, the dialog can still be cancelled by closing it (optional, default `true`)
-    *   `options.setActive` **[Boolean][139]** Also set the project as active when selected (optional, default `false`)
+    *   `options.title` **[String][132]** The title of the dialog to display (optional, default `"Select a project to work with"`)
+    *   `options.allowCancel` **[Boolean][141]** Advertise cancelling the operation, the dialog can still be cancelled by closing it (optional, default `true`)
+    *   `options.setActive` **[Boolean][141]** Also set the project as active when selected (optional, default `false`)
 
-Returns **[Promise][137]<[Project][83]>** The active project
+Returns **[Promise][139]<[Project][85]>** The active project
 
 ## getProjectState
 
@@ -670,12 +686,12 @@ Return the current, full snapshot state of the active project
 
 ### Parameters
 
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.autoRequire` **[Boolean][139]** Run `requireProject()` automatically before continuing (optional, default `true`)
-*   `Paths` **[Array][136]<[String][130]>** to subscribe to e.g. \['/users/'],
+    *   `options.autoRequire` **[Boolean][141]** Run `requireProject()` automatically before continuing (optional, default `true`)
+*   `Paths` **[Array][138]<[String][132]>** to subscribe to e.g. \['/users/'],
 
-Returns **[Promise][137]<[Object][131]>** The current project state snapshot
+Returns **[Promise][139]<[Object][133]>** The current project state snapshot
 
 ## setProjectState
 
@@ -687,13 +703,13 @@ Paths can be any valid Lodash.set() value such as:
 
 ### Parameters
 
-*   `path` **([String][130] | [Array][136]<[String][130]>)** The sub-path within the project state to set
+*   `path` **([String][132] | [Array][138]<[String][132]>)** The sub-path within the project state to set
 *   `value` **any** The value to set
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.save` **[Boolean][139]** Save the changes to the server immediately, disable to queue up multiple writes (optional, default `true`)
+    *   `options.save` **[Boolean][141]** Save the changes to the server immediately, disable to queue up multiple writes (optional, default `true`)
 
-Returns **[Promise][137]** A promise which resolves when the operation has been dispatched to the server
+Returns **[Promise][139]** A promise which resolves when the operation has been dispatched to the server
 
 ## setProjectStateDefaults
 
@@ -703,31 +719,31 @@ Set a nested value within the project state - just like `setProjectState()` - bu
 
 ### Parameters
 
-*   `path` **([String][130] | [Array][136]<[String][130]>)** The sub-path within the project state to set
+*   `path` **([String][132] | [Array][138]<[String][132]>)** The sub-path within the project state to set
 *   `value` **any** The value to set
-*   `options` **[Object][131]?** Additional options to mutate behaviour, see setProjectState() for the full list of supported options
+*   `options` **[Object][133]?** Additional options to mutate behaviour, see setProjectState() for the full list of supported options
 
-Returns **[Promise][137]<[Boolean][139]>** A promise which resolves to whether any changes were made - True if defaults were applied, false otherwise
+Returns **[Promise][139]<[Boolean][141]>** A promise which resolves to whether any changes were made - True if defaults were applied, false otherwise
 
 ## setProjectStateFlush
 
 Force copying local changes to the server
 This is only ever needed when saving large quantities of data that need to be immediately available
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ## setProjectStateRefresh
 
 Force refetching the remote project state into local
 This is only ever needed when saving large quantities of data that need to be immediately available
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ## saveProjectState
 
 Force-Save the currently active project state
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ## replaceProjectState
 
@@ -738,9 +754,9 @@ You almost never want to use this function directly, see `setProjectState(path, 
 
 ### Parameters
 
-*   `newState` **[Object][131]** The new state to replace the current state with
+*   `newState` **[Object][133]** The new state to replace the current state with
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ## applyProjectStatePatch
 
@@ -748,9 +764,9 @@ Apply a computed `just-diff` patch to the current project state
 
 ### Parameters
 
-*   `Patch` **[Object][131]** to apply
+*   `Patch` **[Object][133]** to apply
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ## subscribeProjectState
 
@@ -758,7 +774,7 @@ Subscribe to project state changes
 This will dispatch an RPC call to the source object `applyProjectStatePatchLocal()` function with the patch
 If the above call fails the subscriber is assumed as dead and unsubscribed from the polling list
 
-Returns **[Promise][137]<[Function][143]>** A promise which resolves when a subscription has been created, call the resulting function to unsubscribe
+Returns **[Promise][139]<[Function][145]>** A promise which resolves when a subscription has been created, call the resulting function to unsubscribe
 
 ## FileFilters
 
@@ -766,10 +782,10 @@ Data structure for a file filter
 
 ### Properties
 
-*   `library` **[Boolean][139]?** Restrict to library files only
-*   `filename` **[String][130]?** CSV of @momsfriendlydevco/match expressions to filter the filename by (filenames are the basename sans extension)
-*   `basename` **[String][130]?** CSV of @momsfriendlydevco/match expressions to filter the basename by
-*   `ext` **[String][130]?** CSV of @momsfriendlydevco/match expressions to filter the file extension by
+*   `library` **[Boolean][141]?** Restrict to library files only
+*   `filename` **[String][132]?** CSV of @momsfriendlydevco/match expressions to filter the filename by (filenames are the basename sans extension)
+*   `basename` **[String][132]?** CSV of @momsfriendlydevco/match expressions to filter the basename by
+*   `ext` **[String][132]?** CSV of @momsfriendlydevco/match expressions to filter the file extension by
 
 ## selectProjectFile
 
@@ -777,20 +793,20 @@ Prompt the user to select a library to operate on
 
 ### Parameters
 
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.title` **[String][130]** The title of the dialog to display (optional, default `"Select a file"`)
-    *   `options.hint` **([String][130] | [Array][136]<[String][130]>)?** Hints to identify the file to select in array order of preference
-    *   `options.save` **[Boolean][139]** Set to truthy if saving a new file, UI will adjust to allowing overwrite OR new file name input (optional, default `false`)
-    *   `options.filters` **[FileFilters][106]?** Optional file filters
-    *   `options.allowUpload` **[Boolean][139]** Allow uploading new files (optional, default `true`)
-    *   `options.allowRefresh` **[Boolean][139]** Allow the user to manually refresh the file list (optional, default `true`)
-    *   `options.allowDownloadZip` **[Boolean][139]** Allow the user to download a Zip of all files (optional, default `true`)
-    *   `options.allowCancel` **[Boolean][139]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
-    *   `options.autoRequire` **[Boolean][139]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.filter` **[FileFilters][106]?** Optional file filters
+    *   `options.title` **[String][132]** The title of the dialog to display (optional, default `"Select a file"`)
+    *   `options.hint` **([String][132] | [Array][138]<[String][132]>)?** Hints to identify the file to select in array order of preference
+    *   `options.save` **[Boolean][141]** Set to truthy if saving a new file, UI will adjust to allowing overwrite OR new file name input (optional, default `false`)
+    *   `options.filters` **[FileFilters][108]?** Optional file filters
+    *   `options.allowUpload` **[Boolean][141]** Allow uploading new files (optional, default `true`)
+    *   `options.allowRefresh` **[Boolean][141]** Allow the user to manually refresh the file list (optional, default `true`)
+    *   `options.allowDownloadZip` **[Boolean][141]** Allow the user to download a Zip of all files (optional, default `true`)
+    *   `options.allowCancel` **[Boolean][141]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
+    *   `options.autoRequire` **[Boolean][141]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.filter` **[FileFilters][108]?** Optional file filters
 
-Returns **[Promise][137]<[ProjectFile][1]>** The eventually selected file
+Returns **[Promise][139]<[ProjectFile][1]>** The eventually selected file
 
 ## setProjectFile
 
@@ -798,10 +814,10 @@ Replace a project files contents
 
 ### Parameters
 
-*   `path` **[String][130]** File path to write
-*   `contents` **(File | [Blob][134] | [FormData][135] | [Object][131] | [Array][136])** The new file contents
+*   `id` **[String][132]** File to overwrite
+*   `contents` **(File | [Blob][136] | [FormData][137] | [Object][133] | [Array][138])** The new file contents
 
-Returns **[Promise][137]** A promise which will resolve when the write operation has completed
+Returns **[Promise][139]** A promise which will resolve when the write operation has completed
 
 ## selectProjectLibrary
 
@@ -809,18 +825,18 @@ Prompt the user to select a library to operate on and return a array of referenc
 
 ### Parameters
 
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.title` **[String][130]** The title of the dialog to display (optional, default `"Select a citation library"`)
-    *   `options.hint` **([String][130] | [Array][136]<[String][130]>)?** Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'dedisputed'
-    *   `options.allowUpload` **[Boolean][139]** Allow uploading new files (optional, default `true`)
-    *   `options.allowRefresh` **[Boolean][139]** Allow the user to manually refresh the file list (optional, default `true`)
-    *   `options.allowDownloadZip` **[Boolean][139]** Allow the user to download a Zip of all files (optional, default `true`)
-    *   `options.allowCancel` **[Boolean][139]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
-    *   `options.autoRequire` **[Boolean][139]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.filters` **[FileFilters][106]?** Optional file filters, defaults to citation library selection only
+    *   `options.title` **[String][132]** The title of the dialog to display (optional, default `"Select a citation library"`)
+    *   `options.hint` **([String][132] | [Array][138]<[String][132]>)?** Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'dedisputed'
+    *   `options.allowUpload` **[Boolean][141]** Allow uploading new files (optional, default `true`)
+    *   `options.allowRefresh` **[Boolean][141]** Allow the user to manually refresh the file list (optional, default `true`)
+    *   `options.allowDownloadZip` **[Boolean][141]** Allow the user to download a Zip of all files (optional, default `true`)
+    *   `options.allowCancel` **[Boolean][141]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
+    *   `options.autoRequire` **[Boolean][141]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.filters` **[FileFilters][108]?** Optional file filters, defaults to citation library selection only
 
-Returns **[Promise][137]<[Array][136]\<Ref>>** A collection of references from the selected file
+Returns **[Promise][139]<[Array][138]\<Ref>>** A collection of references from the selected file
 
 ## getProjectLibrary
 
@@ -828,15 +844,15 @@ Fetch + convert a project file into a library of citations
 
 ### Parameters
 
-*   `path` **[String][130]** File path to read, if omitted the contents of `options` are used to guess at a suitable file
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `id` **[String][132]** File ID to read
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.format` **[String][130]** Format for the file. ENUM: 'pojo' (return a parsed JS collection), 'blob' (raw JS Blob object), 'file' (named JS File object) (optional, default `'json'`)
-    *   `options.autoRequire` **[Boolean][139]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.filter` **[Function][143]?** Optional async file filter, called each time as `(File:ProjectFile)`
-    *   `options.find` **[Function][143]?** Optional async final stage file filter to reduce all candidates down to one subject file
+    *   `options.format` **[String][132]** Format for the file. ENUM: 'pojo' (return a parsed JS collection), 'blob' (raw JS Blob object), 'file' (named JS File object) (optional, default `'json'`)
+    *   `options.autoRequire` **[Boolean][141]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.filter` **[Function][145]?** Optional async file filter, called each time as `(File:ProjectFile)`
+    *   `options.find` **[Function][145]?** Optional async final stage file filter to reduce all candidates down to one subject file
 
-Returns **([Promise][137]<[Array][136]\<Ref>> | [Promise][137]\<any>)** A collection of references (default bevahiour) or a whatever format was requested
+Returns **([Promise][139]<[Array][138]\<Ref>> | [Promise][139]\<any>)** A collection of references (default bevahiour) or a whatever format was requested
 
 ## setProjectLibrary
 
@@ -844,33 +860,33 @@ Save back a citation library from some input
 
 ### Parameters
 
-*   `path` **[String][130]?** File path to save back to, if omitted one will be prompted for
-*   `refs` **([Array][136]\<RefLibRef> | [Blob][134] | File)?** Collection of references for the selected library or the raw Blob/File
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `id` **[String][132]?** File ID to save back to, if omitted a file will be prompted for
+*   `refs` **([Array][138]\<RefLibRef> | [Blob][136] | File)?** Collection of references for the selected library or the raw Blob/File
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.path` **[String][130]?** Alternate method to specify the path to save as, if omitted one will be prompted for
-    *   `options.refs` **([Array][136]\<RefLibRef> | [Blob][134] | File)?** Alternate method to specify the refs to save as an array or raw Blob/File
-    *   `options.format` **[String][130]** Input format used. ENUM: 'pojo' (return a parsed JS collection), 'blob' (raw JS Blob object), 'file' (named JS File object) (optional, default `'json'`)
-    *   `options.autoRequire` **[Boolean][139]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.hint` **[String][130]?** Hint to store against the library. Generally corresponds to the current operation being performed - e.g. 'deduped'
-    *   `options.filename` **[String][130]?** Suggested filename if path is unspecified
-    *   `options.title` **[String][130]** Dialog title if path is unspecified and we need to prompt (optional, default `'Save citation library'`)
-    *   `options.overwrite` **[Boolean][139]** Allow existing file upsert (optional, default `true`)
-    *   `options.meta` **[Object][131]?** Optional meta data to merge into the file data
+    *   `options.id` **[String][132]?** Alternate method to specify the file ID to save as, if omitted one will be prompted for
+    *   `options.refs` **([Array][138]\<RefLibRef> | [Blob][136] | File)?** Alternate method to specify the refs to save as an array or raw Blob/File
+    *   `options.format` **[String][132]** Input format used. ENUM: 'pojo' (return a parsed JS collection), 'blob' (raw JS Blob object), 'file' (named JS File object) (optional, default `'json'`)
+    *   `options.autoRequire` **[Boolean][141]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.hint` **[String][132]?** Hint to store against the library. Generally corresponds to the current operation being performed - e.g. 'deduped'
+    *   `options.filename` **[String][132]?** Suggested filename if `id` is unspecified
+    *   `options.title` **[String][132]** Dialog title if `id` is unspecified and a prompt is necessary (optional, default `'Save citation library'`)
+    *   `options.overwrite` **[Boolean][141]** Allow existing file upsert (optional, default `true`)
+    *   `options.meta` **[Object][133]?** Optional meta data to merge into the file data
 
-Returns **[Promise][137]** A promise which resolves when the save operation has completed
+Returns **[Promise][139]** A promise which resolves when the save operation has completed
 
 ## projectLog
 
 Create a log entry for the currently active project
 
-The required log object can be of various forms. See [https://tera-tools.com/api/logs.json][144] for the full list
+The required log object can be of various forms. See [https://tera-tools.com/api/logs.json][146] for the full list
 
 ### Parameters
 
-*   `log` **[Object][131]** The log entry to create
+*   `log` **[Object][133]** The log entry to create
 
-Returns **[Promise][137]** A promise which resolves when the operation has completed
+Returns **[Promise][139]** A promise which resolves when the operation has completed
 
 ## setPageUrl
 
@@ -879,7 +895,7 @@ This only really makes a difference to tools within the tera-tools.com site wher
 
 ### Parameters
 
-*   `url` **[String][130]** The URL to restore on next refresh
+*   `url` **[String][132]** The URL to restore on next refresh
 
 ## setPageTitle
 
@@ -888,7 +904,7 @@ This is usually called by a tool nested within the tera-tools.com embed
 
 ### Parameters
 
-*   `title` **[String][130]** The current page title
+*   `title` **[String][132]** The current page title
 
 ## uiAlert
 
@@ -896,13 +912,13 @@ Display simple text within TERA
 
 ### Parameters
 
-*   `text` **[String][130]** The text to display
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `text` **[String][132]** The text to display
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.title` **[String][130]** The title of the alert box (optional, default `'TERA'`)
-    *   `options.isHtml` **[Boolean][139]** If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content (optional, default `false`)
+    *   `options.title` **[String][132]** The title of the alert box (optional, default `'TERA'`)
+    *   `options.isHtml` **[Boolean][141]** If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content (optional, default `false`)
 
-Returns **[Promise][137]** A promise which resolves when the alert has been dismissed
+Returns **[Promise][139]** A promise which resolves when the alert has been dismissed
 
 ## uiSplat
 
@@ -911,10 +927,10 @@ This function is ideally called within a requestFocus() wrapper
 
 ### Parameters
 
-*   `content` **(DOMElement | [String][130] | `false`)** Either a prepared DOM element or string to compile, set to falsy to remove existing content
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `content` **(DOMElement | [String][132] | `false`)** Either a prepared DOM element or string to compile, set to falsy to remove existing content
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.logo` **([Boolean][139] | [String][130])** Add a logo to the output, if boolean true the Tera-tools logo is used otherwise specify a path or URL (optional, default `false`)
+    *   `options.logo` **([Boolean][141] | [String][132])** Add a logo to the output, if boolean true the Tera-tools logo is used otherwise specify a path or URL (optional, default `false`)
 
 ## uiWindow
 
@@ -922,13 +938,13 @@ Open a popup window containing a new site
 
 ### Parameters
 
-*   `url` **[String][130]** The URL to open
-*   `options` **[Object][131]?** Additional options to mutate behaviour
+*   `url` **[String][132]** The URL to open
+*   `options` **[Object][133]?** Additional options to mutate behaviour
 
-    *   `options.width` **[Number][133]** The desired width of the window (optional, default `500`)
-    *   `options.height` **[Number][133]** The desired height of the window (optional, default `600`)
-    *   `options.center` **[Boolean][139]** Attempt to center the window on the screen (optional, default `true`)
-    *   `options.permissions` **[Object][131]?** Additional permissions to set on opening, defaults to a suitable set of permission for popups (see code)
+    *   `options.width` **[Number][135]** The desired width of the window (optional, default `500`)
+    *   `options.height` **[Number][135]** The desired height of the window (optional, default `600`)
+    *   `options.center` **[Boolean][141]** Attempt to center the window on the screen (optional, default `true`)
+    *   `options.permissions` **[Object][133]?** Additional permissions to set on opening, defaults to a suitable set of permission for popups (see code)
 
 Returns **WindowProxy** The opened window object (if `noopener` is not set in permissions)
 
@@ -942,280 +958,284 @@ Returns **WindowProxy** The opened window object (if `noopener` is not set in pe
 
 [5]: #path
 
-[6]: #parsedname
+[6]: #url
 
-[7]: #properties
+[7]: #teraurl
 
-[8]: #created
+[8]: #parsedname
 
-[9]: #createdformatted
+[9]: #properties
 
-[10]: #modified
+[10]: #created
 
-[11]: #modifiedformatted
+[11]: #createdformatted
 
-[12]: #accessed
+[12]: #modified
 
-[13]: #accessedformatted
+[13]: #modifiedformatted
 
-[14]: #size
+[14]: #accessed
 
-[15]: #sizeformatted
+[15]: #accessedformatted
 
-[16]: #mime
+[16]: #size
 
-[17]: #meta
+[17]: #sizeformatted
 
-[18]: #getcontents
+[18]: #mime
 
-[19]: #setcontents
+[19]: #meta
 
-[20]: #parameters
+[20]: #getcontents
 
-[21]: #getrefs
+[21]: #setcontents
 
-[22]: #setrefs
+[22]: #parameters
 
-[23]: #parameters-1
+[23]: #getrefs
 
-[24]: #serialize
+[24]: #setrefs
 
-[25]: #deserialize
+[25]: #parameters-1
 
-[26]: #parameters-2
+[26]: #serialize
 
-[27]: #tera
+[27]: #deserialize
 
-[28]: #parameters-3
+[28]: #parameters-2
 
-[29]: #terafy
+[29]: #tera
 
-[30]: #settings
+[30]: #parameters-3
 
-[31]: #properties-1
+[31]: #terafy
 
-[32]: #events
+[32]: #settings
 
-[33]: #dom
+[33]: #properties-1
 
-[34]: #properties-2
+[34]: #events
 
-[35]: #methods
+[35]: #dom
 
-[36]: #plugins
+[36]: #properties-2
 
-[37]: #send
+[37]: #methods
 
-[38]: #parameters-4
+[38]: #plugins
 
-[39]: #sendraw
+[39]: #send
 
-[40]: #parameters-5
+[40]: #parameters-4
 
-[41]: #rpc
+[41]: #sendraw
 
-[42]: #parameters-6
+[42]: #parameters-5
 
-[43]: #acceptmessage
+[43]: #rpc
 
-[44]: #parameters-7
+[44]: #parameters-6
 
-[45]: #acceptpostboxes
+[45]: #acceptmessage
 
-[46]: #createprojectstatepatch
+[46]: #parameters-7
 
-[47]: #parameters-8
+[47]: #acceptpostboxes
 
-[48]: #applyprojectstatepatchlocal
+[48]: #createprojectstatepatch
 
-[49]: #parameters-9
+[49]: #parameters-8
 
-[50]: #init
+[50]: #applyprojectstatepatchlocal
 
-[51]: #parameters-10
+[51]: #parameters-9
 
-[52]: #detectmode
+[52]: #init
 
-[53]: #injectcomms
+[53]: #parameters-10
 
-[54]: #injectstylesheet
+[54]: #detectmode
 
-[55]: #injectmethods
+[55]: #injectcomms
 
-[56]: #debug
+[56]: #injectstylesheet
 
-[57]: #parameters-11
+[57]: #injectmethods
 
-[58]: #set
+[58]: #debug
 
-[59]: #parameters-12
+[59]: #parameters-11
 
-[60]: #setifdev
+[60]: #set
 
-[61]: #parameters-13
+[61]: #parameters-12
 
-[62]: #use
+[62]: #setifdev
 
-[63]: #parameters-14
+[63]: #parameters-13
 
-[64]: #mixin
+[64]: #use
 
-[65]: #parameters-15
+[65]: #parameters-14
 
-[66]: #toggledevmode
+[66]: #mixin
 
-[67]: #parameters-16
+[67]: #parameters-15
 
-[68]: #togglefocus
+[68]: #toggledevmode
 
-[69]: #parameters-17
+[69]: #parameters-16
 
-[70]: #selectprojectfile
+[70]: #togglefocus
 
-[71]: #parameters-18
+[71]: #parameters-17
 
-[72]: #getprojectfiles
+[72]: #selectprojectfile
 
-[73]: #parameters-19
+[73]: #parameters-18
 
-[74]: #getprojectfile
+[74]: #getprojectfiles
 
-[75]: #parameters-20
+[75]: #parameters-19
 
-[76]: #handshake
+[76]: #getprojectfile
 
-[77]: #properties-3
+[77]: #parameters-20
 
-[78]: #user
+[78]: #handshake
 
-[79]: #properties-4
+[79]: #properties-3
 
-[80]: #getuser
+[80]: #user
 
-[81]: #requireuser
+[81]: #properties-4
 
-[82]: #parameters-21
+[82]: #getuser
 
-[83]: #project
+[83]: #requireuser
 
-[84]: #getproject
+[84]: #parameters-21
 
-[85]: #getprojects
+[85]: #project
 
-[86]: #setactiveproject
+[86]: #getproject
 
-[87]: #parameters-22
+[87]: #getprojects
 
-[88]: #requireproject
+[88]: #setactiveproject
 
-[89]: #parameters-23
+[89]: #parameters-22
 
-[90]: #selectproject
+[90]: #requireproject
 
-[91]: #parameters-24
+[91]: #parameters-23
 
-[92]: #getprojectstate
+[92]: #selectproject
 
-[93]: #parameters-25
+[93]: #parameters-24
 
-[94]: #setprojectstate
+[94]: #getprojectstate
 
-[95]: #parameters-26
+[95]: #parameters-25
 
-[96]: #setprojectstatedefaults
+[96]: #setprojectstate
 
-[97]: #parameters-27
+[97]: #parameters-26
 
-[98]: #setprojectstateflush
+[98]: #setprojectstatedefaults
 
-[99]: #setprojectstaterefresh
+[99]: #parameters-27
 
-[100]: #saveprojectstate
+[100]: #setprojectstateflush
 
-[101]: #replaceprojectstate
+[101]: #setprojectstaterefresh
 
-[102]: #parameters-28
+[102]: #saveprojectstate
 
-[103]: #applyprojectstatepatch
+[103]: #replaceprojectstate
 
-[104]: #parameters-29
+[104]: #parameters-28
 
-[105]: #subscribeprojectstate
+[105]: #applyprojectstatepatch
 
-[106]: #filefilters
+[106]: #parameters-29
 
-[107]: #properties-5
+[107]: #subscribeprojectstate
 
-[108]: #selectprojectfile-1
+[108]: #filefilters
 
-[109]: #parameters-30
+[109]: #properties-5
 
-[110]: #setprojectfile
+[110]: #selectprojectfile-1
 
-[111]: #parameters-31
+[111]: #parameters-30
 
-[112]: #selectprojectlibrary
+[112]: #setprojectfile
 
-[113]: #parameters-32
+[113]: #parameters-31
 
-[114]: #getprojectlibrary
+[114]: #selectprojectlibrary
 
-[115]: #parameters-33
+[115]: #parameters-32
 
-[116]: #setprojectlibrary
+[116]: #getprojectlibrary
 
-[117]: #parameters-34
+[117]: #parameters-33
 
-[118]: #projectlog
+[118]: #setprojectlibrary
 
-[119]: #parameters-35
+[119]: #parameters-34
 
-[120]: #setpageurl
+[120]: #projectlog
 
-[121]: #parameters-36
+[121]: #parameters-35
 
-[122]: #setpagetitle
+[122]: #setpageurl
 
-[123]: #parameters-37
+[123]: #parameters-36
 
-[124]: #uialert
+[124]: #setpagetitle
 
-[125]: #parameters-38
+[125]: #parameters-37
 
-[126]: #uisplat
+[126]: #uialert
 
-[127]: #parameters-39
+[127]: #parameters-38
 
-[128]: #uiwindow
+[128]: #uisplat
 
-[129]: #parameters-40
+[129]: #parameters-39
 
-[130]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[130]: #uiwindow
 
-[131]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[131]: #parameters-40
 
-[132]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
+[132]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[133]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[133]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[134]: https://developer.mozilla.org/docs/Web/API/Blob
+[134]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
 
-[135]: https://developer.mozilla.org/docs/Web/API/FormData
+[135]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[136]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[136]: https://developer.mozilla.org/docs/Web/API/Blob
 
-[137]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[137]: https://developer.mozilla.org/docs/Web/API/FormData
 
-[138]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
+[138]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[139]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[139]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[140]: https://developer.mozilla.org/docs/Web/API/Window
+[140]: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
 
-[141]: https://developer.mozilla.org/docs/Web/API/MessageEvent
+[141]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[142]: http://jsonpatch.com
+[142]: https://developer.mozilla.org/docs/Web/API/Window
 
-[143]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[143]: https://developer.mozilla.org/docs/Web/API/MessageEvent
 
-[144]: https://tera-tools.com/api/logs.json
+[144]: http://jsonpatch.com
+
+[145]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[146]: https://tera-tools.com/api/logs.json
