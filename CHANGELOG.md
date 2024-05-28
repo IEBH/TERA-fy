@@ -1,5 +1,18 @@
 # Changelog
 
+# [1.7.0](https://github.com/IEBH/TERA-fy/compare/v1.6.1...v1.7.0) (2024-05-28)
+
+
+### Bug Fixes
+
+* Actually write the file when using setProjectLibrary() ([282e710](https://github.com/IEBH/TERA-fy/commit/282e710197320f10264d7a13b45ba4c62f7f0594))
+* Used wrong filename when passing output to RefLib for file write ([e9d36d8](https://github.com/IEBH/TERA-fy/commit/e9d36d857a17a88f05db42a5d4c13ed409adb4d0))
+
+
+### Features
+
+* Added more file operation - creation of stubs + file removal + nicer getProjectFile() handling ([ec68885](https://github.com/IEBH/TERA-fy/commit/ec6888540bdecbf077cedccad55be46a78a09993))
+
 ## [1.6.1](https://github.com/IEBH/TERA-fy/compare/v1.6.0...v1.6.1) (2024-05-27)
 
 # [1.6.0](https://github.com/IEBH/TERA-fy/compare/v1.5.0...v1.6.0) (2024-05-23)
