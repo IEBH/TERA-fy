@@ -30,7 +30,7 @@
     "./projectFile": "./lib/projectFile.js",
     "./server": "./lib/terafy.server.js",
     "./plugins/*": "./plugins/*.js",
-    "./widgets/*": "./widgets/*.vue"
+    "./widgets/*": "./widgets/*"
   },
   "repository": {
     "type": "git",
