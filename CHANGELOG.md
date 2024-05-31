@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.4](https://github.com/IEBH/TERA-fy/compare/v1.7.3...v1.7.4) (2024-05-31)
+
+
+### Bug Fixes
+
+* Route file fetching through the TERA $project service instead of the raw $supabase feed ([2e0ef7f](https://github.com/IEBH/TERA-fy/commit/2e0ef7f254d7b46315447788104fd4b773c54507))
+
 ## [1.7.3](https://github.com/IEBH/TERA-fy/compare/v1.7.2...v1.7.3) (2024-05-31)
 
 
