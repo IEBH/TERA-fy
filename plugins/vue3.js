@@ -166,7 +166,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 							.then(projects => $tera.projects = reactive(projects))
 							.then(()=> $tera.debug('INFO', 2, 'Loaded project list', $tera.projects)),
 					]))
-					.then(()=> this.debug('INFO', 1, 'Ready'))
+					.then(()=> $tera.debug('INFO', 1, 'Ready'))
 
 
 				// Make this module available globally
