@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/IEBH/TERA-fy/compare/v1.7.1...v1.7.2) (2024-05-31)
+
+
+### Bug Fixes
+
+* Stupid typo upsets some build resolution systems ([c62a4a3](https://github.com/IEBH/TERA-fy/commit/c62a4a322be1d646b9b235073f97736ab0bc614f))
+
 ## [1.7.1](https://github.com/IEBH/TERA-fy/compare/v1.7.0...v1.7.1) (2024-05-31)
 
 
