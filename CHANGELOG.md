@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.3](https://github.com/IEBH/TERA-fy/compare/v1.7.2...v1.7.3) (2024-05-31)
+
+
+### Bug Fixes
+
+* Wrong entity when debugging in Vue3 plugin ([1e6bbed](https://github.com/IEBH/TERA-fy/commit/1e6bbed893f3df41e10f52f4a61bfa34a7dbc965))
+
 ## [1.7.2](https://github.com/IEBH/TERA-fy/compare/v1.7.1...v1.7.2) (2024-05-31)
 
 
