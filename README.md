@@ -47,3 +47,51 @@ Generally importing the source code TERA-fy client (`import terafy from '@iebh/t
 | `@iebh/tera-fy/dist/plugin.vue2.es2019.js` | ESM + ES2019 | `@vue/cli-service` compatible version of the Vue@2 plugin          |
 
 More versions can be added upon request or PR of the build command in the scripts section of `package.json`.
+
+
+Plugins
+=======
+This module exports various plugins which are availble as `import from '@iebh/tera-fy/plugins/*'`.
+
+
+`@iebh/tera-fy/plugins/vue2`
+----------------------------
+FIXME: To add documentation
+
+
+`@iebh/tera-fy/plugins/vue3`
+----------------------------
+FIXME: To add documentation
+
+
+`@iebh/tera-fy/plugins/vite`
+----------------------------
+A plugin for Vite which boots a local proxy server to route traffic to/from `localhost:7334` to tera-tools.com.
+This is to work around the issue where a local website is usually forbidden from talking to TERA-tools.com unless its running with a HTTPS context.
+
+Example Usage within `vite.config.js`:
+
+```javascript
+// ... Other imports ... //
+import pluginTeraFy from '@iebh/tera-fy/plugins/vite';
+
+export default {
+	plugins: [
+		// ... other plugin config ... //
+
+		pluginTeraFy(), // ... or add an options object to override the defaults
+	],
+}
+```
+
+Configuration options:
+
+| Option           | Type      | Default            | Description                                                    |
+|------------------|-----------|--------------------|----------------------------------------------------------------|
+| `force`          | `Boolean` | `false`            | Restart the server even if its apparently running              |
+| `autoStart`      | `Boolean` | `true`             | Automatically start the proxy without calling `Plugin.start()` |
+| `host`           | `String`  | `'0.0.0.0'`        | Host IP to listen on                                           |
+| `port`           | `Number`  | `7334`             | Host port to listen on                                         |
+| `targetProtocol` | `String`  | `'https'`          | Target protocol to forward to                                  |
+| `targetHost`     | `String`  | `'tera-tools.com'` | Target host to forward to                                      |
+| `targetPort`     | `Number`  | `443`              | Target port to forward to                                      |
