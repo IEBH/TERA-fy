@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "filesize": "^10.1.1",
+    "http-proxy": "^1.18.1",
     "just-diff": "^6.0.2",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
