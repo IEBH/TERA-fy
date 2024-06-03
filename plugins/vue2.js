@@ -17,7 +17,7 @@ import TeraFyPluginBase from './base.js';
 * import TerafyVue from '@iebh/tera-fy/plugins/vue2';
 * let terafy = new TeraFy()
 *   .set('devMode', true) // Uncomment this line if you want TeraFy to be chatty
-*   .set('siteUrl', 'http://localhost:8000/embed') // Uncomment this line if running TERA locally
+*   .set('siteUrl', 'http://localhost:7334/embed') // Uncomment this line if running TERA locally
 *   .use(TerafyVue, { // Add the Vue plugin
 *   	vue: window.Vue, // Assumes Vue is available on the window object
 *   })

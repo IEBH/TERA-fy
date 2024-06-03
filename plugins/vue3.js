@@ -14,7 +14,7 @@ import {reactive, watch} from 'vue';
 * import TerafyVue from '@iebh/tera-fy/plugins/vue';
 * let terafy = new TeraFy()
 *   .set('devMode', import.meta.env.DEV)
-*   .set('siteUrl', 'http://localhost:8000/embed') // Uncomment this line if running TERA locally
+*   .set('siteUrl', 'http://localhost:7334/embed') // Uncomment this line if running TERA locally
 *   .use(TerafyVue) // Add the Vue plugin
 *
 * terafy.init(); // Initialize everything
