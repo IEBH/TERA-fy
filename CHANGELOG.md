@@ -1,5 +1,22 @@
 # Changelog
 
+# [1.8.0](https://github.com/IEBH/TERA-fy/compare/v1.7.4...v1.8.0) (2024-06-04)
+
+
+### Bug Fixes
+
+* Remove secondary /project path segment when computing ProjectFile.teraUrl ([18ad085](https://github.com/IEBH/TERA-fy/commit/18ad085e77df9e9c1e5deb4a84f5d888df6255c3))
+* Updated default port to match TERA proxy deployment ([6904dfc](https://github.com/IEBH/TERA-fy/commit/6904dfcf4505a2989733e5a46537ef140aedadea))
+
+
+### Features
+
+* Add stub for uiProgress (unfinished implementation) ([402d181](https://github.com/IEBH/TERA-fy/commit/402d1810fb679782088728958140304cb0eba9c9))
+* Added plugins/vite ([3d48f3b](https://github.com/IEBH/TERA-fy/commit/3d48f3b7a2c52648f5757d267606dec9800d08a0))
+* More init debug steps + transmit server verbosity as first action ([8cb6e52](https://github.com/IEBH/TERA-fy/commit/8cb6e5221883079158af508be552eea7055fedc2))
+* setServerVerbosity() ([a0f7f77](https://github.com/IEBH/TERA-fy/commit/a0f7f77d7c95e43a1cea0f73fb199a513a561b55))
+* toggleDevMode() now also accepts the "proxy" meta value to switch to local proxy-forwarding mode ([d2fa61d](https://github.com/IEBH/TERA-fy/commit/d2fa61d6c584a7489ea18b3f48d28e5ab91cf682))
+
 ## [1.7.4](https://github.com/IEBH/TERA-fy/compare/v1.7.3...v1.7.4) (2024-05-31)
 
 

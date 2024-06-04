@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.7.3 | Documentation</title>
+  <title>@iebh/tera-fy 1.7.4 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.7.3</code></div>
+          <div class='mb1'><code>1.7.4</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -469,6 +469,16 @@
               
                 
                 <li><a
+                  href='#setserververbosity'
+                  class="">
+                  setServerVerbosity
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#getuser'
                   class="">
                   getUser
@@ -739,9 +749,9 @@
               
                 
                 <li><a
-                  href='#uisplat'
+                  href='#uiprogress'
                   class="">
-                  uiSplat
+                  uiProgress
                   
                 </a>
                 
@@ -752,6 +762,16 @@
                   href='#uiwindow'
                   class="">
                   uiWindow
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#uisplat'
+                  class="">
+                  uiSplat
                   
                 </a>
                 
@@ -3721,7 +3741,7 @@ This function will only act if <code>settings.devMode</code> is truthy</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>set(key, value)</span>
+            <span class='code strong strong truncate'>set(key, value, options?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3732,7 +3752,7 @@ This function will only act if <code>settings.devMode</code> is truthy</p>
   <p>Set or merge settings
 This function also routes 'special' keys like <code>devMode</code> to their internal handlers</p>
 
-    <div class='pre p1 fill-light mt0'>set(key: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>), value: any): <a href="#terafy">TeraFy</a></div>
+    <div class='pre p1 fill-light mt0'>set(key: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>), value: any, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="#terafy">TeraFy</a></div>
   
   
 
@@ -3764,6 +3784,42 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
  is a string
 
           </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.ignoreNullish</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span>If falsy, this forces the setting of undefined or null values rather than ignoring them when specifying values by string
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
           
         </div>
       
@@ -3804,7 +3860,7 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setIfDev(key, value)</span>
+            <span class='code strong strong truncate'>setIfDev(key, value, options?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3814,7 +3870,7 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
 
   <p>Set or merge settings - but only in dev mode and only if the value is not undefined</p>
 
-    <div class='pre p1 fill-light mt0'>setIfDev(key: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>), value: any): <a href="#terafy">TeraFy</a></div>
+    <div class='pre p1 fill-light mt0'>setIfDev(key: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>), value: any, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="#terafy">TeraFy</a></div>
   
   
 
@@ -3844,6 +3900,15 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
 	    The value to set if 
 <code>key</code>
  is a string
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
 
           </div>
           
@@ -4063,9 +4128,13 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
 
   
 
-  <p>Set or toggle devMode</p>
+  <p>Set or toggle devMode
+This function also accepts meta values:</p>
+<pre><code>'toggle' - Set dev mode to whatever the opposing value of the current mode
+'proxy'  - Optimize for using a loopback proxy
+</code></pre>
 
-    <div class='pre p1 fill-light mt0'>toggleDevMode(devModeEnabled: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)): <a href="#terafy">TeraFy</a></div>
+    <div class='pre p1 fill-light mt0'>toggleDevMode(devModeEnabled: (<code>"toggle"</code> | <code>"proxy"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)): <a href="#terafy">TeraFy</a></div>
   
   
 
@@ -4082,9 +4151,9 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>devModeEnabled</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)
+            <span class='code bold'>devModeEnabled</span> <code class='quiet'>((<code>"toggle"</code> | <code>"proxy"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)
             = <code>&#39;toggle&#39;</code>)</code>
-	    Optional boolean to force dev mode
+	    Optional boolean to force dev mode or specify other behaviour
 
           </div>
           
@@ -4317,6 +4386,17 @@ This is an pre-requisite step for requireProject()</p>
   <td class='break-word'><span>Run 
 <code>requireProject()</code>
  automatically before continuing
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.lazy</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span>If true, use the fastest method to retrieve the file list such as the cache. If false, force a refresh each time
 </span></td>
 </tr>
 
@@ -4631,6 +4711,70 @@ This creates an empty file which can then be written to</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setserververbosity'>
+      setServerVerbosity
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>RPC callback to set the server verbostiy level</p>
+
+    <div class='pre p1 fill-light mt0'>setServerVerbosity(verbosity: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>verbosity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+	    The desired server verbosity level
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   
@@ -7238,18 +7382,18 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='uisplat'>
-      uiSplat
+    <h3 class='fl m0' id='uiprogress'>
+      uiProgress
     </h3>
     
     
   </div>
   
 
-  <p>Display HTML content full-screen within TERA
-This function is ideally called within a requestFocus() wrapper</p>
+  <p>Display, update or dispose of windows for long running tasks
+All options are cumulative - i.e. they are merged with other options previously provided</p>
 
-    <div class='pre p1 fill-light mt0'>uiSplat(content: (DOMElement | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <code>false</code>), options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</div>
+    <div class='pre p1 fill-light mt0'>uiProgress(options: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7266,17 +7410,10 @@ This function is ideally called within a requestFocus() wrapper</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>content</span> <code class='quiet'>((DOMElement | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <code>false</code>))</code>
-	    Either a prepared DOM element or string to compile, set to falsy to remove existing content
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
-	    Additional options to mutate behaviour
+            <span class='code bold'>options</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)?)</code>
+	    Additional options to mutate behaviour, if boolean false 
+<code>{close: true}</code>
+ is assumed
 
           </div>
           
@@ -7294,11 +7431,72 @@ This function is ideally called within a requestFocus() wrapper</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.logo</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+  <td class='break-word'><span class='code bold'>options.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  
+    (default <code>&#39;TERA&#39;</code>)
+  </td>
+  <td class='break-word'><span>Window title, can only be set on the initial call
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.body</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  
+    (default <code>&#39;&#39;</code>)
+  </td>
+  <td class='break-word'><span>Window body text, can only be set on the initial call
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.bodyHtml</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
   
     (default <code>false</code>)
   </td>
-  <td class='break-word'><span>Add a logo to the output, if boolean true the Tera-tools logo is used otherwise specify a path or URL
+  <td class='break-word'><span>Treat body text as HTML
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.close</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>Close the existing dialog, if true the dialog is disposed and options reset
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.text</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
+  </td>
+  <td class='break-word'><span>The text of the task being conducted
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.progress</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>?</code>
+  </td>
+  <td class='break-word'><span>The current progress of the task being conducted, this is assumed to be a value less than 
+<code>maxProgress</code>
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.maxProgress</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>?</code>
+  </td>
+  <td class='break-word'><span>The maximum value that the progress can be
 </span></td>
 </tr>
 
@@ -7314,6 +7512,14 @@ This function is ideally called within a requestFocus() wrapper</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which resolves when the dialog has been updated
+
+      
+    
   
 
   
@@ -7455,6 +7661,107 @@ This function is ideally called within a requestFocus() wrapper</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='uisplat'>
+      uiSplat
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Display HTML content full-screen within TERA
+This function is ideally called within a requestFocus() wrapper</p>
+
+    <div class='pre p1 fill-light mt0'>uiSplat(content: (DOMElement | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <code>false</code>), options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>content</span> <code class='quiet'>((DOMElement | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <code>false</code>))</code>
+	    Either a prepared DOM element or string to compile, set to falsy to remove existing content
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.logo</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>Add a logo to the output, if boolean true the Tera-tools logo is used otherwise specify a path or URL
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   
