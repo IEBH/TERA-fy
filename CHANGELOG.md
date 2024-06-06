@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.9.0](https://github.com/IEBH/TERA-fy/compare/v1.8.0...v1.9.0) (2024-06-06)
+
+
+### Features
+
+* **proxy:** Better in-use port detection + custom logging handler ([8bfa2d3](https://github.com/IEBH/TERA-fy/commit/8bfa2d3923ef8a71dff04983113eca0b8cff606f))
+
 # [1.8.0](https://github.com/IEBH/TERA-fy/compare/v1.7.4...v1.8.0) (2024-06-04)
 
 
