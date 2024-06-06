@@ -69,6 +69,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "detect-port": "^1.6.1",
     "filesize": "^10.1.1",
     "http-proxy": "^1.18.1",
     "just-diff": "^6.0.2",
