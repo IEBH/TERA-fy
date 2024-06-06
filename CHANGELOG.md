@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.1](https://github.com/IEBH/TERA-fy/compare/v1.9.0...v1.9.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* Debugging artefacts ([5642606](https://github.com/IEBH/TERA-fy/commit/56426062d7184bfe898527adab75ecc71cf31ab8))
+* Spelling errors ([ce96424](https://github.com/IEBH/TERA-fy/commit/ce96424e83f689d5c5203a80140801c0115546e5))
+
 # [1.9.0](https://github.com/IEBH/TERA-fy/compare/v1.8.0...v1.9.0) (2024-06-06)
 
 
