@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.9.0 | Documentation</title>
+  <title>@iebh/tera-fy 1.9.1 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.9.0</code></div>
+          <div class='mb1'><code>1.9.1</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -652,6 +652,16 @@
                   href='#selectprojectfile-1'
                   class="">
                   selectProjectFile
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getprojectfilecontents'
+                  class="">
+                  getProjectFileContents
                   
                 </a>
                 
@@ -2052,7 +2062,7 @@ This is used to direct to the edit/view/download UI when the files project is ac
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getContents()</span>
+            <span class='code strong strong truncate'>getContents(options?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2061,19 +2071,33 @@ This is used to direct to the edit/view/download UI when the files project is ac
   
 
   <p>Fetch the raw file contents as a Blob</p>
+
+    <div class='pre p1 fill-light mt0'>getContents(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additioanl options to mutate behaviour
 <p>returns {Blob} The eventual raw file contents as a Blob</p>
 
-    <div class='pre p1 fill-light mt0'>getContents()</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -6362,6 +6386,114 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#projectfile">ProjectFile</a>></code>:
         The eventually selected file, if in save mode new files are created as stubs
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getprojectfilecontents'>
+      getProjectFileContents
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fetch the raw contents of a file by its ID</p>
+
+    <div class='pre p1 fill-light mt0'>getProjectFileContents(id: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
+	    File ID to retrieve the contents of
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additioanl options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.format</span> <code class='quiet'>(<code>"blob"</code> | <code>"json"</code>)</code>
+  
+    (default <code>&#39;blob&#39;</code>)
+  </td>
+  <td class='break-word'><span>The format to retrieve the file in
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        The file contents in the requested format
 
       
     

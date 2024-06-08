@@ -1,5 +1,18 @@
 # Changelog
 
+# [1.10.0](https://github.com/IEBH/TERA-fy/compare/v1.9.1...v1.10.0) (2024-06-08)
+
+
+### Bug Fixes
+
+* More file content handling functionality ([ca96f04](https://github.com/IEBH/TERA-fy/commit/ca96f045ecc4551f58ed6512485c97bc6a2f7878))
+* Use correct dialog title when handling files ([0d261e7](https://github.com/IEBH/TERA-fy/commit/0d261e72fc992a5d8e6a18ba9b024e8d1cf37984))
+
+
+### Features
+
+* Added uiProgress() functionality ([371094d](https://github.com/IEBH/TERA-fy/commit/371094d598161b7eecbf61c4295d8c26d527d449))
+
 ## [1.9.1](https://github.com/IEBH/TERA-fy/compare/v1.9.0...v1.9.1) (2024-06-06)
 
 
