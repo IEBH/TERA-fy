@@ -8,11 +8,16 @@ import TeraProxy from '../lib/terafy.proxy.js';
 * @returns {VitePlugin}
 */
 export default function vitePluginTeraFy(options) {
-	TeraProxy(options);
 
-	// Vite output
+	// Vite plugin config
 	return {
 		name: 'tera-fy',
-		apply: 'dev', // Only run on dev-serve-mode rather than each build
+		apply(config, {command}) { // Only run within serve-mode rather than each build
+
+			// Don't run when building
+			if (command == 'build') return false;
+
+			TeraProxy(options);
+		},
 	}
 }
