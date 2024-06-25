@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.11.0](https://github.com/IEBH/TERA-fy/compare/v1.10.0...v1.11.0) (2024-06-25)
+
+
+### Features
+
+* Much better handshake handling for the various initComms() profiles ([6de5e9b](https://github.com/IEBH/TERA-fy/commit/6de5e9bc15b2df89942d82f782fc7123eea6fb13))
+
 # [1.10.0](https://github.com/IEBH/TERA-fy/compare/v1.9.1...v1.10.0) (2024-06-08)
 
 

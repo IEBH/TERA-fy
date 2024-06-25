@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.9.1 | Documentation</title>
+  <title>@iebh/tera-fy 1.10.0 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.9.1</code></div>
+          <div class='mb1'><code>1.10.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -179,6 +179,12 @@
                         href='#injectcomms'
                         class='regular pre-open'>
                         #injectComms
+                      </a></li>
+                      
+                      <li><a
+                        href='#handshakeloop'
+                        class='regular pre-open'>
+                        #handshakeLoop
                       </a></li>
                       
                       <li><a
@@ -369,6 +375,12 @@
                         href='#injectcomms'
                         class='regular pre-open'>
                         #injectComms
+                      </a></li>
+                      
+                      <li><a
+                        href='#handshakeloop'
+                        class='regular pre-open'>
+                        #handshakeLoop
                       </a></li>
                       
                       <li><a
@@ -2614,6 +2626,13 @@ By default this computes a Structured Clone which can be stringified</p>
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>handshakeTimeout</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
+          : Interval in milliseconds for when to give up trying to handshake
+
+          
+        </div>
+      
     </div>
   
 
@@ -3547,6 +3566,96 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
         A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='handshakeloop'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>handshakeLoop(options?)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Keep trying to handshake until the target responds</p>
+
+    <div class='pre p1 fill-light mt0'>handshakeLoop(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>handshakeInterval</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>?)</code>
+          : Interval in milliseconds when sanning for a handshake, defaults to global setting
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>handshakeTimeout</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>?)</code>
+          : Interval in milliseconds for when to give up trying to handshake, defaults to global setting
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which will either resolve when the handshake is successful OR fail with 'TIMEOUT'
 
       
     
