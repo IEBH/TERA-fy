@@ -70,7 +70,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 								return;
 							}
 
-							this.createProojectStatePatch(newVal, oldVal);
+							this.createProjectStatePatch(newVal, oldVal);
 						},
 						{
 							deep: true,
