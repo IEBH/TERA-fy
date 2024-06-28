@@ -76,7 +76,7 @@
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
     "nanoid": "^5.0.2",
-    "release-it": "^17.1.1"
+    "release-it": "^17.4.0"
   },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^1.0.7",
