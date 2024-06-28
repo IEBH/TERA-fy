@@ -122,7 +122,11 @@ export function merge(target, path, value) {
 */
 export function defaults(target, path, value) {
 	if (typeof path == 'string' || Array.isArray(path)) { // Called as (target, path, value)
-		return _defaults(get(target, path), value);
+		if (!has(target, path)) { // Target path doesn't exist at all
+			return set(target, path, value);
+		} else { // Target path exists - apply Lodash defaults
+			return _defaults(get(target, path), value);
+		}
 	} else { // Called as (target, value)
 		return _defaults(target, path);
 	}
