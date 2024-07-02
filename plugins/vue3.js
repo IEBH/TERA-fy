@@ -1,3 +1,4 @@
+import {cloneDeep} from 'lodash-es';
 import TeraFyPluginBase from './base.js';
 import {reactive, watch} from 'vue';
 
@@ -62,15 +63,22 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 
 				// Watch for local writes and react
 				if (settings.write) {
+
+					// NOTE: The below watch function returns two copies of the new value of the observed
+					//       so we have to keep track of what changed ourselves by initalizing against the
+					//       snapshot
+					let oldVal = cloneDeep(snapshot);
+
 					watch(
 						stateReactive,
-						(newVal, oldVal) => {
+						newVal => {
 							if (skipUpdate > 0) {
 								skipUpdate--;
 								return;
 							}
 
 							this.createProjectStatePatch(newVal, oldVal);
+							oldVal = cloneDeep(snapshot);
 						},
 						{
 							deep: true,
