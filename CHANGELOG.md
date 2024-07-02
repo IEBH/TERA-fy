@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.11.4](https://github.com/IEBH/TERA-fy/compare/v1.11.0...v1.11.4) (2024-07-02)
+
+
+### Bug Fixes
+
+* Attempting to apply defaults to a path that doesnt exist resulted in a dangling-pointer ([b98aec8](https://github.com/IEBH/TERA-fy/commit/b98aec8f91d0f14899184d05fe7248d35e2b631b))
+* Typo ([cfbdc08](https://github.com/IEBH/TERA-fy/commit/cfbdc087267626d4ef70f0d976c9b4338d732d23))
+* **vite:** Dont boot the proxy system when in build mode ([c6af764](https://github.com/IEBH/TERA-fy/commit/c6af7640db9d9bba587f60ee57508d8ea848a28d))
+* **Vue3:** Fix for Vue@3 watchers not providing the old state when constructing patches ([d702d4e](https://github.com/IEBH/TERA-fy/commit/d702d4e44ea82f8a40a6c645b91b4f6ceca13264))
+
 # [1.11.0](https://github.com/IEBH/TERA-fy/compare/v1.10.0...v1.11.0) (2024-06-25)
 
 
