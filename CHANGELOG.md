@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.5](https://github.com/IEBH/TERA-fy/compare/v1.11.4...v1.11.5) (2024-07-03)
+
+
+### Bug Fixes
+
+* Idiot level typo caused state to always revert back to baseline for Vue@3 plugins ([e237a68](https://github.com/IEBH/TERA-fy/commit/e237a680ade686efd0e1bdee930ce9e5d77690d6))
+
 ## [1.11.4](https://github.com/IEBH/TERA-fy/compare/v1.11.0...v1.11.4) (2024-07-02)
 
 
