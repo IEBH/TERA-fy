@@ -78,7 +78,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 							}
 
 							this.createProjectStatePatch(newVal, oldVal);
-							oldVal = cloneDeep(snapshot);
+							oldVal = cloneDeep(newVal); // Update old state the the last seen value
 						},
 						{
 							deep: true,
