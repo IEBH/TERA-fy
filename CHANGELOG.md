@@ -1,5 +1,23 @@
 # Changelog
 
+# [1.12.0](https://github.com/IEBH/TERA-fy/compare/v1.11.5...v1.12.0) (2024-07-04)
+
+
+### Bug Fixes
+
+* Better handling of TERA-fy server running in top-level mode and no iframes being present on the page ([31d2785](https://github.com/IEBH/TERA-fy/commit/31d2785344e525f4dd561cbc3e0b6b9696058f70))
+* Dead code ([6c84c51](https://github.com/IEBH/TERA-fy/commit/6c84c51292ee55d6896d5eb61809332f1924b08f))
+* Dont use the faulty jsonpatch.com standard as object keys dont get correctly escaped ([949cb14](https://github.com/IEBH/TERA-fy/commit/949cb14c01039c9c1e33baf9fd8742a14ee18a74))
+
+## [1.11.6](https://github.com/IEBH/TERA-fy/compare/v1.11.5...v1.11.6) (2024-07-04)
+
+
+### Bug Fixes
+
+* Better handling of TERA-fy server running in top-level mode and no iframes being present on the page ([31d2785](https://github.com/IEBH/TERA-fy/commit/31d2785344e525f4dd561cbc3e0b6b9696058f70))
+* Dead code ([6c84c51](https://github.com/IEBH/TERA-fy/commit/6c84c51292ee55d6896d5eb61809332f1924b08f))
+* Dont use the faulty jsonpatch.com standard as object keys dont get correctly escaped ([949cb14](https://github.com/IEBH/TERA-fy/commit/949cb14c01039c9c1e33baf9fd8742a14ee18a74))
+
 ## [1.11.5](https://github.com/IEBH/TERA-fy/compare/v1.11.4...v1.11.5) (2024-07-03)
 
 
