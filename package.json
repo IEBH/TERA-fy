@@ -70,20 +70,20 @@
   },
   "dependencies": {
     "detect-port": "^1.6.1",
-    "filesize": "^10.1.1",
+    "filesize": "^10.1.4",
     "http-proxy": "^1.18.1",
     "just-diff": "^6.0.2",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
-    "nanoid": "^5.0.2",
-    "release-it": "^17.4.0"
+    "nanoid": "^5.0.7",
+    "release-it": "^17.5.0"
   },
   "devDependencies": {
-    "@momsfriendlydevco/eslint-config": "^2.0.0",
+    "@momsfriendlydevco/eslint-config": "^2.0.1",
     "@release-it/conventional-changelog": "^8.0.1",
     "concurrently": "^8.2.2",
-    "documentation": "^14.0.2",
-    "esbuild": "^0.19.5",
+    "documentation": "^14.0.3",
+    "esbuild": "^0.23.0",
     "eslint": "^9.6.0"
   },
   "peerDependencies": {
