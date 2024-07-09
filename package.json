@@ -79,11 +79,12 @@
     "release-it": "^17.4.0"
   },
   "devDependencies": {
-    "@momsfriendlydevco/eslint-config": "^1.0.7",
+    "@momsfriendlydevco/eslint-config": "^2.0.0",
     "@release-it/conventional-changelog": "^8.0.1",
     "concurrently": "^8.2.2",
     "documentation": "^14.0.2",
-    "esbuild": "^0.19.5"
+    "esbuild": "^0.19.5",
+    "eslint": "^9.6.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
@@ -92,17 +93,6 @@
     "@iebh/reflib": "^2.2.2",
     "just-diff-apply": "^5.5.0",
     "vue": "^3.3.7"
-  },
-  "eslintConfig": {
-    "extends": "@momsfriendlydevco",
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 13,
-      "sourceType": "module"
-    }
   },
   "release-it": {
     "git": {
