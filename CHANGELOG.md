@@ -1,5 +1,19 @@
 # Changelog
 
+# [1.13.0](https://github.com/IEBH/TERA-fy/compare/v1.12.0...v1.13.0) (2024-07-09)
+
+
+### Bug Fixes
+
+* Issue where minimize/maximize screwed around with local dev mode focusRequest() state ([68d547c](https://github.com/IEBH/TERA-fy/commit/68d547c48c9cdee6aa2a018d8d8372c336ffdb69))
+* Stop trying to handshake after timeout has tripped ([cc11595](https://github.com/IEBH/TERA-fy/commit/cc11595b7a2e057b5bd8715dc762b0e7b56f3d86))
+
+
+### Features
+
+* Debugging functionality to watch patch paths via `{debugPaths: Array<String|Array>}` ([23003bc](https://github.com/IEBH/TERA-fy/commit/23003bcbf248a72c872fc1c504b552df6868a3a3))
+* uiConfirm(), uiPrompt() & uiThrow() ([32f4378](https://github.com/IEBH/TERA-fy/commit/32f4378ea686cf89f2a36256bcc9d35d8ac2b23a))
+
 # [1.12.0](https://github.com/IEBH/TERA-fy/compare/v1.11.5...v1.12.0) (2024-07-04)
 
 
