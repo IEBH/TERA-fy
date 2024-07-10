@@ -997,11 +997,13 @@ Display simple text within TERA
 
 ### Parameters
 
-*   `text` **[String][150]** The text to display
+*   `text` **[String][150]?** Text to display, if specified this populates `options.body`
 *   `options` **[Object][151]?** Additional options to mutate behaviour
 
-    *   `options.title` **[String][150]** The title of the alert box (optional, default `'TERA'`)
+    *   `options.body` **[String][150]** The body text to display (optional, default `"Alert!"`)
     *   `options.isHtml` **[Boolean][159]** If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content (optional, default `false`)
+    *   `options.title` **[String][150]** The title of the alert box (optional, default `'TERA'`)
+    *   `options.buttons` **(`"ok"` | `false`)** Button set to use or falsy to disable (optional, default `'ok'`)
 
 Returns **[Promise][157]** A promise which resolves when the alert has been dismissed
 
@@ -1011,11 +1013,12 @@ Present a simple ok/cancel dialog to the user
 
 ### Parameters
 
-*   `text` **[String][150]** The text to display
+*   `text` **[String][150]?** Text to display, if specified this populates `options.body`
 *   `options` **[Object][151]?** Additional options to mutate behaviour
 
-    *   `options.title` **[String][150]** The title of the confirmation box (optional, default `'TERA'`)
+    *   `options.body` **[String][150]** The body text to display (optional, default `"Confirm?"`)
     *   `options.isHtml` **[Boolean][159]** If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content (optional, default `false`)
+    *   `options.title` **[String][150]** The title of the confirmation box (optional, default `'TERA'`)
 
 Returns **[Promise][157]** A promise which resolves with `Promise.resolve('OK')` or rejects with `Promise.reject('CANCEL')`
 
@@ -1044,13 +1047,15 @@ Prompt the user for an input, responding with a Promisable value
 
 ### Parameters
 
+*   `text` **[String][150]?** Text to display, if specified this populates `options.body`
 *   `options` **[Object][151]?** Additional options to mutate behaviour
 
+    *   `options.body` **[String][150]?** Optional additional body text
     *   `options.value` **[String][150]?** Current or default value to display pre-filled
     *   `options.title` **[String][150]** The dialog title to display (optional, default `'Input required'`)
-    *   `options.body` **[String][150]?** Optional additional body text
     *   `options.bodyHtml` **[Boolean][159]** If truthy, treat the body as HTML (optional, default `false`)
     *   `options.placeholder` **[String][150]?** Optional placeholder text
+    *   `options.required` **[Boolean][159]** Treat nullish or empty inputs as a cancel operation (optional, default `true`)
 
 Returns **[Promise][157]\<any>** Either the eventual user value or a throw with `Promise.reject('CANCEL')`
 

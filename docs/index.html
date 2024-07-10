@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.12.0 | Documentation</title>
+  <title>@iebh/tera-fy 1.13.0 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.12.0</code></div>
+          <div class='mb1'><code>1.13.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -7553,7 +7553,7 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
 
   <p>Display simple text within TERA</p>
 
-    <div class='pre p1 fill-light mt0'>uiAlert(text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>uiAlert(text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7570,8 +7570,9 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    The text to display
+            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
+	    Text to display, if specified this populates 
+<code>options.body</code>
 
           </div>
           
@@ -7598,11 +7599,11 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  <td class='break-word'><span class='code bold'>options.body</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
   
-    (default <code>&#39;TERA&#39;</code>)
+    (default <code>&quot;Alert!&quot;</code>)
   </td>
-  <td class='break-word'><span>The title of the alert box
+  <td class='break-word'><span>The body text to display
 </span></td>
 </tr>
 
@@ -7614,6 +7615,28 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
     (default <code>false</code>)
   </td>
   <td class='break-word'><span>If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  
+    (default <code>&#39;TERA&#39;</code>)
+  </td>
+  <td class='break-word'><span>The title of the alert box
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.buttons</span> <code class='quiet'>(<code>"ok"</code> | <code>false</code>)</code>
+  
+    (default <code>&#39;ok&#39;</code>)
+  </td>
+  <td class='break-word'><span>Button set to use or falsy to disable
 </span></td>
 </tr>
 
@@ -7672,7 +7695,7 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
 
   <p>Present a simple ok/cancel dialog to the user</p>
 
-    <div class='pre p1 fill-light mt0'>uiConfirm(text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>uiConfirm(text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -7689,8 +7712,9 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    The text to display
+            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
+	    Text to display, if specified this populates 
+<code>options.body</code>
 
           </div>
           
@@ -7717,11 +7741,11 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  <td class='break-word'><span class='code bold'>options.body</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
   
-    (default <code>&#39;TERA&#39;</code>)
+    (default <code>&quot;Confirm?&quot;</code>)
   </td>
-  <td class='break-word'><span>The title of the confirmation box
+  <td class='break-word'><span>The body text to display
 </span></td>
 </tr>
 
@@ -7733,6 +7757,17 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
     (default <code>false</code>)
   </td>
   <td class='break-word'><span>If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  
+    (default <code>&#39;TERA&#39;</code>)
+  </td>
+  <td class='break-word'><span>The title of the confirmation box
 </span></td>
 </tr>
 
@@ -7957,7 +7992,7 @@ All options are cumulative - i.e. they are merged with other options previously 
 
   <p>Prompt the user for an input, responding with a Promisable value</p>
 
-    <div class='pre p1 fill-light mt0'>uiPrompt(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
+    <div class='pre p1 fill-light mt0'>uiPrompt(text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
   
   
 
@@ -7971,6 +8006,16 @@ All options are cumulative - i.e. they are merged with other options previously 
   
     <div class='py1 quiet mt1 prose-big'>Parameters</div>
     <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?)</code>
+	    Text to display, if specified this populates 
+<code>options.body</code>
+
+          </div>
+          
+        </div>
       
         <div class='space-bottom0'>
           <div>
@@ -7993,6 +8038,15 @@ All options are cumulative - i.e. they are merged with other options previously 
             <tbody class='mt1'>
               
                 <tr>
+  <td class='break-word'><span class='code bold'>options.body</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
+  </td>
+  <td class='break-word'><span>Optional additional body text
+</span></td>
+</tr>
+
+
+              
+                <tr>
   <td class='break-word'><span class='code bold'>options.value</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
   </td>
   <td class='break-word'><span>Current or default value to display pre-filled
@@ -8013,15 +8067,6 @@ All options are cumulative - i.e. they are merged with other options previously 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.body</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
-  </td>
-  <td class='break-word'><span>Optional additional body text
-</span></td>
-</tr>
-
-
-              
-                <tr>
   <td class='break-word'><span class='code bold'>options.bodyHtml</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
   
     (default <code>false</code>)
@@ -8036,6 +8081,17 @@ All options are cumulative - i.e. they are merged with other options previously 
   <td class='break-word'><span class='code bold'>options.placeholder</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
   </td>
   <td class='break-word'><span>Optional placeholder text
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.required</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span>Treat nullish or empty inputs as a cancel operation
 </span></td>
 </tr>
 
