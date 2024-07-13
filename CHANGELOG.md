@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.13.3](https://github.com/IEBH/TERA-fy/compare/v1.13.2...v1.13.3) (2024-07-13)
+
 ## [1.13.2](https://github.com/IEBH/TERA-fy/compare/v1.13.1...v1.13.2) (2024-07-11)
 
 ## [1.13.1](https://github.com/IEBH/TERA-fy/compare/v1.13.0...v1.13.1) (2024-07-10)
