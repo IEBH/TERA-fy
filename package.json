@@ -76,15 +76,15 @@
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
     "nanoid": "^5.0.7",
-    "release-it": "^17.5.0"
+    "release-it": "^17.6.0"
   },
   "devDependencies": {
-    "@momsfriendlydevco/eslint-config": "^2.0.1",
+    "@momsfriendlydevco/eslint-config": "^2.0.2",
     "@release-it/conventional-changelog": "^8.0.1",
     "concurrently": "^8.2.2",
     "documentation": "^14.0.3",
     "esbuild": "^0.23.0",
-    "eslint": "^9.6.0"
+    "eslint": "^9.7.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
