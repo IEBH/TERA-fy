@@ -274,7 +274,9 @@ Fetch the raw file contents as a Blob
 
 #### Parameters
 
-*   `options` **[Object][149]?** Additioanl options to mutate behaviourreturns {Blob} The eventual raw file contents as a Blob
+*   `options` **[Object][149]?** Additioanl options to mutate behaviour
+
+Returns **[Blob][152]** The eventual raw file contents as a Blob
 
 ### setContents
 
@@ -304,8 +306,7 @@ Overwrite the contents of a file with a new collection of Reflib refs
 
 #### Parameters
 
-*   `refs` &#x20;
-*   `Collection` **[Array][154]\<RefLibRef>** of references for the selected library
+*   `refs` **[Array][154]\<RefLibRef>** Collection of references for the selected library
 
 Returns **[Promise][155]** A promise which resolves when the operation has completed
 
@@ -411,7 +412,7 @@ Call an RPC function in the server instance
 #### Parameters
 
 *   `method` **[String][148]** The method name to call
-*   `args` **...any**&#x20;
+*   `args` **...any?** Optional arguments to pass to the function
 
 Returns **[Promise][155]\<any>** The resolved output of the server function
 
@@ -421,8 +422,9 @@ Accept an incoming message
 
 #### Parameters
 
-*   `rawMessage` &#x20;
-*   `Raw` **[MessageEvent][159]** message event to process
+*   `rawMessage` **[MessageEvent][159]** Raw message event to process
+
+Returns **[Promise][155]** A promise which will resolve when the message has been processed
 
 ### acceptPostboxes
 
@@ -509,7 +511,7 @@ This function will only act if `settings.devMode` is truthy
 
 #### Parameters
 
-*   `msg` **...any**&#x20;
+*   `msg` **...any?** Output to show
 *   `method` **(`"INFO"` | `"LOG"` | `"WARN"` | `"ERROR"`)** Logging method to use (optional, default `'LOG'`)
 *   `verboseLevel` **[Number][151]** The verbosity level to trigger at. If `settings.verbosity` is lower than this, the message is ignored (optional, default `1`)
 
@@ -548,9 +550,8 @@ Include a TeraFy client plugin
 
 #### Parameters
 
-*   `mod` &#x20;
+*   `mod` **[Object][149]** The module function to include. Invoked as `(teraClient:TeraFy, options:Object)`
 *   `options` **[Object][149]?** Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
-*   `The` **[Object][149]** module function to include. Invoked as `(teraClient:TeraFy, options:Object)`
 
 Returns **[TeraFy][30]** This chainable terafy instance
 
@@ -618,8 +619,7 @@ Fetch a project file by its name
 
 #### Parameters
 
-*   `id` &#x20;
-*   `name` **[String][148]** The name + relative directory path component
+*   `id` **[String][148]** The name + relative directory path component
 *   `options` **([Object][149] | [String][148])?** Additional options to mutate behaviour, if a string is given `options.subkey` is assumed
 
     *   `options.subkey` **[String][148]?** If specified only the extracted subkey is returned rather than the full object
@@ -919,6 +919,7 @@ Prompt the user to select a library to operate on and return a array of referenc
     *   `options.allowCancel` **[Boolean][157]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
     *   `options.autoRequire` **[Boolean][157]** Run `requireProject()` automatically before continuing (optional, default `true`)
     *   `options.filters` **[FileFilters][114]?** Optional file filters, defaults to citation library selection only
+*   `options` **...any?** Additional options - see `getProjectLibrary()`
 
 Returns **[Promise][155]<[Array][154]\<Ref>>** A collection of references from the selected file
 
@@ -981,7 +982,7 @@ This is usually called by a tool nested within the tera-tools.com embed
 
 *   `options` **([Object][149] | [String][148])** Context information about the page, if this is a string, its assumed to popupate `url`
 
-    *   `options.url` **[String][148]?** The URL to restore on next refresh
+    *   `options.path` **[String][148]?** The URL path segment to restore on next refresh
     *   `options.title` **[String][148]?** The page title associated with the path
 
 ## uiAlert

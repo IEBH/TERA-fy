@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.4](https://github.com/IEBH/TERA-fy/compare/v1.13.3...v1.13.4) (2024-07-24)
+
+
+### Bug Fixes
+
+* ProjectFile.teraUrl should never assume we are using the base tera-tools.com domain - accept any source ([87f417b](https://github.com/IEBH/TERA-fy/commit/87f417ba9b186e822a0045911011ffd4eb15e171))
+
 ## [1.13.3](https://github.com/IEBH/TERA-fy/compare/v1.13.2...v1.13.3) (2024-07-13)
 
 ## [1.13.2](https://github.com/IEBH/TERA-fy/compare/v1.13.1...v1.13.2) (2024-07-11)

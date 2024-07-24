@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.13.2 | Documentation</title>
+  <title>@iebh/tera-fy 1.13.3 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.13.2</code></div>
+          <div class='mb1'><code>1.13.3</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -2104,7 +2104,7 @@ This is used to direct to the edit/view/download UI when the files project is ac
 
   <p>Fetch the raw file contents as a Blob</p>
 
-    <div class='pre p1 fill-light mt0'>getContents(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</div>
+    <div class='pre p1 fill-light mt0'>getContents(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/API/Blob">Blob</a></div>
   
   
 
@@ -2123,7 +2123,6 @@ This is used to direct to the edit/view/download UI when the files project is ac
           <div>
             <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
 	    Additioanl options to mutate behaviour
-<p>returns {Blob} The eventual raw file contents as a Blob</p>
 
           </div>
           
@@ -2134,6 +2133,14 @@ This is used to direct to the edit/view/download UI when the files project is ac
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/API/Blob">Blob</a></code>:
+        The eventual raw file contents as a Blob
+
+      
+    
   
 
   
@@ -2310,7 +2317,7 @@ This is used to direct to the edit/view/download UI when the files project is ac
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setRefs(refs, Collection)</span>
+            <span class='code strong strong truncate'>setRefs(refs)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2320,7 +2327,7 @@ This is used to direct to the edit/view/download UI when the files project is ac
 
   <p>Overwrite the contents of a file with a new collection of Reflib refs</p>
 
-    <div class='pre p1 fill-light mt0'>setRefs(refs: any, Collection: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>setRefs(refs: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -2337,16 +2344,8 @@ This is used to direct to the edit/view/download UI when the files project is ac
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>refs</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>Collection</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>)</code>
-	    of references for the selected library
+            <span class='code bold'>refs</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RefLibRef>)</code>
+	    Collection of references for the selected library
 
           </div>
           
@@ -3085,7 +3084,7 @@ This function does not return or wait for a reply - use <code>send()</code> for 
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rpc(method, args)</span>
+            <span class='code strong strong truncate'>rpc(method, args?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3095,7 +3094,7 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 
   <p>Call an RPC function in the server instance</p>
 
-    <div class='pre p1 fill-light mt0'>rpc(method: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, args: ...any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
+    <div class='pre p1 fill-light mt0'>rpc(method: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, args: ...any?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any></div>
   
   
 
@@ -3121,8 +3120,9 @@ This function does not return or wait for a reply - use <code>send()</code> for 
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>args</span> <code class='quiet'>(...any)</code>
-	    
+            <span class='code bold'>args</span> <code class='quiet'>(...any?)</code>
+	    Optional arguments to pass to the function
+
           </div>
           
         </div>
@@ -3164,7 +3164,7 @@ This function does not return or wait for a reply - use <code>send()</code> for 
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>acceptMessage(rawMessage, Raw)</span>
+            <span class='code strong strong truncate'>acceptMessage(rawMessage)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3174,7 +3174,7 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 
   <p>Accept an incoming message</p>
 
-    <div class='pre p1 fill-light mt0'>acceptMessage(rawMessage: any, Raw: <a href="https://developer.mozilla.org/docs/Web/API/MessageEvent">MessageEvent</a>)</div>
+    <div class='pre p1 fill-light mt0'>acceptMessage(rawMessage: <a href="https://developer.mozilla.org/docs/Web/API/MessageEvent">MessageEvent</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -3191,16 +3191,8 @@ This function does not return or wait for a reply - use <code>send()</code> for 
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>rawMessage</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>Raw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/MessageEvent">MessageEvent</a>)</code>
-	    message event to process
+            <span class='code bold'>rawMessage</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/MessageEvent">MessageEvent</a>)</code>
+	    Raw message event to process
 
           </div>
           
@@ -3211,6 +3203,14 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which will resolve when the message has been processed
+
+      
+    
   
 
   
@@ -3825,7 +3825,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>debug(msg, method, verboseLevel)</span>
+            <span class='code strong strong truncate'>debug(msg?, method, verboseLevel)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3836,7 +3836,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
   <p>Debugging output function
 This function will only act if <code>settings.devMode</code> is truthy</p>
 
-    <div class='pre p1 fill-light mt0'>debug(msg: ...any, method: (<code>"INFO"</code> | <code>"LOG"</code> | <code>"WARN"</code> | <code>"ERROR"</code>), verboseLevel: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
+    <div class='pre p1 fill-light mt0'>debug(msg: ...any?, method: (<code>"INFO"</code> | <code>"LOG"</code> | <code>"WARN"</code> | <code>"ERROR"</code>), verboseLevel: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
   
   
 
@@ -3853,8 +3853,9 @@ This function will only act if <code>settings.devMode</code> is truthy</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>msg</span> <code class='quiet'>(...any)</code>
-	    
+            <span class='code bold'>msg</span> <code class='quiet'>(...any?)</code>
+	    Output to show
+
           </div>
           
         </div>
@@ -4128,7 +4129,7 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>use(mod, options?, The)</span>
+            <span class='code strong strong truncate'>use(mod, options?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4138,7 +4139,7 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
 
   <p>Include a TeraFy client plugin</p>
 
-    <div class='pre p1 fill-light mt0'>use(mod: any, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?, The: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#terafy">TeraFy</a></div>
+    <div class='pre p1 fill-light mt0'>use(mod: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="#terafy">TeraFy</a></div>
   
   
 
@@ -4155,8 +4156,10 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>mod</span> <code class='quiet'>(any)</code>
-	    
+            <span class='code bold'>mod</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    The module function to include. Invoked as 
+<code>(teraClient:TeraFy, options:Object)</code>
+
           </div>
           
         </div>
@@ -4165,16 +4168,6 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
           <div>
             <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
 	    Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>The</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    module function to include. Invoked as 
-<code>(teraClient:TeraFy, options:Object)</code>
 
           </div>
           
@@ -4624,7 +4617,7 @@ This is an pre-requisite step for requireProject()</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getProjectFile(id, name, options?)</span>
+            <span class='code strong strong truncate'>getProjectFile(id, options?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4634,7 +4627,7 @@ This is an pre-requisite step for requireProject()</p>
 
   <p>Fetch a project file by its name</p>
 
-    <div class='pre p1 fill-light mt0'>getProjectFile(id: any, name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#projectfile">ProjectFile</a>></div>
+    <div class='pre p1 fill-light mt0'>getProjectFile(id: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#projectfile">ProjectFile</a>></div>
   
   
 
@@ -4651,15 +4644,7 @@ This is an pre-requisite step for requireProject()</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+            <span class='code bold'>id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
 	    The name + relative directory path component
 
           </div>
@@ -6830,7 +6815,7 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
 
   <p>Prompt the user to select a library to operate on and return a array of references in a given format</p>
 
-    <div class='pre p1 fill-light mt0'>selectProjectLibrary(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;Ref>></div>
+    <div class='pre p1 fill-light mt0'>selectProjectLibrary(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?, options: ...any?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;Ref>></div>
   
   
 
@@ -6955,6 +6940,16 @@ If the above call fails the subscriber is assumed as dead and unsubscribed from 
               
             </tbody>
           </table>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...any?)</code>
+	    Additional options - see 
+<code>getProjectLibrary()</code>
+
+          </div>
           
         </div>
       
@@ -7458,9 +7453,9 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.url</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
+  <td class='break-word'><span class='code bold'>options.path</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
   </td>
-  <td class='break-word'><span>The URL to restore on next refresh
+  <td class='break-word'><span>The URL path segment to restore on next refresh
 </span></td>
 </tr>
 
