@@ -79,7 +79,7 @@
     "release-it": "^17.6.0"
   },
   "devDependencies": {
-    "@momsfriendlydevco/eslint-config": "^2.0.2",
+    "@momsfriendlydevco/eslint-config": "^2.0.3",
     "@release-it/conventional-changelog": "^8.0.1",
     "concurrently": "^8.2.2",
     "documentation": "^14.0.3",
