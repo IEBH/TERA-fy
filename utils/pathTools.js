@@ -11,7 +11,6 @@ import {
 * General path setters / getters for project state
 * These are _MAINLY_ wrappers for Lodash functionality such as Lodash.set() / Lodash.get(), any deviations are documented inline
 *
-* @typedef {PathTools}
 * In each case these functions work with either dotted or array notation against a target master-object
 *     - Dotted notation - e.g. `foo.bar.1.baz`
 *     - Array path segments e.g. `['foo', 'bar', 1, 'baz']`
@@ -77,8 +76,8 @@ export function set(target, path, value, options) {
 * @param {*} [fallback] Optional fallback to return if the end point does not exist
 * @returns {*} The fetched value
 */
-export function get(subject, path, fallback) {
-	return _get(subject, path, fallback);
+export function get(target, path, fallback) {
+	return _get(target, path, fallback);
 }
 
 
@@ -131,6 +130,7 @@ export function defaults(target, path, value) {
 		return _defaults(target, path);
 	}
 }
+
 
 // Export all functions as a lookup object
 export default {

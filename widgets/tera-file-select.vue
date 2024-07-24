@@ -55,7 +55,7 @@ export default {
 		* Trigger the file selection functionality within TERA-fy
 		* This sets the `selected` data property to the newly selected file + fires @change
 		*
-		* @fires change Fired as `(file:ProjectFile)` when the contents changes
+		* @emits change Fired as `(file:ProjectFile)` when the contents changes
 		* @returns {ProjectFile} file The selected file
 		*/
 		async choose() {

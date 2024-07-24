@@ -5,6 +5,7 @@ import TeraProxy from '../lib/terafy.proxy.js';
 *
 * @see lib/terafy.proxy.js
 *
+* @param {Object} [options] Options to pass to the Proxy module
 * @returns {VitePlugin}
 */
 export default function vitePluginTeraFy(options) {

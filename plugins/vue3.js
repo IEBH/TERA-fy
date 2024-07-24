@@ -118,6 +118,8 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	* Utility function which returns an awaitable promise when the state is loading or being refreshed
 	* This is used in place of `statePromisable` as it has a slightly more logical syntax as a function
 	*
+	* @returns {Promise} A promise representing the loading of the project state
+	*
 	* @example Await the state loading
 	* await $tera.statePromise();
 	*/
@@ -128,6 +130,8 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 
 	/**
 	* Provide a Vue@3 compatible plugin
+	*
+	* @returns {VuePlugin} A Vue@3 plugin spec
 	*/
 	vuePlugin() {
 		let $tera = this;
@@ -137,12 +141,12 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 			/**
 			* Install into Vue as a generic Vue@3 plugin
 			*
+			* @param {VueApp} app The Vue top-level app to install against
+			*
 			* @param {Object} [options] Additional options to mutate behaviour
 			* @param {Boolean} [options.autoInit=true] Call Init() during the `statePromiseable` cycle if its not already been called
 			* @param {String} [options.globalName='$tera'] Globa property to allocate this service as
 			* @param {Objecct} [options.bindOptions] Options passed to `bindProjectState()`
-			*
-			* @returns {VuePlugin} A plugin matching the Vue@3 spec
 			*/
 			install(app, options) {
 				let settings = {
