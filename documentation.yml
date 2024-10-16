@@ -2,11 +2,65 @@ toc:
   - name: TeraFy Playground
     description: |
       See [the TeraFy Playground](./playground.html) to expriment with the various TeraFy API calls.
+  - TeraFy
   - name: Data entities
     children:
-      - User
+      - FileFilters
       - Project
       - ProjectFile
-  - name: TeraFy
-    description: |
-      API reference for all methods exposed by the TeraFy client library.
+      - User
+  - name: Messaging
+    children:
+      - handshake
+      - setServerVerbosity
+  - name: Sessions
+    children:
+      - getUser
+      - requireUser
+  - name: Projects
+    children:
+      - getProject
+      - getProjects
+      - requireProject
+      - selectProject
+      - setActiveProject
+  - name: Project State
+    children:
+      - applyProjectStatePatch
+      - getProjectState
+      - replaceProjectState
+      - saveProjectState
+      - setProjectState
+      - setProjectStateDefaults
+      - setProjectStateFlush
+      - setProjectStateRefresh
+      - subscribeProjectState
+  - name: Project files
+    children:
+      - createProjectFile
+      - deleteProjectFile
+      - getProjectFile
+      - getProjectFileContents
+      - getProjectFiles
+      - selectProjectFile
+      - setProjectFile
+  - name: Project Libraries
+    children:
+      - getProjectLibrary
+      - selectProjectLibrary
+      - setProjectLibrary
+  - name: Project Logging
+    children:
+      - projectLog
+  - name: Web pages
+    children:
+      - setPage
+  - name: UI
+    children:
+      - uiAlert
+      - uiConfirm
+      - uiProgress
+      - uiPrompt
+      - uiSplat
+      - uiThrow
+      - uiWindow
