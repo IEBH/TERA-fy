@@ -43,7 +43,7 @@ toc:
       - getProjectFileContents
       - getProjectFiles
       - selectProjectFile
-      - setProjectFile
+      - setProjectFileContents
   - name: Project Libraries
     children:
       - getProjectLibrary
