@@ -77,53 +77,53 @@
         *   [Parameters][73]
     *   [selectProjectFile][74]
         *   [Parameters][75]
-    *   [getProjectFiles][76]
-        *   [Parameters][77]
-    *   [getProjectFile][78]
-        *   [Parameters][79]
-    *   [createProjectFile][80]
-        *   [Parameters][81]
-*   [handshake][82]
-    *   [Properties][83]
-*   [setServerVerbosity][84]
-    *   [Parameters][85]
-*   [User][86]
-    *   [Properties][87]
-*   [getUser][88]
-*   [requireUser][89]
-    *   [Parameters][90]
-*   [Project][91]
-*   [getProject][92]
-*   [getProjects][93]
-*   [setActiveProject][94]
+*   [handshake][76]
+    *   [Properties][77]
+*   [setServerVerbosity][78]
+    *   [Parameters][79]
+*   [User][80]
+    *   [Properties][81]
+*   [getUser][82]
+*   [requireUser][83]
+    *   [Parameters][84]
+*   [Project][85]
+*   [getProject][86]
+*   [getProjects][87]
+*   [setActiveProject][88]
+    *   [Parameters][89]
+*   [requireProject][90]
+    *   [Parameters][91]
+*   [selectProject][92]
+    *   [Parameters][93]
+*   [getProjectState][94]
     *   [Parameters][95]
-*   [requireProject][96]
+*   [setProjectState][96]
     *   [Parameters][97]
-*   [selectProject][98]
+*   [setProjectStateDefaults][98]
     *   [Parameters][99]
-*   [getProjectState][100]
-    *   [Parameters][101]
-*   [setProjectState][102]
-    *   [Parameters][103]
-*   [setProjectStateDefaults][104]
-    *   [Parameters][105]
-*   [setProjectStateFlush][106]
-*   [setProjectStateRefresh][107]
-*   [saveProjectState][108]
-*   [replaceProjectState][109]
-    *   [Parameters][110]
-*   [applyProjectStatePatch][111]
-    *   [Parameters][112]
-*   [subscribeProjectState][113]
-*   [FileFilters][114]
-    *   [Properties][115]
-*   [selectProjectFile][116]
+*   [setProjectStateFlush][100]
+*   [setProjectStateRefresh][101]
+*   [saveProjectState][102]
+*   [replaceProjectState][103]
+    *   [Parameters][104]
+*   [applyProjectStatePatch][105]
+    *   [Parameters][106]
+*   [subscribeProjectState][107]
+*   [FileFilters][108]
+    *   [Properties][109]
+*   [selectProjectFile][110]
+    *   [Parameters][111]
+*   [getProjectFiles][112]
+    *   [Parameters][113]
+*   [getProjectFileContents][114]
+    *   [Parameters][115]
+*   [getProjectFile][116]
     *   [Parameters][117]
-*   [getProjectFileContents][118]
+*   [createProjectFile][118]
     *   [Parameters][119]
 *   [deleteProjectFile][120]
     *   [Parameters][121]
-*   [setProjectFile][122]
+*   [setProjectFileContents][122]
     *   [Parameters][123]
 *   [selectProjectLibrary][124]
     *   [Parameters][125]
@@ -280,7 +280,7 @@ Returns **[Blob][152]** The eventual raw file contents as a Blob
 
 ### setContents
 
-*   **See**: setProjectFile()
+*   **See**: setProjectFileContents()
 
 Overwrite the contents of a file with new content
 
@@ -599,45 +599,6 @@ This is an pre-requisite step for requireProject()
 
 Returns **[Promise][155]** A promise which will resolve if the there is a user and they are logged in
 
-### getProjectFiles
-
-Fetch the files associated with a given project
-
-#### Parameters
-
-*   `options` **[Object][149]** Options which mutate behaviour
-
-    *   `options.autoRequire` **[Boolean][157]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.lazy` **[Boolean][157]** If true, use the fastest method to retrieve the file list such as the cache. If false, force a refresh each time (optional, default `true`)
-    *   `options.meta` **[Boolean][157]** Pull meta information for each file entity (optional, default `true`)
-
-Returns **[Promise][155]<[Array][154]<[ProjectFile][1]>>** A collection of project files for the given project
-
-### getProjectFile
-
-Fetch a project file by its name
-
-#### Parameters
-
-*   `id` **[String][148]** The name + relative directory path component
-*   `options` **([Object][149] | [String][148])?** Additional options to mutate behaviour, if a string is given `options.subkey` is assumed
-
-    *   `options.subkey` **[String][148]?** If specified only the extracted subkey is returned rather than the full object
-    *   `options.cache` **[Boolean][157]** Use the existing file cache if possible, set to false to force a refresh of files from the server first (optional, default `true`)
-
-Returns **[Promise][155]<[ProjectFile][1]>** The eventual fetched ProjectFile (or requested subkey)
-
-### createProjectFile
-
-Create a new file
-This creates an empty file which can then be written to
-
-#### Parameters
-
-*   `name` **[String][148]** The name + relative directory path component
-
-Returns **[Promise][155]<[ProjectFile][1]>** The eventual ProjectFile created
-
 ## handshake
 
 Return basic server information as a form of validation
@@ -671,7 +632,7 @@ User / active session within TERA
 
 Fetch the current session user
 
-Returns **[Promise][155]<[User][86]>** The current logged in user or null if none
+Returns **[Promise][155]<[User][80]>** The current logged in user or null if none
 
 ## requireUser
 
@@ -685,7 +646,7 @@ This is an pre-requisite step for requireProject()
 
     *   `options.forceRetry` **[Boolean][157]** Forcabily try to refresh the user state (optional, default `false`)
 
-Returns **[Promise][155]<[User][86]>** The current logged in user or null if none
+Returns **[Promise][155]<[User][80]>** The current logged in user or null if none
 
 ## Project
 
@@ -695,13 +656,13 @@ Project entry within TERA
 
 Get the currently active project, if any
 
-Returns **[Promise][155]<([Project][91] | null)>** The currently active project, if any
+Returns **[Promise][155]<([Project][85] | null)>** The currently active project, if any
 
 ## getProjects
 
 Get a list of projects the current session user has access to
 
-Returns **[Promise][155]<[Array][154]<[Project][91]>>** Collection of projects the user has access to
+Returns **[Promise][155]<[Array][154]<[Project][85]>>** Collection of projects the user has access to
 
 ## setActiveProject
 
@@ -725,7 +686,7 @@ Note that this function will percist in asking the uesr even if they try to canc
     *   `options.noSelectTitle` **[String][148]** Dialog title when warning the user they need to select something (optional, default `'Select project'`)
     *   `options.noSelectBody` **[String][148]** Dialog body when warning the user they need to select something (optional, default `'A project needs to be selected to continue'`)
 
-Returns **[Promise][155]<[Project][91]>** The active project
+Returns **[Promise][155]<[Project][85]>** The active project
 
 ## selectProject
 
@@ -739,7 +700,7 @@ Prompt the user to select a project from those available
     *   `options.allowCancel` **[Boolean][157]** Advertise cancelling the operation, the dialog can still be cancelled by closing it (optional, default `true`)
     *   `options.setActive` **[Boolean][157]** Also set the project as active when selected (optional, default `false`)
 
-Returns **[Promise][155]<[Project][91]>** The active project
+Returns **[Promise][155]<[Project][85]>** The active project
 
 ## getProjectState
 
@@ -859,15 +820,29 @@ Prompt the user to select a library to operate on
     *   `options.title` **[String][148]** The title of the dialog to display (optional, default `"Select a file"`)
     *   `options.hint` **([String][148] | [Array][154]<[String][148]>)?** Hints to identify the file to select in array order of preference
     *   `options.save` **[Boolean][157]** Set to truthy if saving a new file, UI will adjust to allowing overwrite OR new file name input (optional, default `false`)
-    *   `options.filters` **[FileFilters][114]?** Optional file filters
+    *   `options.filters` **[FileFilters][108]?** Optional file filters
     *   `options.allowUpload` **[Boolean][157]** Allow uploading new files (optional, default `true`)
     *   `options.allowRefresh` **[Boolean][157]** Allow the user to manually refresh the file list (optional, default `true`)
     *   `options.allowDownloadZip` **[Boolean][157]** Allow the user to download a Zip of all files (optional, default `true`)
     *   `options.allowCancel` **[Boolean][157]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
     *   `options.autoRequire` **[Boolean][157]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.filter` **[FileFilters][114]?** Optional file filters
+    *   `options.filter` **[FileFilters][108]?** Optional file filters
 
 Returns **[Promise][155]<[ProjectFile][1]>** The eventually selected file, if in save mode new files are created as stubs
+
+## getProjectFiles
+
+Fetch the files associated with a given project
+
+### Parameters
+
+*   `options` **[Object][149]** Options which mutate behaviour
+
+    *   `options.autoRequire` **[Boolean][157]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.lazy` **[Boolean][157]** If true, use the fastest method to retrieve the file list such as the cache. If false, force a refresh each time (optional, default `true`)
+    *   `options.meta` **[Boolean][157]** Pull meta information for each file entity (optional, default `true`)
+
+Returns **[Promise][155]<[Array][154]<[ProjectFile][1]>>** A collection of project files for the given project
 
 ## getProjectFileContents
 
@@ -882,6 +857,31 @@ Fetch the raw contents of a file by its ID
 
 Returns **any** The file contents in the requested format
 
+## getProjectFile
+
+Fetch a project file by its name
+
+### Parameters
+
+*   `id` **[String][148]** The name + relative directory path component
+*   `options` **([Object][149] | [String][148])?** Additional options to mutate behaviour, if a string is given `options.subkey` is assumed
+
+    *   `options.subkey` **[String][148]?** If specified only the extracted subkey is returned rather than the full object
+    *   `options.cache` **[Boolean][157]** Use the existing file cache if possible, set to false to force a refresh of files from the server first (optional, default `true`)
+
+Returns **[Promise][155]<[ProjectFile][1]>** The eventual fetched ProjectFile (or requested subkey)
+
+## createProjectFile
+
+Create a new file
+This creates an empty file which can then be written to
+
+### Parameters
+
+*   `name` **[String][148]** The name + relative directory path component
+
+Returns **[Promise][155]<[ProjectFile][1]>** The eventual ProjectFile created
+
 ## deleteProjectFile
 
 Remove a project file by its ID
@@ -892,7 +892,7 @@ Remove a project file by its ID
 
 Returns **[Promise][155]** A promise which resolves when the operation has completed
 
-## setProjectFile
+## setProjectFileContents
 
 Replace a project files contents
 
@@ -918,7 +918,7 @@ Prompt the user to select a library to operate on and return a array of referenc
     *   `options.allowDownloadZip` **[Boolean][157]** Allow the user to download a Zip of all files (optional, default `true`)
     *   `options.allowCancel` **[Boolean][157]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
     *   `options.autoRequire` **[Boolean][157]** Run `requireProject()` automatically before continuing (optional, default `true`)
-    *   `options.filters` **[FileFilters][114]?** Optional file filters, defaults to citation library selection only
+    *   `options.filters` **[FileFilters][108]?** Optional file filters, defaults to citation library selection only
 *   `options` **...any?** Additional options - see `getProjectLibrary()`
 
 Returns **[Promise][155]<[Array][154]\<Ref>>** A collection of references from the selected file
@@ -1241,91 +1241,91 @@ This function is ideally called within a requestFocus() wrapper
 
 [75]: #parameters-19
 
-[76]: #getprojectfiles
+[76]: #handshake
 
-[77]: #parameters-20
+[77]: #properties-4
 
-[78]: #getprojectfile
+[78]: #setserververbosity
 
-[79]: #parameters-21
+[79]: #parameters-20
 
-[80]: #createprojectfile
+[80]: #user
 
-[81]: #parameters-22
+[81]: #properties-5
 
-[82]: #handshake
+[82]: #getuser
 
-[83]: #properties-4
+[83]: #requireuser
 
-[84]: #setserververbosity
+[84]: #parameters-21
 
-[85]: #parameters-23
+[85]: #project
 
-[86]: #user
+[86]: #getproject
 
-[87]: #properties-5
+[87]: #getprojects
 
-[88]: #getuser
+[88]: #setactiveproject
 
-[89]: #requireuser
+[89]: #parameters-22
 
-[90]: #parameters-24
+[90]: #requireproject
 
-[91]: #project
+[91]: #parameters-23
 
-[92]: #getproject
+[92]: #selectproject
 
-[93]: #getprojects
+[93]: #parameters-24
 
-[94]: #setactiveproject
+[94]: #getprojectstate
 
 [95]: #parameters-25
 
-[96]: #requireproject
+[96]: #setprojectstate
 
 [97]: #parameters-26
 
-[98]: #selectproject
+[98]: #setprojectstatedefaults
 
 [99]: #parameters-27
 
-[100]: #getprojectstate
+[100]: #setprojectstateflush
 
-[101]: #parameters-28
+[101]: #setprojectstaterefresh
 
-[102]: #setprojectstate
+[102]: #saveprojectstate
 
-[103]: #parameters-29
+[103]: #replaceprojectstate
 
-[104]: #setprojectstatedefaults
+[104]: #parameters-28
 
-[105]: #parameters-30
+[105]: #applyprojectstatepatch
 
-[106]: #setprojectstateflush
+[106]: #parameters-29
 
-[107]: #setprojectstaterefresh
+[107]: #subscribeprojectstate
 
-[108]: #saveprojectstate
+[108]: #filefilters
 
-[109]: #replaceprojectstate
+[109]: #properties-6
 
-[110]: #parameters-31
+[110]: #selectprojectfile-1
 
-[111]: #applyprojectstatepatch
+[111]: #parameters-30
 
-[112]: #parameters-32
+[112]: #getprojectfiles
 
-[113]: #subscribeprojectstate
+[113]: #parameters-31
 
-[114]: #filefilters
+[114]: #getprojectfilecontents
 
-[115]: #properties-6
+[115]: #parameters-32
 
-[116]: #selectprojectfile-1
+[116]: #getprojectfile
 
 [117]: #parameters-33
 
-[118]: #getprojectfilecontents
+[118]: #createprojectfile
 
 [119]: #parameters-34
 
@@ -1333,7 +1333,7 @@ This function is ideally called within a requestFocus() wrapper
 
 [121]: #parameters-35
 
-[122]: #setprojectfile
+[122]: #setprojectfilecontents
 
 [123]: #parameters-36
 

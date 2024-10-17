@@ -1,3 +1,45 @@
+# Changelog
+
+# [1.14.0](https://github.com/IEBH/TERA-fy/compare/v1.13.4...v1.14.0) (2024-10-17)
+
+
+### devops
+
+* Changed CHANGELOG format angular -> eslint ([9461445](https://github.com/IEBH/TERA-fy/commit/946144560893d9bb738f4aacb0b9f4c3cee5cf77))
+
+### docs
+
+* Nicer TOC for the documentation structure ([5aa6088](https://github.com/IEBH/TERA-fy/commit/5aa6088bf720022dac134099c69b2e81a1c38dd2))
+* Removed outdated Playground links ([cafe9a5](https://github.com/IEBH/TERA-fy/commit/cafe9a5699a6e67dfe992c642921cc562ccfe23c))
+
+### fix
+
+* Typos and missing function headers ([34b1267](https://github.com/IEBH/TERA-fy/commit/34b1267735c2c1849a98ed11aca2c70c5bc9635e))
+
+### refactor
+
+* setProjectFile() -> setProjectFileContents() inline with naming convention ([0a45f44](https://github.com/IEBH/TERA-fy/commit/0a45f44f02394c40e0d9d9a014431af5dcd55f13))
+
+## [1.13.5](https://github.com/IEBH/TERA-fy/compare/v1.13.4...v1.13.5) (2024-10-17)
+
+
+### devops
+
+* Changed CHANGELOG format angular -> eslint ([9461445](https://github.com/IEBH/TERA-fy/commit/946144560893d9bb738f4aacb0b9f4c3cee5cf77))
+
+### docs
+
+* Nicer TOC for the documentation structure ([5aa6088](https://github.com/IEBH/TERA-fy/commit/5aa6088bf720022dac134099c69b2e81a1c38dd2))
+* Removed outdated Playground links ([cafe9a5](https://github.com/IEBH/TERA-fy/commit/cafe9a5699a6e67dfe992c642921cc562ccfe23c))
+
+### fix
+
+* Typos and missing function headers ([34b1267](https://github.com/IEBH/TERA-fy/commit/34b1267735c2c1849a98ed11aca2c70c5bc9635e))
+
+### refactor
+
+* setProjectFile() -> setProjectFileContents() inline with naming convention ([0a45f44](https://github.com/IEBH/TERA-fy/commit/0a45f44f02394c40e0d9d9a014431af5dcd55f13))
+
 ## [1.13.4](https://github.com/IEBH/TERA-fy/compare/v1.13.3...v1.13.4) (2024-07-24)
 
 
@@ -1023,6 +1065,3 @@
 * Proof-of-concept using iFrame + postMessage ([47c9af8](https://github.com/IEBH/TERA-fy/commit/47c9af8b8d18aaf38ed37e5d7367dd193136bc07))
 * Prototype app ([69b14c2](https://github.com/IEBH/TERA-fy/commit/69b14c2d01083da52a4a522a3024f7c166cf2f1e))
 * Various cleanups now the solution has settled ([52fcc61](https://github.com/IEBH/TERA-fy/commit/52fcc61e7ec5f6d2489a7be8e83660a19ae827d7))
-
-
-
