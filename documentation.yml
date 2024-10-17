@@ -1,7 +1,4 @@
 toc:
-  - name: TeraFy Playground
-    description: |
-      See [the TeraFy Playground](./playground.html) to expriment with the various TeraFy API calls.
   - TeraFy
   - name: Data entities
     children:

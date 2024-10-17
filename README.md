@@ -4,7 +4,6 @@ TERA website worker, intended to be embedded with TERA tools.
 
 * [TERA-fy API (API explorer)](https://iebh.github.io/TERA-fy/)
 * [TERA-fy API (Markdown, single page)](./api.md)
-* [API playground](https://iebh.github.io/TERA-fy/playground.html)
 * [TERA-Explorer](https://github.com/IEBH/TERA-explorer) - A simple example project using TERA-fy
 	- [Live standalone version](https://explorer.tera-tools.com/)
 	- [Live Embedded version](https://tera-tools.com/explorer)
