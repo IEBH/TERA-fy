@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.13.5 | Documentation</title>
+  <title>@iebh/tera-fy 1.14.0 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.13.5</code></div>
+          <div class='mb1'><code>1.14.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -6786,7 +6786,7 @@ This creates an empty file which can then be written to</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setProjectFileContents(id, contents)</span>
+            <span class='code strong strong truncate'>setProjectFileContents(id?, contents, options?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6794,9 +6794,9 @@ This creates an empty file which can then be written to</p>
 
   
 
-  <p>Replace a project files contents</p>
+  <p>Save (or overwrite) a file within a project</p>
 
-    <div class='pre p1 fill-light mt0'>setProjectFileContents(id: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, contents: (File | <a href="https://developer.mozilla.org/docs/Web/API/Blob">Blob</a> | <a href="https://developer.mozilla.org/docs/Web/API/FormData">FormData</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+    <div class='pre p1 fill-light mt0'>setProjectFileContents(id: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="#projectfile">ProjectFile</a>)?, contents: (File | <a href="https://developer.mozilla.org/docs/Web/API/Blob">Blob</a> | <a href="https://developer.mozilla.org/docs/Web/API/FormData">FormData</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>), options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
   
 
@@ -6813,8 +6813,8 @@ This creates an empty file which can then be written to</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    File to overwrite
+            <span class='code bold'>id</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="#projectfile">ProjectFile</a>)?)</code>
+	    ProjectFile or ID of the same to overwrite, if omitted a file is prompted for
 
           </div>
           
@@ -6826,6 +6826,95 @@ This creates an empty file which can then be written to</p>
 	    The new file contents
 
           </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="#projectfile">ProjectFile</a>)?</code>
+  </td>
+  <td class='break-word'><span>Alternate method to specify the file ID to save as, if omitted one will be prompted for
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.autoRequire</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>true</code>)
+  </td>
+  <td class='break-word'><span>Run 
+<code>requireProject()</code>
+ automatically before continuing
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.hint</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>>)?</code>
+  </td>
+  <td class='break-word'><span>Hint(s) to store against the library. Generally corresponds to the current operation being performed - e.g. 'deduped'
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.filename</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
+  </td>
+  <td class='break-word'><span>Suggested filename if 
+<code>id</code>
+ is unspecified
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>
+  
+    (default <code>&#39;Save citation library&#39;</code>)
+  </td>
+  <td class='break-word'><span>Dialog title if 
+<code>id</code>
+ is unspecified and a prompt is necessary
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.meta</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?</code>
+  </td>
+  <td class='break-word'><span>Optional meta data to merge into the file data
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
           
         </div>
       

@@ -894,12 +894,20 @@ Returns **[Promise][155]** A promise which resolves when the operation has compl
 
 ## setProjectFileContents
 
-Replace a project files contents
+Save (or overwrite) a file within a project
 
 ### Parameters
 
-*   `id` **[String][148]** File to overwrite
+*   `id` **([String][148] | [ProjectFile][1])?** ProjectFile or ID of the same to overwrite, if omitted a file is prompted for
 *   `contents` **(File | [Blob][152] | [FormData][153] | [Object][149] | [Array][154])** The new file contents
+*   `options` **[Object][149]?** Additional options to mutate behaviour
+
+    *   `options.id` **([String][148] | [ProjectFile][1])?** Alternate method to specify the file ID to save as, if omitted one will be prompted for
+    *   `options.autoRequire` **[Boolean][157]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.hint` **([String][148] | [Array][154]<[String][148]>)?** Hint(s) to store against the library. Generally corresponds to the current operation being performed - e.g. 'deduped'
+    *   `options.filename` **[String][148]?** Suggested filename if `id` is unspecified
+    *   `options.title` **[String][148]** Dialog title if `id` is unspecified and a prompt is necessary (optional, default `'Save citation library'`)
+    *   `options.meta` **[Object][149]?** Optional meta data to merge into the file data
 
 Returns **[Promise][155]** A promise which will resolve when the write operation has completed
 

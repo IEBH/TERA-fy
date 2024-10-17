@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/IEBH/TERA-fy/compare/v1.14.0...v1.14.1) (2024-10-17)
+
+
+### docs
+
+* Stale docs for setProjectFileContents() ([e9e8867](https://github.com/IEBH/TERA-fy/commit/e9e8867db3d23415ecfa6f6daf7f15ed98ab5954))
+
 # [1.14.0](https://github.com/IEBH/TERA-fy/compare/v1.13.4...v1.14.0) (2024-10-17)
 
 
