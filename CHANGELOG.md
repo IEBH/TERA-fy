@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.2](https://github.com/IEBH/TERA-fy/compare/v1.14.1...v1.14.2) (2024-11-01)
+
+
+### fix
+
+* Wrong body text binding with UIConfirm ([ecd870c](https://github.com/IEBH/TERA-fy/commit/ecd870c4460a7021853220a6bc34756a9f425430))
+
 ## [1.14.1](https://github.com/IEBH/TERA-fy/compare/v1.14.0...v1.14.1) (2024-10-17)
 
 
