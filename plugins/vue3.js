@@ -1,4 +1,4 @@
-import {cloneDeep} from 'lodash-es';
+import {cloneDeep, debounce} from 'lodash-es';
 import TeraFyPluginBase from './base.js';
 import {reactive, watch} from 'vue';
 
@@ -33,6 +33,7 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 	* @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
 	* @param {Boolean} [options.read=true] Allow remote reactivity - update the local state when the server changes
 	* @param {Boolean} [options.write=true] Allow local reactivity to writes - send these to the server
+	* @param {Object} [options.throttle] Lodash debounce options + `wait` key used to throttle all writes, set to falsy to disable
 	*
 	* @returns {Promie<Reactive<Object>>} A reactive object representing the project state
 	*/
@@ -41,6 +42,12 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 			autoRequire: true,
 			read: true,
 			write: true,
+			throttle: {
+				wait: 200,
+				maxWait: 2000,
+				leading: false,
+				trailing: true,
+			},
 			...options,
 		};
 
@@ -69,18 +76,23 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 					//       snapshot
 					let oldVal = cloneDeep(snapshot);
 
-					watch(
-						stateReactive,
-						newVal => {
-							if (skipUpdate > 0) {
-								skipUpdate--;
-								return;
-							}
+					// Function to handle the state update (can be debounced)
+					let watchHandle = newVal => {
+						if (skipUpdate > 0) {
+							skipUpdate--;
+							return;
+						}
 
-							this.createProjectStatePatch(newVal, oldVal);
-							oldVal = cloneDeep(newVal); // Update old state the the last seen value
-						},
-						{
+						this.createProjectStatePatch(newVal, oldVal);
+						oldVal = cloneDeep(newVal); // Update old state the the last seen value
+					};
+
+					watch(
+						stateReactive, // State to watch
+						settings.throttle // Pointer to watchHandle which takes the new state (optionally throttled)
+							? debounce(watchHandle, settings.throttle.wait, settings.throttle)
+							: watchHandle,
+						{ // Watch options
 							deep: true,
 						},
 					);

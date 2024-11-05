@@ -1,4 +1,4 @@
-import {cloneDeep, isPlainObject} from 'lodash-es';
+import {cloneDeep, debounce, isPlainObject} from 'lodash-es';
 import TeraFyPluginBase from './base.js';
 
 /**
@@ -45,7 +45,9 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 	* @param {String} [options.componentKey] Key within the component to attach the state. Defaults to a random string
 	* @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
 	* @param {String|Boolean} [options.bindKey='project'] If set, creates the binding also as the specified key within the main Tera object, if falsy just returns the observable
+	* @param {Boolean} [options.read=true] Allow remote reactivity - update the local state when the server changes
 	* @param {Boolean} [options.write=true] Allow local reactivity to writes - send these to the server
+	* @param {Object} [options.throttle] Lodash debounce options + `wait` key used to throttle all writes, set to falsy to disable
 	*
 	* @returns {Promie<VueObservable<Object>>} A Vue.Observable object representing the project state
 	*/
@@ -54,7 +56,14 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 			component: null,
 			componentKey: null,
 			autoRequire: true,
+			read: true,
 			write: true,
+			throttle: {
+				wait: 200,
+				maxWait: 2000,
+				leading: false,
+				trailing: true,
+			},
 			...options,
 		};
 
@@ -107,19 +116,24 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 					//       snapshot
 					let oldVal = cloneDeep(snapshot);
 
-					settings.component.$watch(
-						settings.componentKey,
-						newVal => {
-							if (skipUpdate > 0) {
-								skipUpdate--;
-								return;
-							}
+					// Function to handle the state update (can be debounced)
+					let watchHandle = newVal => {
+						if (skipUpdate > 0) {
+							skipUpdate--;
+							return;
+						}
 
-							this.debug('INFO', 5, 'Update Vue2 Local->Remote', {new: newVal, old: oldVal});
-							this.createProjectStatePatch(newVal, oldVal);
-							oldVal = cloneDeep(snapshot);
-						},
-						{
+						this.debug('INFO', 5, 'Update Vue2 Local->Remote', {new: newVal, old: oldVal});
+						this.createProjectStatePatch(newVal, oldVal);
+						oldVal = cloneDeep(snapshot);
+					};
+
+					settings.component.$watch(
+						settings.componentKey, // State to watch
+						settings.throttle // Pointer to watchHandle which takes the new state (optionally throttled)
+							? debounce(watchHandle, settings.throttle.wait, settings.throttle)
+							: watchHandle,
+						{ // Watch options
 							deep: true,
 						},
 					);
