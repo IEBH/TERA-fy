@@ -60,10 +60,15 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 				let stateReactive = reactive(snapshot);
 
 				// Watch for remote changes and update
-				let skipUpdate = 0; // How many subsequent WRITE operations to ignore (set when reading)
 				if (settings.read) {
 					this.events.on(`update:projects/${stateReactive.id}`, newState => {
-						skipUpdate++; // Skip next update as we're updating our own state anyway
+						if (
+							newState?.lastPatch?.session // Last state change had a session worth noting
+							&& newState.lastPatch.session == this.settings.session  // The last state update was made FROM INSIDE THE BUILDING! BUWHAHAHA!
+						)
+							return; // Discard it, we don't care
+
+						// Everything else - patch the remote state locally
 						Object.assign(stateReactive, newState);
 					});
 				}
@@ -78,11 +83,6 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 
 					// Function to handle the state update (can be debounced)
 					let watchHandle = newVal => {
-						if (skipUpdate > 0) {
-							skipUpdate--;
-							return;
-						}
-
 						this.createProjectStatePatch(newVal, oldVal);
 						oldVal = cloneDeep(newVal); // Update old state the the last seen value
 					};

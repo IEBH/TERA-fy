@@ -98,11 +98,17 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 				settings.component[settings.componentKey] = stateObservable;
 
 				// Watch for remote changes and update
-				let skipUpdate = 0; // How many subsequent WRITE operations to ignore (set when reading)
 				if (settings.read) {
 					this.events.on(`update:projects/${stateObservable.id}`, newState => {
-						skipUpdate++; // Skip next update as we're updating our own state anyway
+						if (
+							newState?.lastPatch?.session // Last state change had a session worth noting
+							&& newState.lastPatch.session == this.settings.session  // The last state update was made FROM INSIDE THE BUILDING! BUWHAHAHA!
+						)
+							return; // Discard it, we don't care
+
+						// Everything else - patch the remote state locally
 						this.debug('INFO', 5, 'Update Vue2 Remote->Local', {new: newState, old: stateObservable});
+
 						this.merge(stateObservable, newState);
 					});
 				}
@@ -118,11 +124,6 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 
 					// Function to handle the state update (can be debounced)
 					let watchHandle = newVal => {
-						if (skipUpdate > 0) {
-							skipUpdate--;
-							return;
-						}
-
 						this.debug('INFO', 5, 'Update Vue2 Local->Remote', {new: newVal, old: oldVal});
 						this.createProjectStatePatch(newVal, oldVal);
 						oldVal = cloneDeep(snapshot);
