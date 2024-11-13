@@ -1,5 +1,25 @@
 # Changelog
 
+# [1.15.0](https://github.com/IEBH/TERA-fy/compare/v1.14.2...v1.15.0) (2024-11-13)
+
+
+### feat
+
+* Added write throttle to bindProjectState() ([a86afc0](https://github.com/IEBH/TERA-fy/commit/a86afc0a397682e28e5a9c658e06cc827f9986db))
+* All clients now have a unique session ID ([5c4d24d](https://github.com/IEBH/TERA-fy/commit/5c4d24db0a54392ee165594f09cd4b0a214015df))
+* Transmit session ID with project state patches ([f31f52a](https://github.com/IEBH/TERA-fy/commit/f31f52a2eaef30e9a4d5dcfad5d08ae7a9b43c60))
+* uiDie() ([bc144c4](https://github.com/IEBH/TERA-fy/commit/bc144c4288bb3b1fd01f3cc10e88b9884b981539))
+
+### fix
+
+* Always return a promise for handshakeLoop() ([cab3e60](https://github.com/IEBH/TERA-fy/commit/cab3e60e2ba34db148dcdbb6fc127d0d9da0d0df))
+* Better handling for modeOverrides - dont stomp on URL if the user has already overriden it ([e5d847b](https://github.com/IEBH/TERA-fy/commit/e5d847b0b60a84766460496f7b38c28d21c5f729))
+* Local dev mode fixes for TERA-fy client mode ([e9c0697](https://github.com/IEBH/TERA-fy/commit/e9c06977b434ff6c2e9ac305301cc5d9e85c7bd3))
+
+### refactor
+
+* Move from a ignoreCount model to a did-i-do-that model for state patching ([1f560ac](https://github.com/IEBH/TERA-fy/commit/1f560acced09f0296bf7c17766f0c4085a57ee95))
+
 ## [1.14.2](https://github.com/IEBH/TERA-fy/compare/v1.14.1...v1.14.2) (2024-11-01)
 
 
