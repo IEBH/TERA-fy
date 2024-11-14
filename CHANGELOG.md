@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.1](https://github.com/IEBH/TERA-fy/compare/v1.15.0...v1.15.1) (2024-11-14)
+
+
+### devops
+
+* Also patch restrictOrigin rule when using child mode ([5647e84](https://github.com/IEBH/TERA-fy/commit/5647e84befa5d176ceab4a0865a6c5e80203dbcc))
+
 # [1.15.0](https://github.com/IEBH/TERA-fy/compare/v1.14.2...v1.15.0) (2024-11-13)
 
 
