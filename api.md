@@ -568,7 +568,7 @@ Include a TeraFy client plugin
 
 #### Parameters
 
-*   `mod` **[Object][155]** The module function to include. Invoked as `(teraClient:TeraFy, options:Object)`
+*   `source` **([Object][155] | [String][154])** Either the JS module function to include or the URL to fetch it from. Eventually invoked as `(teraClient:TeraFy, options:Object)`
 *   `options` **[Object][155]?** Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
 
 Returns **[TeraFy][30]** This chainable terafy instance

@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.15.2](https://github.com/IEBH/TERA-fy/compare/v1.15.1...v1.15.2) (2024-11-18)
+
+
+### devops
+
+* Build step for bootstrapper ([7fd53fd](https://github.com/IEBH/TERA-fy/commit/7fd53fd34052e7ba21c7b0b444cb35be7472b43b))
+
+### docs
+
+* Various docs fixups ([df14fac](https://github.com/IEBH/TERA-fy/commit/df14face922bdfff9cbfcb7056c4c66d7bae8b4e))
+
+### feat
+
+* Initial build of the bootstrapper component ([f334645](https://github.com/IEBH/TERA-fy/commit/f334645c47b4c4416bc45f7c670e1d2f11a2b829))
+* Prep for .use(url:String) being supported in future ([463c3d9](https://github.com/IEBH/TERA-fy/commit/463c3d96efd9368e9b61d8ab37b4ca5593e31142))
+
+### fix
+
+* Dont expect the DOM element always being present ([0f97dc4](https://github.com/IEBH/TERA-fy/commit/0f97dc4bba70eba6b069ece70cf7b291c9707fde))
+* Error in IIF ([6b84c69](https://github.com/IEBH/TERA-fy/commit/6b84c698368f5d021504e6acb945d06818c4ef0f))
+* Misspelling ([2950e57](https://github.com/IEBH/TERA-fy/commit/2950e57ca7d58b795876f0e7cae0fae43d4ff04a))
+* Removed pointles registry setting ([66291f2](https://github.com/IEBH/TERA-fy/commit/66291f2c5b6c341cc20972bae3c767fe929e27b8))
+
+### task
+
+* Rebuild lock ([bfe1ba0](https://github.com/IEBH/TERA-fy/commit/bfe1ba00eb27372ac44d6926d289d1d505078ac5))
+
 ## [1.15.1](https://github.com/IEBH/TERA-fy/compare/v1.15.0...v1.15.1) (2024-11-14)
 
 
