@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.15.3](https://github.com/IEBH/TERA-fy/compare/v1.15.2...v1.15.3) (2024-11-18)
+
+
+### fix
+
+* Moved restrictOrigin overrides into devMode toggle ([7e4ed36](https://github.com/IEBH/TERA-fy/commit/7e4ed365b446cfa97aa1726e8e940fa5e8939304))
+* Removed useless eslint override ([7c9bbd9](https://github.com/IEBH/TERA-fy/commit/7c9bbd9a16c7868d7de1e2381e5e614ba8f80698))
+* Various fixes to the new use() syntax ([6dbf55f](https://github.com/IEBH/TERA-fy/commit/6dbf55f6806000d9c6d55c1364de894f3aac515e))
+* Various patches, mainly to keep eslint happy ([d9c111a](https://github.com/IEBH/TERA-fy/commit/d9c111ab372366a36006e1cf5ef53f426475678a))
+
 ## [1.15.2](https://github.com/IEBH/TERA-fy/compare/v1.15.1...v1.15.2) (2024-11-18)
 
 

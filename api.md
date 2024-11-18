@@ -348,7 +348,7 @@ Type: [Object][155]
 #### Properties
 
 *   `session` **[String][154]** Unique session signature for this instance of TeraFy, used to sign server messages, if falsy `getEntropicString(16)` is used to populate
-*   `devMode` **[Boolean][163]** Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance
+*   `devMode` **[Boolean][163]** Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerent of weird iframe origins
 *   `verbosity` **[Number][157]** Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
 *   `mode` **(`"detect"` | `"parent"` | `"child"` | `"popup"`)** How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to `modeFallback` if communication fails
 *   `modeFallback` **[String][154]** Method to use when all method detection fails
@@ -568,7 +568,7 @@ Include a TeraFy client plugin
 
 #### Parameters
 
-*   `source` **([Object][155] | [String][154])** Either the JS module function to include or the URL to fetch it from. Eventually invoked as `(teraClient:TeraFy, options:Object)`
+*   `source` **([Function][164] | [Object][155] | [String][154])** Either the JS module class, singleton object or URL to fetch it from. Eventually constructed as invoked as `(teraClient:TeraFy, options:Object)`
 *   `options` **[Object][155]?** Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
 
 Returns **[TeraFy][30]** This chainable terafy instance
