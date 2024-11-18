@@ -122,8 +122,7 @@
       }
     },
     "npm": {
-      "publish": true,
-      "publishArgs": "--registry=https://registry.npmjs.org"
+      "publish": true
     }
   }
 }
