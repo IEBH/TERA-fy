@@ -79,7 +79,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 					if (settings.componentKey) return; // Already allocated by user
 					for (let x = 0; x < 50; x++) {
 						let key = `terafy_${x}`;
-						if (!Object.hasOwnProperty(settings.component, key)) { // eslint-disable-line
+						if (!Object.hasOwnProperty(settings.component, key)) {
 							settings.componentKey = key;
 							return;
 						}
