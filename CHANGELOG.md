@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.4](https://github.com/IEBH/TERA-fy/compare/v1.15.3...v1.15.4) (2024-12-12)
+
+
+### fix
+
+* Throw error when trying to use setProjectState() with a nullish/empty path ([6aeb6ae](https://github.com/IEBH/TERA-fy/commit/6aeb6ae00bb1ecc5ec9cf3494e2fe88495d81468))
+
 ## [1.15.3](https://github.com/IEBH/TERA-fy/compare/v1.15.2...v1.15.3) (2024-11-18)
 
 
