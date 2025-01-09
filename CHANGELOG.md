@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.6](https://github.com/IEBH/TERA-fy/compare/v1.15.5...v1.15.6) (2025-01-09)
+
+
+### fix
+
+* Removed restrictOrigin option as its just too painful to pre-emptively guess who we are talking to in the variety of modes we support ([66d4105](https://github.com/IEBH/TERA-fy/commit/66d4105a5e8bad0b990cc3890fce4d43b4fb894f))
+
 ## [1.15.5](https://github.com/IEBH/TERA-fy/compare/v1.15.4...v1.15.5) (2025-01-09)
 
 
