@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.7](https://github.com/IEBH/TERA-fy/compare/v1.15.6...v1.15.7) (2025-01-09)
+
+
+### fix
+
+* Embedded workaround no longer goes into a doom loop on any downstream errors ([5eec247](https://github.com/IEBH/TERA-fy/commit/5eec2477fc557aed2df461cdc7365bb8469482e0))
+
 ## [1.15.6](https://github.com/IEBH/TERA-fy/compare/v1.15.5...v1.15.6) (2025-01-09)
 
 
