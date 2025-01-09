@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.15.5](https://github.com/IEBH/TERA-fy/compare/v1.15.4...v1.15.5) (2025-01-09)
+
+
+### chore
+
+* Bump reflib to latest ([19e0bf4](https://github.com/IEBH/TERA-fy/commit/19e0bf4db6236b958b31c834676e820159ac0909))
+
+### docs
+
+* Marked saveProjectState() as depreciated ([f4184e6](https://github.com/IEBH/TERA-fy/commit/f4184e6b3533700743836806e761848215e62fa6))
+
+### feat
+
+* getUser() now also returns the user credits ([276b33d](https://github.com/IEBH/TERA-fy/commit/276b33d1417fbfc3b1e697099185cfc913b79adc))
+
+### refactor
+
+* uiDie() -> uiPanic() ([daf6960](https://github.com/IEBH/TERA-fy/commit/daf6960fa275eea439d8478459fe943a5b71343b))
+
 ## [1.15.4](https://github.com/IEBH/TERA-fy/compare/v1.15.3...v1.15.4) (2024-12-12)
 
 

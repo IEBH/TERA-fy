@@ -143,7 +143,7 @@
     *   [Parameters][139]
 *   [uiConfirm][140]
     *   [Parameters][141]
-*   [uiDie][142]
+*   [uiPanic][142]
     *   [Parameters][143]
 *   [uiProgress][144]
     *   [Parameters][145]
@@ -1052,7 +1052,7 @@ Present a simple ok/cancel dialog to the user
 
 Returns **[Promise][161]** A promise which resolves with `Promise.resolve('OK')` or rejects with `Promise.reject('CANCEL')`
 
-## uiDie
+## uiPanic
 
 Trigger a fatal error, killing the outer TERA site
 
@@ -1417,7 +1417,7 @@ This function is ideally called within a requestFocus() wrapper
 
 [141]: #parameters-45
 
-[142]: #uidie
+[142]: #uipanic
 
 [143]: #parameters-46
 
