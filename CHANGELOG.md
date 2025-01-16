@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.8](https://github.com/IEBH/TERA-fy/compare/v1.15.7...v1.15.8) (2025-01-16)
+
+
+### fix
+
+* Debugging artefact ([c6cac8a](https://github.com/IEBH/TERA-fy/commit/c6cac8a0b763786a9259bc55f7f5713130f62d48))
+
 ## [1.15.7](https://github.com/IEBH/TERA-fy/compare/v1.15.6...v1.15.7) (2025-01-09)
 
 
