@@ -82,9 +82,14 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 					let oldVal = cloneDeep(snapshot);
 
 					// Function to handle the state update (can be debounced)
-					let watchHandle = newVal => {
+					let watchHandle = ()=> {
+						let newVal = cloneDeep(snapshot);
+
+						this.debug('INFO', 5, 'Update Vue3 Local->Remote', {new: newVal, old: oldVal});
 						this.createProjectStatePatch(newVal, oldVal);
-						oldVal = cloneDeep(newVal); // Update old state the the last seen value
+
+						// Set oldVal to the deep clone we just made so we can track the diff
+						oldVal = newVal;
 					};
 
 					watch(
