@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.15.9](https://github.com/IEBH/TERA-fy/compare/v1.15.8...v1.15.9) (2025-01-22)
+
+
+### fix
+
+* Better handling for empty state patches ([93c59f6](https://github.com/IEBH/TERA-fy/commit/93c59f60f2635b8f6696bd597e5091a76d35d320))
+* Flatten Vue2/3 state content when preping server patches ([ade2b76](https://github.com/IEBH/TERA-fy/commit/ade2b76f8470ebadfc2cbc04f1434bec57f31354))
+
+### task
+
+* Bump eslint + ruleset to latest ([8471a1f](https://github.com/IEBH/TERA-fy/commit/8471a1f476f02402150ce2fbd50914a9cf12354d))
+
 ## [1.15.8](https://github.com/IEBH/TERA-fy/compare/v1.15.7...v1.15.8) (2025-01-16)
 
 
