@@ -1,17 +1,14 @@
-import {cloneDeep, debounce, isPlainObject} from 'lodash-es';
-import TeraFyPluginBase from './base.js';
+import {cloneDeep} from 'lodash-es';
+import TeraFyPluginFirebase from './firebase.js';
 
 /**
-* Vue2 observables plugin
-* Provides the `bindProjectState()` function for Vue based projects
+* Vue@2 observables plugin
 *
 * This function is expected to be included via the `terafy.use(MODULE, OPTIONS)` syntax rather than directly
 *
-* @class TeraFyPluginVue
-* @param {Object} options Options when initalizing
-* @param {Vue} options.Vue Vue instance to bind against
+* @class TeraFyPluginVue2
 *
-* @example Implementation within a Vue2 project `src/main.js`:
+* @example Implementation within a Vue@2 project `src/main.js`:
 * // Include the main Tera-Fy core
 * import TeraFy from '@iebh/tera-fy';
 * import TerafyVue from '@iebh/tera-fy/plugins/vue2';
@@ -27,7 +24,7 @@ import TeraFyPluginBase from './base.js';
 * app.$mount("#app");
 * await terafy.init({app});
 */
-export default class TeraFyPluginVue2 extends TeraFyPluginBase {
+export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 
 	/**
 	* Local Vue@2 library to use, set during constuctor
@@ -35,6 +32,75 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 	* @type {Vue}
 	*/
 	Vue;
+
+
+	/**
+	* The bound, reactive state of the active TERA project
+	*
+	* @type {Object}
+	*/
+	project = null;
+
+
+	/**
+	* Install into Vue@2
+	*
+	* @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
+	* @param {Object} options.app Root level Vue app to bind against
+	* @param {Vue} options.Vue Vue@2 instance to bind against
+	* @param {String} [options.globalName='$tera'] Global property to allocate this service as within Vue2
+	* @param {*...} [options...] see TeraFyPluginFirebase
+	*
+	* @returns {Promise} A Promise which will resolve when the init process has completed
+	*/
+	async init(options) {
+		let settings = {
+			app: null,
+			Vue: null,
+			globalName: '$tera',
+			...options,
+		};
+
+		if (!settings.Vue) throw new Error('Vue instance to use must be specified in init options as `Vue`');
+		this.Vue = settings.Vue;
+
+		if (!settings.app) throw new Error('Vue Root / App instance to use must be specified in init options as `app`');
+		this.app = settings.app;
+
+		// Make this module available globally
+		if (settings.globalName)
+			this.Vue.prototype[settings.globalName] = this;
+
+		await super.init(settings); // Initalize parent class Firebase functionality
+
+		this.project = await this.mountNamespace('_PROJECT');
+	}
+
+
+	/** @override */
+	getReactive(value) {
+		let doc = this.Vue.observable(value);
+
+		let watcherPath = `_teraFy-${this.path}`;
+		this.app.$data[watcherPath] = doc;
+
+		let reactive = {
+			doc,
+			setState(state) {
+				// Shallow copy all sub-keys into existing object (keeping the object pointer)
+				Object.entries(state || {})
+					.forEach(([k, v]) => doc[k] = v)
+			},
+			getState() {
+				return cloneDeep(doc);
+			},
+			watch: cb => {
+				this.app.$watch(watcherPath, cb, {deep: true});
+			},
+		};
+		return reactive;
+	}
+
 
 
 	/**
@@ -175,89 +241,4 @@ export default class TeraFyPluginVue2 extends TeraFyPluginBase {
 		return target;
 	}
 
-
-
-	/**
-	* List of available projects for the current session
-	* Initalized during constructor
-	*
-	* @type {VueReactive<Array<Object>>}
-	*/
-	projects;
-
-
-	/**
-	* The bound, reactive state of a Vue project
-	* When loaded this represents the state of a project as an object
-	*
-	* @type {Object}
-	*/
-	state = null;
-
-
-	/**
-	* Install into Vue@2
-	*
-	* @param {Object} options Additional options to mutate behaviour (defaults to the main teraFy settings)
-	* @param {Object} options.app Root level Vue app to bind against
-	* @param {Vue} options.Vue Vue@2 instance to bind against
-	* @param {String} [options.globalName='$tera'] Global property to allocate this service as within Vue2
-	* @param {Boolean} [options.requireProject=true] Automatically call requireProject() prior to any operation
-	* @param {Boolean} [options.subscribeState=true] Setup `vm.$tera.state` as a live binding on init
-	* @param {Boolean} [options.subscribeList=true] Setup `vm.$tera.projects` as a list of accesible projects on init
-	* @param {Objecct} [options.stateOptions] Options passed to `bindProjectState()` when setting up the main state
-	*
-	* @returns {Promise} A Promise which will resolve when the init process has completed
-	*/
-	init(options) {
-		let settings = {
-			app: null,
-			Vue: null,
-			globalName: '$tera',
-			requireProject: true,
-			subscribeState: true,
-			subscribeProjects: true,
-			stateOptions: {
-				read: true,
-				write: true,
-			},
-			...options,
-		};
-
-		if (!settings.Vue) throw new Error('Vue instance to use must be specified in init options as `Vue`');
-		this.Vue = options.Vue;
-
-		if (!this.settings.app) throw new Error('Need to specify the root level Vue2 app during init');
-		settings.stateOptions.app = this.settings.app;
-
-		// Create observable binding for projects
-		this.projects = this.Vue.observable([])
-
-		// Make this module available globally
-		if (settings.globalName)
-			this.Vue.prototype[settings.globalName] = this;
-
-		// Bind `state` to the active project
-		// Initialize state to null
-		this.state = null;
-
-		// this.statePromisable becomes the promise we are waiting on to resolve
-		return Promise.resolve()
-			.then(()=> settings.requireProject && this.requireProject())
-			.then(()=> Promise.all([
-				// Bind available project and wait on it
-				settings.subscribeState && this.bindProjectState({
-					...settings.stateOptions,
-					component: this.settings.app.$root,
-				})
-					.then(state => this.state = state)
-					.then(()=> this.debug('INFO', 1, 'Loaded initial project state', this.state)),
-
-				// Fetch available projects
-				settings.subscribeProjects && this.getProjects()
-					.then(projects => this.projects = this.Vue.observable(projects))
-					.then(()=> this.debug('INFO', 2, 'Loaded project list', this.projects)),
-			]))
-			.then(()=> this.debug('INFO', 1, 'Ready'))
-	}
 }
