@@ -43,6 +43,14 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 
 
 	/**
+	* Simple incrementor to ensure unique IDs for $watch expressions
+	*
+	* @type {Number{
+	*/
+	reactiveId = 1001;
+
+
+	/**
 	* Install into Vue@2
 	*
 	* @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
@@ -81,10 +89,10 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	getReactive(value) {
 		let doc = this.Vue.observable(value);
 
-		let watcherPath = `_teraFy-${this.path}`;
-		this.app.$data[watcherPath] = doc;
+		let watcherPath = `_teraFy_${this.reactiveId++}`;
+		this.app[watcherPath] = doc; // Attach onto app so we can use $watch later on
 
-		let reactive = {
+		return {
 			doc,
 			setState(state) {
 				// Shallow copy all sub-keys into existing object (keeping the object pointer)
@@ -98,7 +106,6 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 				this.app.$watch(watcherPath, cb, {deep: true});
 			},
 		};
-		return reactive;
 	}
 
 
