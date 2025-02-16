@@ -1,14 +1,13 @@
-import {cloneDeep, debounce} from 'lodash-es';
-import TeraFyPluginBase from './base.js';
-import {reactive, watch} from 'vue';
+import {cloneDeep} from 'lodash-es';
+import TeraFyPluginFirebase from './firebase.js';
+import {markRaw, reactive as vueReactive, watch as vueWatch} from 'vue';
 
 /**
 * Vue observables plugin
-* Provides the `bindProjectState()` function for Vue based projects
 *
 * This function is expected to be included via the `terafy.use(MODULE, OPTIONS)` syntax rather than directly
 *
-* @class TeraFyPluginVue
+* @class TeraFyPluginVue3
 *
 * @example Implementation within a Vue3 / Vite project within `src/main.js`:
 * import TeraFy from '@iebh/tera-fy';
@@ -23,125 +22,51 @@ import {reactive, watch} from 'vue';
 * app.use(terafy.vuePlugin({
 *   globalName: '$tera', // Install as vm.$tera into every component
 * }));
+*
+* @example Accessing project state - within a Vue component
+* this.$tera.active
 */
-export default class TeraFyPluginVue extends TeraFyPluginBase {
+export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 
 	/**
-	* Return a Vue reactive object that can be read/written which whose changes will transparently be written back to the TERA server instance
+	* The bound, reactive state of the active TERA project
 	*
-	* @param {Object} [options] Additional options to mutate behaviour
-	* @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
-	* @param {Boolean} [options.read=true] Allow remote reactivity - update the local state when the server changes
-	* @param {Boolean} [options.write=true] Allow local reactivity to writes - send these to the server
-	* @param {Object} [options.throttle] Lodash debounce options + `wait` key used to throttle all writes, set to falsy to disable
-	*
-	* @returns {Promie<Reactive<Object>>} A reactive object representing the project state
+	* @type {Object}
 	*/
-	bindProjectState(options) {
-		let settings = {
-			autoRequire: true,
-			read: true,
-			write: true,
-			throttle: {
-				wait: 200,
-				maxWait: 2000,
-				leading: false,
-				trailing: true,
-			},
-			...options,
-		};
+	project = null;
 
-		return Promise.resolve()
-			.then(()=> this.getProjectState({
-				autoRequire: settings.autoRequire ,
-			}))
-			.then(snapshot => {
-				// Create initial reactive
-				let stateReactive = reactive(snapshot);
 
-				// Watch for remote changes and update
-				if (settings.read) {
-					this.events.on(`update:projects/${stateReactive.id}`, newState => {
-						if (
-							newState?.lastPatch?.session // Last state change had a session worth noting
-							&& newState.lastPatch.session == this.settings.session  // The last state update was made FROM INSIDE THE BUILDING! BUWHAHAHA!
-						)
-							return; // Discard it, we don't care
+	/**
+	* Init the project including create a reactive mount for the active project
+	*
+	* @param {Object} options Additional options to mutate behaviour
+	* @param {*...} [options...] see TeraFyPluginFirebase
+	*/
+	async init(options) {
+		await super.init(options); // Initalize parent class Firebase functionality
 
-						// Everything else - patch the remote state locally
-						Object.assign(stateReactive, newState);
-					});
-				}
-
-				// Watch for local writes and react
-				if (settings.write) {
-
-					// NOTE: The below watch function returns two copies of the new value of the observed
-					//       so we have to keep track of what changed ourselves by initalizing against the
-					//       snapshot
-					let oldVal = cloneDeep(snapshot);
-
-					// Function to handle the state update (can be debounced)
-					let watchHandle = ()=> {
-						let newVal = cloneDeep(snapshot);
-
-						this.debug('INFO', 5, 'Update Vue3 Local->Remote', {new: newVal, old: oldVal});
-						this.createProjectStatePatch(newVal, oldVal);
-
-						// Set oldVal to the deep clone we just made so we can track the diff
-						oldVal = newVal;
-					};
-
-					watch(
-						stateReactive, // State to watch
-						settings.throttle // Pointer to watchHandle which takes the new state (optionally throttled)
-							? debounce(watchHandle, settings.throttle.wait, settings.throttle)
-							: watchHandle,
-						{ // Watch options
-							deep: true,
-						},
-					);
-				}
-
-				// Return Vue Reactive
-				return stateReactive;
-			})
+		// Mount the project namespace
+		this.project = await this.mountNamespace('_PROJECT');
 	}
 
 
-	/**
-	* List of available projects for the current session
-	* @type {VueReactive<Array<Object>>}
-	*/
-	projects = reactive([]);
-
-
-	/**
-	* The bound, reactive state of a Vue project
-	* When loaded this represents the state of a project as an object
-	* @type {Object}
-	*/
-	state = null;
-
-
-	/**
-	* Promise used when binding to state
-	* @type {Promise}
-	*/
-	statePromisable = null;
-
-
-	/**
-	* Utility function which returns an awaitable promise when the state is loading or being refreshed
-	* This is used in place of `statePromisable` as it has a slightly more logical syntax as a function
-	*
-	* @returns {Promise} A promise representing the loading of the project state
-	*
-	* @example Await the state loading
-	* await $tera.statePromise();
-	*/
-	statePromise() {
-		return this.statePromisable;
+	/** @override */
+	getReactive(value) {
+		let doc = vueReactive(value);
+		return {
+			doc,
+			setState(state) {
+				// Shallow copy all sub-keys into existing object (keeping the object pointer)
+				Object.entries(state || {})
+					.forEach(([k, v]) => doc[k] = v)
+			},
+			getState() {
+				return cloneDeep(doc);
+			},
+			watch(cb) {
+				vueWatch(doc, cb, {deep: true});
+			},
+		};
 	}
 
 
@@ -161,42 +86,13 @@ export default class TeraFyPluginVue extends TeraFyPluginBase {
 			* @param {VueApp} app The Vue top-level app to install against
 			*
 			* @param {Object} [options] Additional options to mutate behaviour
-			* @param {Boolean} [options.autoInit=true] Call Init() during the `statePromiseable` cycle if its not already been called
-			* @param {String} [options.globalName='$tera'] Globa property to allocate this service as
-			* @param {Objecct} [options.bindOptions] Options passed to `bindProjectState()`
+			* @param {String} [options.globalName='$tera'] Global property to allocate this service as
 			*/
 			install(app, options) {
 				let settings = {
-					autoInit: true,
 					globalName: '$tera',
-					subscribeState: true,
-					subscribeProjects: true,
-					stateOptions: {
-						write: true,
-					},
 					...options,
 				};
-
-				// Bind $tera.state to the active project
-				// Initialize state to null
-				$tera.state = null;
-
-				// $tera.statePromisable becomes the promise we are waiting on to resolve
-				$tera.statePromisable = Promise.resolve()
-					.then(()=> settings.autoInit && $tera.init())
-					.then(()=> Promise.all([
-						// Bind available project and wait on it
-						settings.subscribeState && $tera.bindProjectState(settings.stateOptions)
-							.then(state => $tera.state = state)
-							.then(()=> $tera.debug('INFO', 1, 'Loaded initial project state', $tera.state)),
-
-						// Fetch available projects
-						settings.subscribeProjects && $tera.getProjects()
-							.then(projects => $tera.projects = reactive(projects))
-							.then(()=> $tera.debug('INFO', 2, 'Loaded project list', $tera.projects)),
-					]))
-					.then(()=> $tera.debug('INFO', 1, 'Ready'))
-
 
 				// Make this module available globally
 				app.config.globalProperties[settings.globalName] = $tera;

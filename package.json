@@ -72,6 +72,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@momsfriendlydevco/marshal": "^2.1.1",
     "detect-port": "^1.6.1",
     "filesize": "^10.1.4",
     "http-proxy": "^1.18.1",
@@ -91,6 +92,8 @@
     "nodemon": "^3.1.7"
   },
   "peerDependencies": {
+    "@supabase/supabase-js": "^2.48.1",
+    "firebase": "^11.3.1",
     "vue": "^3.0.0"
   },
   "optionalDependencies": {
