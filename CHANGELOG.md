@@ -1,5 +1,31 @@
 # Changelog
 
+# [2.0.0](https://github.com/IEBH/TERA-fy/compare/v1.15.9...v2.0.0) (2025-02-16)
+
+
+### feat
+
+* getCredentials() ([c4dfabd](https://github.com/IEBH/TERA-fy/commit/c4dfabd54772ea61f360021d98df7d54c1702000))
+* getCredentials() ([afa601e](https://github.com/IEBH/TERA-fy/commit/afa601e0601c12f7e1fc6c4c31e19a0b041e2f21))
+* listNamespaces() ([40239c5](https://github.com/IEBH/TERA-fy/commit/40239c5feb3724da3efc05e638329cdfafc93340))
+* Prorotype usage for new Firestore mounting ([0b25973](https://github.com/IEBH/TERA-fy/commit/0b259730cd64e1f9ec101f8da8969f269ba3222e))
+
+### fix
+
+* Confision between isHtml & bodyHtml -> isHtml ([60a479e](https://github.com/IEBH/TERA-fy/commit/60a479ecf84181f52e9a4fa70b248c07f6b91bd6))
+* mixin() now supports layered class inheritence ([dd8c5d7](https://github.com/IEBH/TERA-fy/commit/dd8c5d78e7d06be755513fb2e218f1a6ba9d8bf1))
+* mixin() now supports non-function inheritence ([02ff2c2](https://github.com/IEBH/TERA-fy/commit/02ff2c2d8b74289227bde62e8f042480a0d3d84f))
+* Various copy-paste typos ([c6198c8](https://github.com/IEBH/TERA-fy/commit/c6198c8246a9e96295619983356e6bad9f4c418f))
+
+### refactor
+
+* Depreciate setProjectStateFlush() ([64530d5](https://github.com/IEBH/TERA-fy/commit/64530d53d907ff5c5dd012bdc40bc9fc07b9d5b4))
+
+### task
+
+* Beginning of Firebase implementation core ([d65b9c0](https://github.com/IEBH/TERA-fy/commit/d65b9c0cb095c717b9a2192e979f296598f38765))
+* Vue@2 plugin now working ([437a414](https://github.com/IEBH/TERA-fy/commit/437a4140bf321d23e4842bce2cb6d3d4d82c66dd))
+
 ## [1.15.9](https://github.com/IEBH/TERA-fy/compare/v1.15.8...v1.15.9) (2025-01-22)
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 1.15.8 | Documentation</title>
+  <title>@iebh/tera-fy 1.15.9 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>1.15.8</code></div>
+          <div class='mb1'><code>1.15.9</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -72,6 +72,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#terafynamespaces'
+                        class='regular pre-open'>
+                        #namespaces
+                      </a></li>
+                      
+                      <li><a
                         href='#terafysend'
                         class='regular pre-open'>
                         #send
@@ -99,6 +105,18 @@
                         href='#terafyacceptpostboxes'
                         class='regular pre-open'>
                         #acceptPostboxes
+                      </a></li>
+                      
+                      <li><a
+                        href='#terafymountnamespace'
+                        class='regular pre-open'>
+                        #mountNamespace
+                      </a></li>
+                      
+                      <li><a
+                        href='#terafyunmountnamespace'
+                        class='regular pre-open'>
+                        #unmountNamespace
                       </a></li>
                       
                       <li><a
@@ -201,6 +219,12 @@
                         href='#terafygetentropicstring'
                         class='regular pre-open'>
                         #getEntropicString
+                      </a></li>
+                      
+                      <li><a
+                        href='#terafyselectprojectfile'
+                        class='regular pre-open'>
+                        #selectProjectFile
                       </a></li>
                       
                       <li><a
@@ -430,12 +454,6 @@
                         href='#setprojectstatedefaults'
                         class='regular pre-open'>
                         .setProjectStateDefaults
-                      </a></li>
-                    
-                      <li><a
-                        href='#setprojectstateflush'
-                        class='regular pre-open'>
-                        .setProjectStateFlush
                       </a></li>
                     
                       <li><a
@@ -680,6 +698,56 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#actual-namespace-mounting-function-designed-to-be-overriden-by-plugins'
+                  class="">
+                  Actual namespace mounting function designed to be overriden by plugins
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#actual-namespace-unmounting-function-designed-to-be-overriden-by-plugins'
+                  class="">
+                  Actual namespace unmounting function designed to be overriden by plugins
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getnamespace'
+                  class="">
+                  getNamespace
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setnamespace'
+                  class="">
+                  setNamespace
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#listnamespaces'
+                  class="">
+                  listNamespaces
+                  
+                </a>
                 
                 </li>
               
@@ -1160,6 +1228,62 @@ This array is forms the reference of <code>TeraFy.METHOD()</code> objects to pro
       </div>
     </div>
   
+    <div class='border-bottom' id='terafynamespaces'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>namespaces</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Active namespaces we are subscribed to
+Each key is the namespace name with the value as the local reactive \ observer \ object equivelent
+The key string is always of the form <code>${ENTITY}::${ID}</code> e.g. <code>projects:1234</code></p>
+
+    <div class='pre p1 fill-light mt0'>namespaces</div>
+  
+    <p>
+      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='terafysend'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -1475,6 +1599,150 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='terafymountnamespace'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>mountNamespace(name)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Make a namespace available locally
+This generally creates whatever framework flavoured reactive/observer/object is supported locally - generally with writes automatically synced with the master state</p>
+
+    <div class='pre p1 fill-light mt0'>mountNamespace(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;Reactive></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The alias of the namespace, this should be alphanumeric + hyphens + underscores
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;Reactive></code>:
+        A promise which resolves to the reactive object
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='terafyunmountnamespace'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>unmountNamespace</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Release a locally mounted namespace
+This function will remove the namespace from <code>namespaces</code>, cleaning up any memory / subscription hooks</p>
+
+    <div class='pre p1 fill-light mt0'>unmountNamespace</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The name of the namespace to unmount
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which resolves when the operation has completed
+
+      
+    
   
 
   
@@ -2755,6 +3023,76 @@ This is usually because the server component wants to perform some user activity
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
         
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='terafyselectprojectfile'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>selectProjectFile(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Provide an object of credentials for 3rd party services like Firebase/Supabase</p>
+
+    <div class='pre p1 fill-light mt0'>selectProjectFile(options: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        An object containing 3rd party service credentials
+
       
     
   
@@ -6042,64 +6380,6 @@ Paths can be any valid Lodash.set() value such as:</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='setprojectstateflush'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setProjectStateFlush()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Force copying local changes to the server
-This is only ever needed when saving large quantities of data that need to be immediately available</p>
-
-    <div class='pre p1 fill-light mt0'>setProjectStateFlush(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        A promise which resolves when the operation has completed
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='setprojectstaterefresh'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -8546,6 +8826,17 @@ All options are cumulative - i.e. they are merged with other options previously 
 
               
                 <tr>
+  <td class='break-word'><span class='code bold'>options.isHtml</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>If truthy, treat the body as HTML
+</span></td>
+</tr>
+
+
+              
+                <tr>
   <td class='break-word'><span class='code bold'>options.value</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
   </td>
   <td class='break-word'><span>Current or default value to display pre-filled
@@ -8560,17 +8851,6 @@ All options are cumulative - i.e. they are merged with other options previously 
     (default <code>&#39;Input required&#39;</code>)
   </td>
   <td class='break-word'><span>The dialog title to display
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.bodyHtml</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
-  
-    (default <code>false</code>)
-  </td>
-  <td class='break-word'><span>If truthy, treat the body as HTML
 </span></td>
 </tr>
 
@@ -8947,6 +9227,409 @@ This function is ideally called within a requestFocus() wrapper</p>
     </div>
   
 </div>
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='actual-namespace-mounting-function-designed-to-be-overriden-by-plugins'>
+      Actual namespace mounting function designed to be overriden by plugins
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>Actual namespace mounting function designed to be overriden by plugins</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The alias of the namespace, this should be alphanumeric + hyphens + underscores
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which resolves when the mount operation has completed
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='actual-namespace-unmounting-function-designed-to-be-overriden-by-plugins'>
+      Actual namespace unmounting function designed to be overriden by plugins
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>Actual namespace unmounting function designed to be overriden by plugins</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The name of the namespace to unmount
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        A promise which resolves when the operation has completed
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getnamespace'>
+      getNamespace
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get a one-off snapshot of a namespace without mounting it
+This can be used for simpler apps which don't have their own reactive / observer equivelent</p>
+
+    <div class='pre p1 fill-light mt0'>getNamespace(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The alias of the namespace, this should be alphanumeric + hyphens + underscores
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        A promise which resolves to the namespace POJO state
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setnamespace'>
+      setNamespace
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Set (or merge by default) a one-off snapshot over an existing namespace
+This can be used for simpler apps which don't have their own reactive / observer equivelent and just want to quickly set something</p>
+
+    <div class='pre p1 fill-light mt0'>setNamespace(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, state: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The name of the namespace
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>state</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    The state to merge
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+	    Additional options to mutate behaviour
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.method</span> <code class='quiet'>(<code>"merge"</code> | <code>"set"</code>)</code>
+  
+    (default <code>&#39;merge&#39;</code>)
+  </td>
+  <td class='break-word'><span>How to handle the state. 'merge' (merge a partial state over the existing namespace state), 'set' (completely overwrite the existing namespace)
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        A promise which resolves to the namespace POJO state
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='listnamespaces'>
+      listNamespaces
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Return a list of namespaces available to the current project</p>
+
+    <div class='pre p1 fill-light mt0'>listNamespaces(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+          : The name of the namespace
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>></code>:
+        Collection of available namespaces for the current project
+
+      
+    
+  
+
+  
+
+  
+
+  
 
   
 
