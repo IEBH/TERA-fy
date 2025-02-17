@@ -33,6 +33,7 @@
     "./projectFile": "./lib/projectFile.js",
     "./proxy": "./lib/terafy.proxy.js",
     "./server": "./lib/terafy.server.js",
+    "./syncro": "./lib/syncro.js",
     "./plugins/*": "./plugins/*.js",
     "./widgets/*": "./widgets/*"
   },
