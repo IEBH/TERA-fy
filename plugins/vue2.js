@@ -1,4 +1,4 @@
-import {cloneDeep} from 'lodash-es';
+import {cloneDeep, isEqual} from 'lodash-es';
 import TeraFyPluginFirebase from './firebase.js';
 
 /**
@@ -97,6 +97,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 			setState(state) {
 				// Shallow copy all sub-keys into existing object (keeping the object pointer)
 				Object.entries(state || {})
+					.filter(([k]) => !isEqual(doc[k], state[k])) // Only accept changed keys
 					.forEach(([k, v]) => doc[k] = v)
 			},
 			getState() {
