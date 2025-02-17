@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.0.1](https://github.com/IEBH/TERA-fy/compare/v2.0.0...v2.0.1) (2025-02-17)
+
+
+### devops
+
+* Added flushState() handlers to all entities ([a6717a8](https://github.com/IEBH/TERA-fy/commit/a6717a892738b816ebcf3dc9b29367a6e5eec73d))
+
+### feat
+
+* Can now export the Syncro library directly ([d7de07b](https://github.com/IEBH/TERA-fy/commit/d7de07b8c8dc4661e4d22aa29dd68a4e6e5a00c4))
+* fromFirestoreFields() utility function ([ac5fd38](https://github.com/IEBH/TERA-fy/commit/ac5fd381486b68cd8e43b6fb6ea2ad553a0deaac))
+* Presence / Heartbeat functionality ([d5812fd](https://github.com/IEBH/TERA-fy/commit/d5812fdbb8ccd295a048dcef5f1a21e5f8e8dc9d))
+* Syncro.destroy() ([66f7d30](https://github.com/IEBH/TERA-fy/commit/66f7d30700b10618d778104452009381c7934bae))
+
+### fix
+
+* Bump NPM:@mfdc/marshal to fix downstream problem with non-string seralized data ([47eb955](https://github.com/IEBH/TERA-fy/commit/47eb9555587716039b60fc57b17a7df861a3aafa))
+* Various documentation tidyups ([9e81dc4](https://github.com/IEBH/TERA-fy/commit/9e81dc4a53a0b4e81056c61b1be61e9c13e515b0))
+
+### refactor
+
+* Moved session initalizer from classdef into constructor - Cloudflare gets upset when trying to use Crypto outside of a function ([4473db4](https://github.com/IEBH/TERA-fy/commit/4473db4a7b99090bf34262dc536dcde71cad7cc4))
+* Remove unnecessary cleaning function when using {from,to}Firestore() ([b81396d](https://github.com/IEBH/TERA-fy/commit/b81396d3a6d206b95eca58e4168a0f94f78932db))
+* Removed useless presence syncro entity as its just as likely to cause issues in the future anyway ([761c373](https://github.com/IEBH/TERA-fy/commit/761c37322402d850bbeb0a534029250b11572ceb))
+
 # [2.0.0](https://github.com/IEBH/TERA-fy/compare/v1.15.9...v2.0.0) (2025-02-16)
 
 
