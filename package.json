@@ -80,7 +80,7 @@
     "just-diff": "^6.0.2",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
-    "nanoid": "^5.0.7",
+    "nanoid": "^5.1.0",
     "release-it": "^17.6.0"
   },
   "devDependencies": {
