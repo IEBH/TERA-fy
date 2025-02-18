@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.0.2](https://github.com/IEBH/TERA-fy/compare/v2.0.1...v2.0.2) (2025-02-18)
+
+
+### feat
+
+* Added .flush() support ([142ba48](https://github.com/IEBH/TERA-fy/commit/142ba48b3e7d21e9032fc08f0c7bda99bc5244a4))
+* Moved TERA buildRandomBranch -> randomBranch() as an export ([beb1a17](https://github.com/IEBH/TERA-fy/commit/beb1a17088143e6841d19c2d54ce30b94727fd87))
+
+### fix
+
+* Disabled circular reference checking when serializing content for Firebase - often screws up and just adds overhead ([9a4a417](https://github.com/IEBH/TERA-fy/commit/9a4a417264658620219b2fcb90e434193291de7e))
+* project_namespaces not using correct UPDATE SQL syntax ([79c5c78](https://github.com/IEBH/TERA-fy/commit/79c5c78d993cd638fe69d8b56e5f03fb0e78ec3d))
+* Wrong session stamp when registering presence ([0b69159](https://github.com/IEBH/TERA-fy/commit/0b69159878d3e22f1b698647d9f892db813e6c3d))
+
+### refactor
+
+* Split setHeartbeat() -> setHearbeat(options) + heartbeat() ([a92b0d7](https://github.com/IEBH/TERA-fy/commit/a92b0d7fcfd2789efa0d5156fa34551efd035ff5))
+* SyncEntities{}.initState() now has same parameters as ..flushState() ([33d56b5](https://github.com/IEBH/TERA-fy/commit/33d56b59ac2af2c5b8e7a9c8b746c76d21efc390))
+* Use nanoid() for session fingerprinting instead of stupidly long UUIDs ([c84fbfb](https://github.com/IEBH/TERA-fy/commit/c84fbfb681b9296ab3bf3b01373cbe2a3b2267b3))
+
 ## [2.0.1](https://github.com/IEBH/TERA-fy/compare/v2.0.0...v2.0.1) (2025-02-17)
 
 
