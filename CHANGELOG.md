@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.3](https://github.com/IEBH/TERA-fy/compare/v2.0.2...v2.0.3) (2025-02-19)
+
+
+### fix
+
+* Misc fixes for {get,set}Namespace() ([aef76cf](https://github.com/IEBH/TERA-fy/commit/aef76cf58e887a317c9abdcdd50c00f63db34a56))
+* Regen package-lock ([0f6802f](https://github.com/IEBH/TERA-fy/commit/0f6802f51576930fc4de2d06705edfb5cd03bf7e))
+
 ## [2.0.2](https://github.com/IEBH/TERA-fy/compare/v2.0.1...v2.0.2) (2025-02-18)
 
 
