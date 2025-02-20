@@ -73,7 +73,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@momsfriendlydevco/marshal": "^2.1.2",
+    "@momsfriendlydevco/marshal": "^2.1.3",
     "detect-port": "^1.6.1",
     "filesize": "^10.1.4",
     "http-proxy": "^1.18.1",
