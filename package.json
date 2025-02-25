@@ -34,6 +34,7 @@
     "./proxy": "./lib/terafy.proxy.js",
     "./server": "./lib/terafy.server.js",
     "./syncro": "./lib/syncro.js",
+    "./syncroKeyed": "./lib/syncroKeyed.js",
     "./plugins/*": "./plugins/*.js",
     "./widgets/*": "./widgets/*"
   },
@@ -81,7 +82,8 @@
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
     "nanoid": "^5.1.0",
-    "release-it": "^17.6.0"
+    "release-it": "^17.6.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^2.1.0",
