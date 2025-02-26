@@ -1,6 +1,6 @@
 import {cloneDeep} from 'lodash-es';
 import TeraFyPluginFirebase from './firebase.js';
-import {markRaw, reactive as vueReactive, watch as vueWatch} from 'vue';
+import {reactive as vueReactive, watch as vueWatch} from 'vue';
 
 /**
 * Vue observables plugin
