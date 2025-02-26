@@ -1,5 +1,47 @@
 # Changelog
 
+## [2.0.6](https://github.com/IEBH/TERA-fy/compare/v2.0.3...v2.0.6) (2025-02-26)
+
+
+### chore
+
+* Bump upstream NPMs to refactor away lodash ([b7b8f04](https://github.com/IEBH/TERA-fy/commit/b7b8f041c537e61a7a5f0aa92f372fc95e271dbd))
+* Depreciate replaceProjectState() ([0e6193a](https://github.com/IEBH/TERA-fy/commit/0e6193aada48c4d1b0495ca8bd3a865dbd749544))
+* Depreciate saveProjectState() ([591f8cd](https://github.com/IEBH/TERA-fy/commit/591f8cdd83b5964a5302aa7931679693a3e62762))
+* Downgrade reflib to make compatible with Vue2/ES2019 ([7e16b67](https://github.com/IEBH/TERA-fy/commit/7e16b67b34137df1a89f92bdc04a075ed73386d6))
+* NPM bump to fix issue with reflib importing a b0rked 3rd party dep ([cad0049](https://github.com/IEBH/TERA-fy/commit/cad00494d8a460b6a639a9c14fee8838053c8e0e))
+* NPM bumps ([0d40612](https://github.com/IEBH/TERA-fy/commit/0d40612e2ffb0d40978c3f07f1ea865048bef0b7))
+* Rebuild package-lock ([6a0e43c](https://github.com/IEBH/TERA-fy/commit/6a0e43cd2dbbd7af8b25ab331ab977e1646e4ab6))
+
+### docs
+
+* Minor inline doc corrections ([9dd5b1a](https://github.com/IEBH/TERA-fy/commit/9dd5b1a25b76340f7cb36b6d27e08656637b983e))
+* Misc inline docs cleanup ([0faec5a](https://github.com/IEBH/TERA-fy/commit/0faec5a64eb98aa1553eb29e5fc9cc18685afdea))
+
+### feat
+
+* Added prototype SyncroKeyed class ([ecd6406](https://github.com/IEBH/TERA-fy/commit/ecd64061b672a012395b2f0a354b131d93fa7b0d))
+* Move Syncro session tracking from Firebase -> Supabase + implement dirty tracking to prevent useless flushing ([758ca75](https://github.com/IEBH/TERA-fy/commit/758ca75129e97c71d4d7a787ef49ad076a031a30))
+
+### fix
+
+* Check activeFiles not null to prevent error when accessing .length on null ([717e0ab](https://github.com/IEBH/TERA-fy/commit/717e0ab4e55cd7f0b85e41431c02ea719601368b))
+* Misc SyncroKeyed fixes - still not working with Vue but seems to function in JS Vanilla ([747cab2](https://github.com/IEBH/TERA-fy/commit/747cab2ef4a47c40f2b2e93ae7e0d62dee7414f7))
+* More SyncroKeyed fixes ([79bd25c](https://github.com/IEBH/TERA-fy/commit/79bd25c3afc1f719a648887edb7049a5c7308e48))
+* new setFirestoreState() usage ([2cdda0c](https://github.com/IEBH/TERA-fy/commit/2cdda0c3a9e567b25664e92c2a18e56f4f5b6850))
+* Pass empty options in projectFile.setContents() to prevent error ([6e2fc8f](https://github.com/IEBH/TERA-fy/commit/6e2fc8f4e08bf75a783035ec402e42bb062c9205))
+* Seperated original Supabase ID (UUID) into its own preserved ProjectFile field ([75fe3ca](https://github.com/IEBH/TERA-fy/commit/75fe3ca0063fe71d7042f3a2f48eebf9d41093b3))
+
+### refactor
+
+* Added throw when trying to save back libraries ([7df8e5d](https://github.com/IEBH/TERA-fy/commit/7df8e5d1af3a2b81ecb3d9cdfe6929169365ebae))
+* Better logical flow when first populating document entity states ([70c9887](https://github.com/IEBH/TERA-fy/commit/70c98876660bbcadc74cddba956022a87bf559eb))
+* Depreciate applyProjectStatePatch(), bindProjectState(), createProjectStatePatch(), subscribeProjectState() ([ecf53ab](https://github.com/IEBH/TERA-fy/commit/ecf53ab83f737eac016346662c14d12782408375))
+* Make Syncro heartbeats a little less agressive ([5e748e6](https://github.com/IEBH/TERA-fy/commit/5e748e6c9c9ead7ff698a202dc80752d5af7b657))
+* Minor tweaks to keep tera-fy happy ([d8bea73](https://github.com/IEBH/TERA-fy/commit/d8bea73c87ba124cb5ef1efd39389e614aa16205))
+* Minor tweaks to keep tera-fy happy #2 ([a6db6e2](https://github.com/IEBH/TERA-fy/commit/a6db6e2e87adb45dcb14fa7dee8c7521a0ac8198)), closes [#2](https://github.com/IEBH/TERA-fy/issues/2)
+* Seperated Syncro {get,set}FirebaseState() into their own methods ([135ca3b](https://github.com/IEBH/TERA-fy/commit/135ca3b139f2d85df739c9b810d5058765d9f2e9))
+
 ## [2.0.3](https://github.com/IEBH/TERA-fy/compare/v2.0.2...v2.0.3) (2025-02-19)
 
 
