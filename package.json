@@ -34,7 +34,7 @@
     "./proxy": "./lib/terafy.proxy.js",
     "./server": "./lib/terafy.server.js",
     "./syncro": "./lib/syncro.js",
-    "./syncroKeyed": "./lib/syncroKeyed.js",
+    "./syncro/*": "./lib/syncro/*.js",
     "./plugins/*": "./plugins/*.js",
     "./widgets/*": "./widgets/*"
   },
