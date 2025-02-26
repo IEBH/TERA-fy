@@ -1,7 +1,7 @@
 import {initializeApp as Firebase} from 'firebase/app';
 import {getFirestore as Firestore} from 'firebase/firestore';
 import {createClient as Supabase} from '@supabase/supabase-js'
-import Syncro from '../lib/syncro.js';
+import Syncro from '../lib/syncro/syncro.js';
 import TeraFyPluginBase from './base.js';
 
 /**
