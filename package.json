@@ -74,7 +74,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@iebh/reflib": "^2.5.4",
+    "@iebh/reflib": "^2.5.3",
     "@momsfriendlydevco/marshal": "^2.1.4",
     "detect-port": "^2.1.0",
     "filesize": "^10.1.6",
