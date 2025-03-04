@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.8](https://github.com/IEBH/TERA-fy/compare/v2.0.7...v2.0.8) (2025-03-04)
+
+
+### chore
+
+* Downgrade NPM:@iebh/reflib to fix issue with 3rd party dep breaking esbuild chain ([857aab5](https://github.com/IEBH/TERA-fy/commit/857aab5d69c583504f7d8828d29b1fe68ce95675))
+
+### fix
+
+* Wrong path for raw Syncro export ([9547ae5](https://github.com/IEBH/TERA-fy/commit/9547ae50abe6e8b99aab892d6ece2e2f8db91248))
+
+### refactor
+
+* Moved entities into its own file + various fixes ([9392f45](https://github.com/IEBH/TERA-fy/commit/9392f456670c00c3e4a61eb045134d2df262a664))
+* Started to rewrite project migration code - throws error for now ([1a4ae43](https://github.com/IEBH/TERA-fy/commit/1a4ae43472da6731989045bcb7c0526971b890ee))
+
 ## [2.0.7](https://github.com/IEBH/TERA-fy/compare/v2.0.6...v2.0.7) (2025-02-26)
 
 
