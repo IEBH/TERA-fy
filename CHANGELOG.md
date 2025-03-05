@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.9](https://github.com/IEBH/TERA-fy/compare/v2.0.8...v2.0.9) (2025-03-05)
+
+
+### fix
+
+* Typo ([be0c001](https://github.com/IEBH/TERA-fy/commit/be0c00171a9fe7d8a62897f1e2b58c4952f99c0e))
+
+### refactor
+
+* Moved reflib from production dep to peer dep ([f21fa69](https://github.com/IEBH/TERA-fy/commit/f21fa69ca5cff87e53a988d48dc015211c8cc4ba))
+* Remove forceLocalInit config setting as it just buggers up esbuild when compiling Vue2 due to it resolving dynamic imports as regular inline imports ([96f76f5](https://github.com/IEBH/TERA-fy/commit/96f76f5f10f858cefb1cebac806adc309ee74bca))
+
 ## [2.0.8](https://github.com/IEBH/TERA-fy/compare/v2.0.7...v2.0.8) (2025-03-04)
 
 
