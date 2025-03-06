@@ -1089,6 +1089,7 @@ All options are cumulative - i.e. they are merged with other options previously 
 *   `options` **([Object][159] | [Boolean][167])?** Additional options to mutate behaviour, if boolean false `{close: true}` is assumed
 
     *   `options.title` **[String][158]** Window title, can only be set on the initial call (optional, default `'TERA'`)
+    *   `options.backdrop` **[String][158]** Set to `'static'` to prevent user being able to click outside the modal to close (optional, default `true`)
     *   `options.body` **[String][158]** Window body text, can only be set on the initial call (optional, default `''`)
     *   `options.bodyHtml` **[Boolean][167]** Treat body text as HTML (optional, default `false`)
     *   `options.close` **[Boolean][167]** Close the existing dialog, if true the dialog is disposed and options reset (optional, default `false`)
