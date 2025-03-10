@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.11](https://github.com/IEBH/TERA-fy/compare/v2.0.9...v2.0.11) (2025-03-10)
+
+
+### fix
+
+* Typo in error handling when loading state ([7abb66c](https://github.com/IEBH/TERA-fy/commit/7abb66c08d6c6ecf1dc1cd0da826fe8927b0c288))
+
+### task
+
+* Ported migration step for projects.temp[tool] data to files ([de3affc](https://github.com/IEBH/TERA-fy/commit/de3affc5a8b4eb12823e01122b3685e704ca283e))
+
 ## [2.0.9](https://github.com/IEBH/TERA-fy/compare/v2.0.8...v2.0.9) (2025-03-05)
 
 
