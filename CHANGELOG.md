@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.13](https://github.com/IEBH/TERA-fy/compare/v2.0.12...v2.0.13) (2025-03-16)
+
+
+### fix
+
+* Create user via Syncro row if it doesnt already exist ([5a9dfe2](https://github.com/IEBH/TERA-fy/commit/5a9dfe286d16f4bcddcfd0870db0d194342ba4ab))
+
 ## [2.0.12](https://github.com/IEBH/TERA-fy/compare/v2.0.11...v2.0.12) (2025-03-12)
 
 ## [2.0.11](https://github.com/IEBH/TERA-fy/compare/v2.0.9...v2.0.11) (2025-03-10)
