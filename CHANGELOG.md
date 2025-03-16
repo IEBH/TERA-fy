@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.14](https://github.com/IEBH/TERA-fy/compare/v2.0.13...v2.0.14) (2025-03-16)
+
+
+### fix
+
+* Missing ID when creating blank user ([574aaa4](https://github.com/IEBH/TERA-fy/commit/574aaa4204b02b90405a83e99086b82fdfce8f3d))
+
 ## [2.0.13](https://github.com/IEBH/TERA-fy/compare/v2.0.12...v2.0.13) (2025-03-16)
 
 
