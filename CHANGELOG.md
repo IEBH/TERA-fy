@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.15](https://github.com/IEBH/TERA-fy/compare/v2.0.14...v2.0.15) (2025-03-19)
+
+
+### refactor
+
+* Switch from Syncro.wrapSupabase() -> NPM:@iebh/supabasey handling ([23e3805](https://github.com/IEBH/TERA-fy/commit/23e3805aecb70e130a727028df27c0d269d4d603))
+
 ## [2.0.14](https://github.com/IEBH/TERA-fy/compare/v2.0.13...v2.0.14) (2025-03-16)
 
 
