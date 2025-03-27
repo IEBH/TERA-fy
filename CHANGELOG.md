@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.16](https://github.com/IEBH/TERA-fy/compare/v2.0.15...v2.0.16) (2025-03-27)
+
+
+### fix
+
+* Better tolerence for failed Syncro mount operations ([b52ec30](https://github.com/IEBH/TERA-fy/commit/b52ec30af0a3f8e2853e196e5159be4e70c062d3))
+* uiProgress calls should always default to enabling the modal backdrop ([bf1cb1a](https://github.com/IEBH/TERA-fy/commit/bf1cb1a4e67db67ea6d7cd484295d5d9b60aff83))
+
 ## [2.0.15](https://github.com/IEBH/TERA-fy/compare/v2.0.14...v2.0.15) (2025-03-19)
 
 
