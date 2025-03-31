@@ -70,7 +70,8 @@ export default class TeraFy {
 	* Event emitter subscription endpoint
 	* @type {Mitt}
 	*/
-	events = Mitt.default();
+	// @ts-ignore
+	events = Mitt();
 
 
 	/**
