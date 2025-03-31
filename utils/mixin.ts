@@ -8,7 +8,7 @@
 * @param {Object} assignments Additional object properties to mix
 * @returns {Object} A shallow copy of the input instance extended with the assignments
 */
-export default function mixin(instance, assignments) {
+export default function mixin(instance: any, assignments: any) {
 	let output = Object.assign(
 		Object.create(Object.getPrototypeOf(instance)),
 		instance,

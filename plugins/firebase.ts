@@ -1,8 +1,9 @@
-import {initializeApp as Firebase} from 'firebase/app';
-import {getFirestore as Firestore} from 'firebase/firestore';
-import {createClient as Supabase} from '@supabase/supabase-js'
+import {initializeApp as Firebase, FirebaseApp} from 'firebase/app';
+import {getFirestore as Firestore, Firestore as FirestoreInstance} from 'firebase/firestore';
+import {createClient as Supabase, SupabaseClient} from '@supabase/supabase-js'
 import Syncro from '../lib/syncro/syncro.js';
 import TeraFyPluginBase from './base.js';
+
 
 /**
 * Plugin which adds Firebase / Firestore support for namespace mounts
@@ -16,7 +17,13 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @type {Object<Syncro>}
 	*/
-	syncros = {};
+	syncros: Record<string, Syncro> = {};
+	namespaces: Record<string, any> = {}; // Declare namespaces property
+
+	// Declare properties expected by the class methods or potentially inherited
+	getCredentials!: () => Promise<Record<string, any>>;
+	requireProject!: () => Promise<{ id: string }>;
+	debug!: (...args: any[]) => void;
 
 
 	/**
@@ -28,6 +35,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	* @name getReactive
 	* @type {Function} A reactive function as defined in Syncro
 	*/
+	getReactive?: Function;
 
 
 	/**
@@ -44,7 +52,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
-	async init(options) {
+	async init(options?: any): Promise<void> { // Add optional '?' and type 'any', keep async Promise<void>
 		let settings = {
 			firebaseApiKey: null,
 			firebaseAuthDomain: null,
@@ -56,19 +64,19 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 			...options,
 		};
 
-		let emptyValues = Object.keys(settings).filter(k => k === null);
+		let emptyValues = Object.keys(settings).filter(k => settings[k as keyof typeof settings] === null);
 		if (emptyValues.length > 0)
 			throw new Error('Firebase plugin requires mandatory options: ' + emptyValues.join(', '));
 
 		Syncro.firebase = Firebase({
-			apiKey: settings.firebaseApiKey,
-			authDomain: settings.firebaseAuthDomain,
-			projectId: settings.firebaseProjectId,
-			appId: settings.firebaseAppId,
+			apiKey: settings.firebaseApiKey!, // Add non-null assertion
+			authDomain: settings.firebaseAuthDomain!, // Add non-null assertion
+			projectId: settings.firebaseProjectId!, // Add non-null assertion
+			appId: settings.firebaseAppId!, // Add non-null assertion
 		});
-		Syncro.firestore = Firestore(this.firebase);
+		Syncro.firestore = Firestore(Syncro.firebase); // Use Syncro.firebase
 
-		Syncro.supabase = Supabase(settings.supabaseUrl, settings.supabaseKey);
+		Syncro.supabase = Supabase(settings.supabaseUrl!, settings.supabaseKey!); // Add non-null assertions
 	}
 
 
@@ -79,8 +87,8 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	_mountNamespace(name) {
-		let syncro; // The eventually bootstrapped Syncro object
+	_mountNamespace(name: string): Promise<void> { // Add type 'string'
+		let syncro: Syncro; // Add type Syncro
 
 		return Promise.resolve()
 			.then(()=> this.requireProject())
@@ -90,7 +98,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 					: `project_namespaces::${project.id}::${name}`;
 
 				syncro = this.syncros[name] = new Syncro(path, {
-					debug: (...msg) => this.debug(`SYNCRO://${path}`, ...msg),
+					debug: (...msg: any[]) => this.debug(`SYNCRO://${path}`, ...msg), // Add type any[]
 					getReactive: this.getReactive, // Try to inherit this instances getReactive prop, otherwise Syncro will fall back to its default
 				});
 
@@ -110,13 +118,18 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	_unmountNamespace(name) {
+	_unmountNamespace(name: string): Promise<void | any[]> { // Add type 'string'
 		let syncro = this.syncros[name]; // Create local alias for Syncro before we detach it
 
 		// Detach local state
 		delete this.namespaces[name];
 		delete this.syncros[name];
 
-		return syncro.destroy(); // Trigger Syncro distruction
+		// Check if syncro exists before calling destroy
+		if (syncro) {
+			return syncro.destroy(); // Trigger Syncro distruction
+		} else {
+			return Promise.resolve(); // Or handle the case where syncro doesn't exist
+		}
 	}
 }

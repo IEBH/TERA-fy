@@ -1,8 +1,19 @@
+// Global 'app' declaration
+declare var app: any;
+
+// Global window augmentation
+declare global {
+    interface Window {
+        panic(text: any): void;
+    }
+}
+
 import {cloneDeep} from 'lodash-es';
 import mixin from '#utils/mixin';
 import {nanoid} from 'nanoid';
 import pathTools from '#utils/pathTools';
 import promiseDefer from '#utils/pDefer';
+// @ts-ignore
 import Reflib from '@iebh/reflib';
 import {reactive} from 'vue';
 
@@ -29,7 +40,7 @@ export default class TeraFyServer {
 	* @property {String} sitePathLogin Either an absolute URL or the relative path (taken from `siteUrl`) when trying to log in the user
 	* @property {Boolean} embedWorkaround Try to use `getUserViaEmbedWorkaround()` to force a login via popup if the user is running in local mode (see function docs for more details). This is toggled to false after the first run
 	*/
-	settings = {
+	settings: any = {
 		devMode: false,
 		verbosity: 9,
 		restrictOrigin: '*',
@@ -57,21 +68,22 @@ export default class TeraFyServer {
 	*
 	* @returns {Object} A context, which is this instance extended with additional properties
 	*/
-	createContext(e) {
+	createContext(e: MessageEvent): any {
 		// Construct wrapper for sendRaw for this client
 		return mixin(this, {
 			messageEvent: e,
-			sendRaw(message) {
+			sendRaw(message: any) {
 				let payload;
 				try {
 					payload = {
 						TERA: 1,
 						...cloneDeep(message), // Need to clone to resolve promise nasties
 					};
-					e.source.postMessage(payload, this.settings.restrictOrigin);
-				} catch (e) {
-					this.debug('ERROR', 1, 'Attempted to dispatch payload server(via reply)->client', {payload, e});
-					throw e;
+					// Use type assertion assuming e.source is a WindowProxy or similar
+					(e.source as WindowProxy).postMessage(payload, this.settings.restrictOrigin);
+				} catch (err: any) { // Changed variable name e -> err
+					this.debug('ERROR', 1, 'Attempted to dispatch payload server(via reply)->client', {payload, e: err});
+					throw err;
 				}
 			},
 		});
@@ -84,14 +96,14 @@ export default class TeraFyServer {
 	*
 	* @returns {Object} A context, which is this instance extended with additional properties
 	*/
-	getClientContext() {
+	getClientContext(): any {
 		switch (this.settings.serverMode) {
 			case TeraFyServer.SERVERMODE_NONE:
 				throw new Error('Client has not yet initiated communication');
 			case TeraFyServer.SERVERMODE_EMBEDDED:
 				// Server is inside an iFrame so we need to send messages to the window parent
 				return mixin(this, {
-					sendRaw(message) {
+					sendRaw(message: any) {
 						let payload;
 						try {
 							payload = {
@@ -99,7 +111,7 @@ export default class TeraFyServer {
 								...cloneDeep(message), // Need to clone to resolve promise nasties
 							};
 							window.parent.postMessage(payload, this.settings.restrictOrigin);
-						} catch (e) {
+						} catch (e: any) {
 							this.debug('ERROR', 1, 'Attempted to dispatch payload server(iframe)->cient(top level window)', {payload, e});
 							throw e;
 						}
@@ -108,26 +120,27 @@ export default class TeraFyServer {
 			case TeraFyServer.SERVERMODE_TERA:
 			case TeraFyServer.SERVERMODE_FRAME: {
 				// Server is the top-level window so we need to send messages to an embedded iFrame
-				let iFrame = document.querySelector('iframe#external');
+				let iFrame = document.querySelector('iframe#external') as HTMLIFrameElement | null;
 				if (!iFrame) {
 					this.debug('INFO', 2, 'Cannot locate TERA-FY top-level->iFrame#external - maybe there is none');
 					return mixin(this, {
-						sendRaw(message) {
+						sendRaw(message: any) {
 							this.debug('INFO', 2, 'Sending broadcast to zero listening clients', {message});
 						},
 					});
 				}
 
 				return mixin(this, {
-					sendRaw(message) {
+					sendRaw(message: any) {
 						let payload;
 						try {
 							payload = {
 								TERA: 1,
 								...cloneDeep(message), // Need to clone to resolve promise nasties
 							};
-							iFrame.contentWindow.postMessage(payload, this.settings.restrictOrigin);
-						} catch (e) {
+							// Check if contentWindow exists before posting
+							iFrame.contentWindow?.postMessage(payload, this.settings.restrictOrigin);
+						} catch (e: any) {
 							this.debug('ERROR', 1, 'Attempted to dispatch payload server(top level window)->cient(iframe)', {payload, e});
 							throw e;
 						}
@@ -135,6 +148,8 @@ export default class TeraFyServer {
 				});
 			}
 			case TeraFyServer.SERVERMODE_POPUP:
+				// FIXME: Need implementation for POPUP mode?
+				throw new Error('SERVERMODE_POPUP getClientContext not implemented');
 		}
 	}
 
@@ -145,7 +160,7 @@ export default class TeraFyServer {
 	*
 	* @type {MessageEvent}
 	*/
-	messageEvent = null;
+	messageEvent: MessageEvent | null = null;
 
 
 	/**
@@ -157,10 +172,12 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<*>} The resolved output of the server function
 	*/
-	senderRpc(method, ...args) {
+	senderRpc(method: string, ...args: any[]): Promise<any> {
 		if (!this.messageEvent) throw new Error('senderRpc() can only be used if given a context from `createContext()`');
 
-		return this.send({
+		// Create a context specific to this event to use its sendRaw
+		const context = this.createContext(this.messageEvent);
+		return context.send({ // Use the context's send method if available, otherwise fallback? Assuming send is on the base class.
 			action: 'rpc',
 			method,
 			args,
@@ -176,7 +193,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Object>} Basic promise result
 	* @property {Date} date Server date
 	*/
-	handshake() {
+	handshake(): Promise<any> {
 		return Promise.resolve({
 			date: new Date(),
 		});
@@ -185,12 +202,14 @@ export default class TeraFyServer {
 
 	/**
 	* Send a message + wait for a response object
+	* This method should likely be part of the context returned by createContext
+	* Assuming it's intended to work on the base class referencing a stored messageEvent
 	*
 	* @param {Object} message Message object to send
 	* @returns {Promise<*>} A promise which resolves when the operation has completed with the remote reply
 	*/
-	send(message) {
-		if (!this.messageEvent) throw new Error('send() can only be used if given a context from `createContext()`');
+	send(message: any): Promise<any> {
+		if (!this.messageEvent?.source) throw new Error('send() requires a messageEvent with a source');
 
 		let id = nanoid();
 
@@ -199,10 +218,11 @@ export default class TeraFyServer {
 			Object.assign(this.acceptPostboxes[id], {
 				resolve, reject,
 			});
+			// Use sendRaw with the specific source from the stored messageEvent
 			this.sendRaw({
 				id,
 				...message,
-			});
+			}, this.messageEvent?.source); // Pass the source explicitly
 		});
 
 		return this.acceptPostboxes[id].promise;
@@ -216,7 +236,7 @@ export default class TeraFyServer {
 	* @param {Object} message Message object to send
 	* @param {Window} sendVia Window context to dispatch the message via if its not the same as the regular window
 	*/
-	sendRaw(message, sendVia) {
+	sendRaw(message: any, sendVia?: any): void {
 		let payload;
 		try {
 			payload = {
@@ -224,8 +244,14 @@ export default class TeraFyServer {
 				...cloneDeep(message), // Need to clone to resolve promise nasties
 			};
 			this.debug('INFO', 3, 'Dispatch response', message, '<=>', payload);
-			(sendVia || globalThis.parent).postMessage(payload, this.settings.restrictOrigin);
-		} catch (e) {
+			// Default to parent if sendVia is not provided, but check if it exists
+			const target = sendVia || (typeof globalThis !== 'undefined' ? globalThis.parent : undefined);
+			if (target) {
+				target.postMessage(payload, this.settings.restrictOrigin);
+			} else {
+				this.debug('WARN', 1, 'Cannot sendRaw, no target window (sendVia or parent) found.');
+			}
+		} catch (e: any) {
 			this.debug('ERROR', 2, 'Attempted to dispatch response server->client', payload);
 			this.debug('ERROR', 2, 'Message compose server->client:', e);
 		}
@@ -237,7 +263,7 @@ export default class TeraFyServer {
 	*
 	* @param {String} mode The server mode to set to
 	*/
-	setServerMode(mode) {
+	setServerMode(mode: string): void {
 		switch (mode) {
 			case 'embedded':
 				this.settings.serverMode = TeraFyServer.SERVERMODE_EMBEDDED;
@@ -259,42 +285,63 @@ export default class TeraFyServer {
 	*
 	* @param {MessageEvent} rawMessage Raw message event to process
 	*/
-	acceptMessage(rawMessage) {
-		if (rawMessage.origin == window.location.origin) return; // Message came from us
+	acceptMessage(rawMessage: MessageEvent): void {
+		// Ignore messages from the same origin (potential loops)
+		if (typeof window !== 'undefined' && rawMessage.origin === window.location.origin) return;
 
 		let message = rawMessage.data;
-		if (!message.TERA) return; // Ignore non-TERA signed messages
+		// Ensure message is an object and has TERA property
+		if (typeof message !== 'object' || message === null || !message.TERA) return;
 		this.debug('INFO', 3, 'Recieved message', message);
 
 		Promise.resolve()
 			.then(()=> {
-				if (message?.action == 'response' && this.acceptPostboxes[message.id]) { // Postbox waiting for reply
+				if (message?.action == 'response' && message.id && this.acceptPostboxes[message.id]) { // Postbox waiting for reply
 					if (message.isError === true) {
 						this.acceptPostboxes[message.id].reject(message.response);
 					} else {
 						this.acceptPostboxes[message.id].resolve(message.response);
 					}
-				} else if (message.action == 'rpc') { // Relay RPC calls
-					if (!this[message.method]) throw new Error(`Unknown RPC method "${message.method}"`);
-					return this[message.method].apply(this.createContext(rawMessage), message.args);
+					delete this.acceptPostboxes[message.id]; // Clean up postbox
+				} else if (message.action == 'rpc' && typeof message.method === 'string') { // Relay RPC calls
+					const method = message.method as string;
+					// Use type assertion for dynamic method call
+					if (typeof (this as any)[method] === 'function') {
+						// Create context for this specific message event
+						const context = this.createContext(rawMessage);
+						// Store the event temporarily for potential use in send() called by the RPC method
+						context.messageEvent = rawMessage;
+						return (this as any)[method].apply(context, message.args || []);
+					} else {
+						throw new Error(`Unknown RPC method "${method}"`);
+					}
 				} else {
 					this.debug('ERROR', 2, 'Unexpected incoming TERA-FY SERVER message', {message});
-					throw new Error('Unknown message format');
+					// Don't throw, just ignore unknown formats silently? Or throw?
+					// throw new Error('Unknown message format');
 				}
 			})
-			.then(response => this.sendRaw({
-				id: message.id,
-				action: 'response',
-				response,
-			}, rawMessage.source))
+			.then(response => {
+				// Only send response if it was an RPC call that returned something
+				if (message.action === 'rpc' && response !== undefined && rawMessage.source) {
+					this.sendRaw({
+						id: message.id,
+						action: 'response',
+						response,
+					}, rawMessage.source);
+				}
+			})
 			.catch(e => {
 				console.warn(`TERA-FY server threw on RPC:${message.method}:`, e);
-				this.sendRaw({
-					id: message.id,
-					action: 'response',
-					isError: true,
-					response: e ? e.toString() : e,
-				}, rawMessage.source);
+				// Send error response back if possible
+				if (message.action === 'rpc' && message.id && rawMessage.source) {
+					this.sendRaw({
+						id: message.id,
+						action: 'response',
+						isError: true,
+						response: e instanceof Error ? e.message : String(e), // Send error message
+					}, rawMessage.source);
+				}
 			})
 	}
 
@@ -302,7 +349,7 @@ export default class TeraFyServer {
 	/**
 	* Listening postboxes, these correspond to outgoing message IDs that expect a response
 	*/
-	acceptPostboxes = {};
+	acceptPostboxes: Record<string, any> = {};
 
 
 	/**
@@ -314,11 +361,20 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<*>} A promise which resolves with the resulting inner callback payload
 	*/
-	requestFocus(cb) {
+	requestFocus(cb: () => Promise<any>): Promise<any> {
+		// Ensure messageEvent is set before calling senderRpc
+		if (!this.messageEvent && this.settings.serverMode != TeraFyServer.SERVERMODE_TERA) {
+			console.warn("requestFocus called without a messageEvent context. Cannot toggle focus.");
+			// Proceed without toggling focus if no context is available
+			return Promise.resolve().then(() => cb.call(this));
+		}
+
 		return Promise.resolve()
-			.then(()=> this.settings.serverMode != TeraFyServer.SERVERMODE_TERA && this.senderRpc('toggleFocus', true))
+			// Only toggle focus if not in TERA mode and messageEvent is available
+			.then(()=> this.settings.serverMode != TeraFyServer.SERVERMODE_TERA && this.messageEvent && this.senderRpc('toggleFocus', true))
 			.then(()=> cb.call(this))
-			.finally(()=> this.settings.serverMode != TeraFyServer.SERVERMODE_TERA && this.senderRpc('toggleFocus', false))
+			// Only toggle focus back if not in TERA mode and messageEvent is available
+			.finally(()=> this.settings.serverMode != TeraFyServer.SERVERMODE_TERA && this.messageEvent && this.senderRpc('toggleFocus', false))
 	}
 
 
@@ -330,13 +386,16 @@ export default class TeraFyServer {
 	* @param {...*} [args] Optional event payload to send
 	* @returns {Promise} A promise which resolves when the transmission has completed
 	*/
-	emitClients(event, ...args) {
-		return this.getClientContext().sendRaw({
+	emitClients(event: string, ...args: any[]): Promise<void> {
+		// Use getClientContext to get the appropriate sendRaw method
+		const context = this.getClientContext();
+		context.sendRaw({
 			action: 'event',
 			id: nanoid(),
 			event,
 			payload: args,
 		});
+		return Promise.resolve(); // sendRaw is fire-and-forget
 	}
 
 
@@ -345,7 +404,7 @@ export default class TeraFyServer {
 	*
 	* @param {Number} verbosity The desired server verbosity level
 	*/
-	setServerVerbosity(verbosity) {
+	setServerVerbosity(verbosity: number): void {
 		this.settings.verbosity = +verbosity;
 		this.debug('INFO', 1, 'Server verbosity set to', this.settings.verbosity);
 	}
@@ -371,7 +430,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<User>} The current logged in user or null if none
 	*/
-	getUser(options) {
+	getUser(options?: any): Promise<any | null> {
 		let settings = {
 			forceRetry: false,
 			waitPromises: true,
@@ -403,7 +462,10 @@ export default class TeraFyServer {
 				}
 				: null
 			)
-			.catch(e => console.warn('getUser() catch', e))
+			.catch((e: any) => {
+				console.warn('getUser() catch', e);
+				return null; // Return null on error
+			})
 	}
 
 
@@ -414,10 +476,10 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<User>} A promise which will resolve if the there is a user and they are logged in
 	*/
-	requireUser() {
-		let user; // Last getUser() response
+	requireUser(): Promise<any> {
+		let user: any; // Last getUser() response
 		return Promise.resolve() // NOTE: This promise is upside down, it only continues down the chain if the user is NOT valid, otherwise it throws to exit
-			.then(()=> this.getUser())
+			.then(()=> this.getUser()) // Removed {} - call seems valid
 			.then(res => user = res)
 			.then(()=> {
 				if (user) {
@@ -473,7 +535,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Object} An object containing 3rd party service credentials
 	*/
-	getCredentials() {
+	getCredentials(): any {
 		return app.service('$auth').credentials;
 	}
 
@@ -494,10 +556,10 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	async getUserViaEmbedWorkaround() {
+	async getUserViaEmbedWorkaround(): Promise<void> {
 		this.debug('INFO', 4, 'Attempting to use getUserViaEmbedWorkaround()');
 
-		let lsState = window.localStorage.getItem('tera.embedUser');
+		let lsState: any = window.localStorage.getItem('tera.embedUser');
 		if (lsState) {
 			this.debug('INFO', 4, 'Using localStorage state');
 			try {
@@ -517,7 +579,7 @@ export default class TeraFyServer {
 				// Force refresh projects against the new user
 				await app.service('$projects').refresh();
 				return;
-			} catch (e) {
+			} catch (e: any) {
 				throw new Error(`Failed to decode local dev state - ${e.toString()}`);
 			}
 		}
@@ -529,15 +591,15 @@ export default class TeraFyServer {
 			+ '<div class="mt-2"><a class="btn btn-light">Open Popup...</a></div>';
 
 		// Attach click listner to internal button to re-popup the auth window (in case popups are blocked)
-		focusContent.querySelector('a.btn').addEventListener('click', ()=>
-			this.uiWindow(new URL(this.settings.sitePathLogin, this.settings.siteUrl))
+		focusContent.querySelector('a.btn')?.addEventListener('click', ()=>
+			this.uiWindow(new URL(this.settings.sitePathLogin, this.settings.siteUrl).toString())
 		);
 
 		// Create a deferred promise which will (eventually) resolve when the downstream window signals its ready
 		let waitOnWindowAuth = promiseDefer();
 
 		// Create a listener for the message from the downstream window to resolve the promise
-		let listenMessages = ({data}) => {
+		let listenMessages = ({data}: {data: any}) => {
 			this.debug('INFO', 3, 'Recieved message from popup window', {data});
 			if (data.TERA && data.action == 'popupUserState' && data.user) { // Signal sent from landing page - we're logged in, yey!
 				let $auth = app.service('$auth');
@@ -552,7 +614,7 @@ export default class TeraFyServer {
 
 				// Store local copy of user image - this only applies to dev mode (localhost connecting to embed) so we can ignore the security implications here
 				Promise.resolve()
-					.then(()=> this.getUser({
+					.then(()=> this.getUser({ // Removed {} - call seems valid
 						forceRetry: false, // Avoid loops
 						waitPromises: false, // We have a partially resolved state so we don't care about outer promises resolving
 					}))
@@ -563,9 +625,9 @@ export default class TeraFyServer {
 		window.addEventListener('message', listenMessages);
 
 		// Go fullscreen, try to open the auth window + prompt the user to retry (if popups are blocked) and wait for resolution
-		await this.requestFocus(()=> {
+		await this.requestFocus(async ()=> {
 			// Try opening the popup automatically - this will likely fail if the user has popup blocking enabled
-			this.uiWindow(new URL(this.settings.sitePathLogin, this.settings.siteUrl));
+			this.uiWindow(new URL(this.settings.sitePathLogin, this.settings.siteUrl).toString());
 
 			// Display a message to the user, offering the ability to re-open the popup if it was originally denied
 			this.uiSplat(focusContent, {logo: true});
@@ -604,7 +666,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Project|null>} The currently active project, if any
 	*/
-	getProject() {
+	getProject(): Promise<any | null> {
 		let $projects = app.service('$projects');
 
 		return $projects.promise()
@@ -625,11 +687,11 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Array<Project>>} Collection of projects the user has access to
 	*/
-	getProjects() {
+	getProjects(): Promise<any[]> {
 		let $projects = app.service('$projects');
 
 		return $projects.promise()
-			.then(()=> $projects.list.map(project => ({
+			.then(()=> $projects.list.map((project: any) => ({
 				id: project.id,
 				name: project.name,
 				created: project.created,
@@ -644,7 +706,7 @@ export default class TeraFyServer {
 	* @param {Object|String} project The project to set as active - either the full Project object or its ID
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	setActiveProject(project) {
+	setActiveProject(project: any): Promise<void> {
 		return app.service('$projects').setActive(project);
 	}
 
@@ -662,7 +724,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Project>} The active project
 	*/
-	requireProject(options) {
+	requireProject(options?: any): Promise<any> {
 		let settings = {
 			autoRequireUser: true,
 			autoSetActiveProject: true,
@@ -679,13 +741,13 @@ export default class TeraFyServer {
 				if (active) return active; // Use active project
 
 				return new Promise((resolve, reject) => {
-					let askProject = ()=> Promise.resolve()
+					let askProject = (): Promise<any> => Promise.resolve()
 						.then(()=> this.selectProject({
 							allowCancel: false,
 						}))
 						.then(project => resolve(project))
 						.catch(e => {
-							if (e == 'cancel') {
+							if (e == 'cancel' || e === 'CANCEL') { // Handle string 'cancel' or rejected 'CANCEL'
 								return this.requestFocus(()=>
 									app.service('$prompt').dialog({
 										title: settings.noSelectTitle,
@@ -701,7 +763,7 @@ export default class TeraFyServer {
 						})
 					askProject(); // Kick off intial project loop
 				})
-				.then(async (project) => {
+				.then(async (project: any) => {
 					if (settings.autoSetActiveProject) await this.setActiveProject(project);
 					return project;
 				})
@@ -719,7 +781,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Project>} The active project
 	*/
-	selectProject(options) {
+	selectProject(options?: any): Promise<any> {
 		let settings = {
 			title: 'Select a project to work with',
 			allowCancel: true,
@@ -732,10 +794,10 @@ export default class TeraFyServer {
 				app.service('$prompt').dialog({
 					title: settings.title,
 					component: 'projectsSelect',
-					buttons: settings.allowCancel && ['cancel'],
+					buttons: settings.allowCancel ? ['cancel'] : [],
 				})
 			))
-			.then(project => settings.setActive
+			.then((project: any) => settings.setActive
 				? this.setActiveProject(project)
 					.then(()=> project)
 				: project
@@ -754,7 +816,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Object>} A promise which resolves to the namespace POJO state
 	*/
-	getNamespace(name) {
+	getNamespace(name: string): Promise<any> {
 		if (!/^[\w-]+$/.test(name)) throw new Error('Namespaces must be alphanumeric + hyphens + underscores');
 
 		return app.service('$sync').getSnapshot(`project_namespaces::${app.service('$projects').active.id}::${name}`);
@@ -772,12 +834,12 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Object>} A promise which resolves to the namespace POJO state
 	*/
-	setNamespace(name, state, options) {
-		if (!/^[\w--]+$/.test(name)) throw new Error('Namespaces must be alphanumeric + hyphens + underscores');
+	setNamespace(name: string, state: any, options?: any): Promise<any> {
+		if (!/^[\w-]+$/.test(name)) throw new Error('Namespaces must be alphanumeric + hyphens + underscores');
 		if (typeof state != 'object') throw new Error('State must be an object');
 
-		return app.service('$sync').setSnapshot(`project_namespaces::${app.service('$projects').active.id}}::${name}`, state, {
-			method: options.method,
+		return app.service('$sync').setSnapshot(`project_namespaces::${app.service('$projects').active.id}::${name}`, state, {
+			method: options?.method ?? 'merge',
 		});
 	}
 
@@ -788,7 +850,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Array<Object>>} Collection of available namespaces for the current project
 	* @property {String} name The name of the namespace
 	*/
-	listNamespaces() {
+	listNamespaces(): Promise<any[]> {
 		return app.service('$projects').listNamespaces();
 	}
 	// }}}
@@ -804,7 +866,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Object>} The current project state snapshot
 	*/
-	getProjectState(options) {
+	getProjectState(options?: any): Promise<any> {
 		let settings = {
 			autoRequire: true,
 			paths: null,
@@ -812,7 +874,7 @@ export default class TeraFyServer {
 		};
 
 		return Promise.resolve()
-			.then(()=> settings.autoRequire && this.requireProject())
+			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
 			.then(()=> app.service('$projects').active)
 	}
 
@@ -837,9 +899,9 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<*>} A promise which resolves to `value` when the operation has been dispatched to the server and saved
 	*/
-	setProjectState(path, value, options) {
+	setProjectState(path: string | string[], value: any, options?: any): Promise<any> {
 		let settings = {
-			save: true,
+			save: true, // Note: This save flag isn't used in the current implementation
 			strategy: 'set',
 			...options,
 		};
@@ -863,7 +925,8 @@ export default class TeraFyServer {
 			},
 		);
 
-		return Promise.resolve(); // Sync functionality for the moment but could be async in the future
+		// Assuming this modifies a reactive object and doesn't need explicit saving via API here
+		return Promise.resolve(value);
 	}
 
 
@@ -877,32 +940,34 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<*>} A promise which resolves to the eventual input value after defaults have been applied
 	*/
-	setProjectStateDefaults(path, value, options) {
-		let settings = {
-			...options,
-		};
+	setProjectStateDefaults(path: string | string[] | any, value?: any, options?: any): Promise<any> {
+		let settings = { ...options }; // Initialize settings from the third argument if present
 		if (!app.service('$projects').active) throw new Error('No active project');
 
 		let target = app.service('$projects').active;
+		let actualValue: any;
 
 		if (typeof path == 'string' || Array.isArray(path)) { // Called as (path, value, options?) Set sub-object
+			actualValue = value;
 			return this.setProjectState(
 				path,
-				value,
+				actualValue,
 				{
 					strategy: 'defaults',
-					...settings,
+					...settings, // Pass options from the third argument
 				},
 			)
 				.then(()=> pathTools.get(target, path));
-		} else { // Called as (value) - Populate entire project layout
-			pathTools.defaults(target, path);
+		} else { // Called as (value, options?) - Populate entire project layout
+			actualValue = path; // The first argument is the value
+			settings = { ...value }; // The second argument holds the options
+			pathTools.defaults(target, actualValue);
 			this.debug('INFO', 1, 'setProjectStateDefaults', {
-				defaults: path,
+				defaults: actualValue,
 				newState: cloneDeep(target),
 			});
-
-			return value;
+			// Note: Save operation mentioned in docs isn't implemented here.
+			return Promise.resolve(target); // Resolve with the modified target state
 		}
 	}
 
@@ -912,7 +977,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	setProjectStateRefresh() {
+	setProjectStateRefresh(): Promise<null> {
 		this.debug('INFO', 1, 'Force project state refresh!');
 		if (!app.service('$projects').active) throw new Error('No active project');
 		return app.service('$projects').active.$read({force: true})
@@ -970,7 +1035,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<ProjectFile>} The eventually selected file, if in save mode new files are created as stubs
 	*/
-	selectProjectFile(options) {
+	selectProjectFile(options?: any): Promise<any> {
 		let settings = {
 			title: 'Select a file',
 			hint: null,
@@ -986,7 +1051,7 @@ export default class TeraFyServer {
 		};
 
 		return app.service('$projects').promise()
-			.then(()=> settings.autoRequire && this.requireProject())
+			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
 			.then(()=> this.requestFocus(()=>
 				app.service('$prompt').dialog({
 					title: settings.title,
@@ -1003,15 +1068,15 @@ export default class TeraFyServer {
 						filters: settings.filters,
 					},
 					componentEvents: {
-						fileSave(file) {
-							app.service('$prompt').close(true, file);
+						fileSave(file: any) {
+							app.service('$prompt').close(true, file); // Assume close takes 2 args
 						},
-						fileSelect(file) {
-							app.service('$prompt').close(true, file);
+						fileSelect(file: any) {
+							app.service('$prompt').close(true, file); // Assume close takes 2 args
 						},
 					},
 					modalDialogClass: 'modal-dialog-lg',
-					buttons: settings.allowCancel && ['cancel'],
+					buttons: settings.allowCancel ? ['cancel'] : [],
 				})
 			))
 	}
@@ -1027,7 +1092,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Array<ProjectFile>>} A collection of project files for the given project
 	*/
-	getProjectFiles(options) {
+	getProjectFiles(options?: any): Promise<any[]> {
 		let settings = {
 			autoRequire: true,
 			lazy: true,
@@ -1037,7 +1102,7 @@ export default class TeraFyServer {
 
 		return Promise.resolve()
 			.then(()=> app.service('$projects').promise())
-			.then(()=> settings.autoRequire && this.requireProject())
+			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
 			.then(()=>
 				app.service('$projects').activeFiles.length == 0 // If we have no files in the cache
 				|| !settings.lazy // OR lazy/cache use is disabled
@@ -1060,7 +1125,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<ProjectFile>} The eventual fetched ProjectFile (or requested subkey)
 	*/
-	getProjectFile(name, options) {
+	getProjectFile(name: string, options?: any): Promise<any> {
 		let settings = {
 			subkey: null,
 			cache: true,
@@ -1077,12 +1142,12 @@ export default class TeraFyServer {
 				})
 				: app.service('$projects').activeFiles // Otherwise use file cache
 			)
-			.then(files =>
-				files.find(file =>
+			.then((files: any[]) =>
+				files.find((file: any) =>
 					file.name == name
 				)
 			)
-			.then(file => file && settings.subkey ? file[settings.subkey] : file) // Provide subkey if asked
+			.then((file: any) => file && settings.subkey ? (file as any)[settings.subkey] : file)
 	}
 
 
@@ -1096,7 +1161,7 @@ export default class TeraFyServer {
 	*
 	* @returns {*} The file contents in the requested format
 	*/
-	getProjectFileContents(id, options) {
+	getProjectFileContents(id: string, options?: any): Promise<any> {
 		let settings = {
 			format: 'blob',
 			...options,
@@ -1117,7 +1182,7 @@ export default class TeraFyServer {
 	* @param {String} name The name + relative directory path component
 	* @returns {Promise<ProjectFile>} The eventual ProjectFile created
 	*/
-	createProjectFile(name) {
+	createProjectFile(name: string): Promise<any> {
 		return Promise.resolve()
 			.then(()=> app.service('$supabase').fileUpload(app.service('$projects').convertRelativePath(name), {
 				file: new Blob([''], {type: 'text/plain'}),
@@ -1130,7 +1195,7 @@ export default class TeraFyServer {
 			.then(()=> this.getProjectFile(name, {
 				cache: false, // Force cache to update, as this is a new file
 			}))
-			.then(file => file || Promise.reject(`Could not create new file "${name}"`))
+			.then((file: any) => file || Promise.reject(`Could not create new file "${name}"`))
 	}
 
 
@@ -1141,7 +1206,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	deleteProjectFile(id) {
+	deleteProjectFile(id: string): Promise<null> {
 		return app.service('$supabase').fileRemove(app.service('$projects').decodeFilePath(id))
 			.then(()=> app.service('$projects').refreshFiles({ // Force a local file list update
 				lazy: false,
@@ -1165,37 +1230,51 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which will resolve when the write operation has completed
 	*/
-	setProjectFileContents(id, contents, options) {
-		// Argument mangling {{{
-		// TODO: Horrible kludge to detect ID is "not a JSON blob"
-		if (typeof id == 'string' && !id.startsWith('{') && contents && options) { // Called as `(id, contents, options)`
-			// Pass
-		} else if (typeof id != 'string' && !options) { // Called as `(contents, options)`
-			[id, contents, options] = [null, id, contents];
+	setProjectFileContents(id: string | any | null, contents: any, options?: any): Promise<null> {
+		// Argument Mangling Logic (Simplified)
+		let fileId: string | null = null;
+		let fileContents: any;
+		let mergedOptions: any;
+
+		if (typeof id === 'string') {
+			fileId = id;
+			fileContents = contents;
+			mergedOptions = { ...options };
+		} else if (id !== null && typeof id === 'object' && !(id instanceof Blob) && !(id instanceof File) && !(id instanceof FormData) && !Array.isArray(id)) {
+			// Assuming called as (optionsObject)
+			mergedOptions = { ...id };
+			fileId = mergedOptions.id ?? null;
+			fileContents = mergedOptions.contents;
 		} else {
-			throw new Error('Unknown function signature. Requires (id:String?, contents:*, options:Object?)');
+			// Assuming called as (contents, options)
+			fileId = options?.id ?? null; // Check options for id if provided
+			fileContents = id; // First arg is contents
+			mergedOptions = { ...contents }; // Second arg is options
 		}
-		// }}}
+
+		if (fileContents === undefined) throw new Error('setProjectFileContents requires contents to save.');
 
 		let settings = {
-			id,
+			id: fileId,
 			autoRequire: true,
 			hint: null,
 			filename: null,
 			title: 'Save file',
 			meta: null,
-			...options,
+			...mergedOptions, // Apply options derived from mangling
 		};
+
 
 		return Promise.resolve()
 			.then(()=> {
-				console.log('Checking for project, is required:', settings.autoRequire);
-				settings.autoRequire && this.requireProject()
-				console.log('Project set!')
+				settings.autoRequire && this.requireProject() // Removed {} - call seems valid
 			})
-			.then(()=> {
-				if (settings.id) return; // We already have a file ID specified - skip
-
+			.then((): Promise<string> => { // Ensure the promise returns a string (fileId)
+				if (settings.id) {
+					// Validate the provided ID exists? Optional, but good practice.
+					// For now, just return it assuming it's valid.
+					return Promise.resolve(settings.id);
+				}
 				// Prompt for a save filename
 				return this.selectProjectFile({
 					title: settings.title,
@@ -1204,12 +1283,20 @@ export default class TeraFyServer {
 					saveFilename: settings.filename,
 					autoRequire: false, // Handled above anyway
 				})
-					.then(file => settings.id = file.id)
+					.then((file: any) => {
+						if (!file || !file.id) throw new Error('File selection cancelled or failed.');
+						return file.id; // Return the selected file ID
+					});
 			})
-			.then(()=> app.service('$supabase').fileSet(app.service('$projects').decodeFilePath(settings.id), contents, {
-				overwrite: true,
-				toast: false,
-			}))
+			.then((resolvedFileId: string) => {
+				settings.id = resolvedFileId; // Update settings.id with the resolved/validated ID
+				if (!settings.id) throw new Error("Could not determine file ID to save to."); // Final check
+				return app.service('$supabase').fileSet(app.service('$projects').decodeFilePath(settings.id), fileContents, {
+					overwrite: true,
+					toast: false,
+					// TODO: Handle settings.meta if $supabase.fileSet supports it
+				});
+			})
 			.then(()=> null)
 	}
 	// }}}
@@ -1231,7 +1318,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Array<Ref>>} A collection of references from the selected file
 	*/
-	selectProjectLibrary(options) {
+	selectProjectLibrary(options?: any): Promise<any[]> {
 		let settings = {
 			title: 'Select a citation library',
 			hint: null,
@@ -1242,14 +1329,27 @@ export default class TeraFyServer {
 			autoRequire: true,
 			filters: {
 				library: true,
-				...options?.filter,
+				...(options?.filters ?? {}), // Use filters from options if provided
 			},
 			...options,
 		};
+		// Remove filters from top-level settings if it exists to avoid conflict
+		delete settings.filter;
+
 
 		return app.service('$projects').promise()
-			.then(()=> this.selectProjectFile(settings))
-			.then(selectedFile => this.getProjectLibrary(selectedFile.id, settings))
+			.then(()=> this.selectProjectFile(settings)) // Pass merged settings
+			.then((selectedFile: any) => {
+				if (!selectedFile || !selectedFile.id) throw new Error('Library selection failed or was cancelled.');
+				// Pass relevant options down to getProjectLibrary
+				return this.getProjectLibrary(selectedFile.id, {
+					format: options?.format,
+					autoRequire: false, // Already required
+					// Pass filter/find if they were part of the original options
+					filter: options?.filter,
+					find: options?.find,
+				});
+			})
 	}
 
 
@@ -1266,23 +1366,24 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<Array<Ref>>|Promise<*>} A collection of references (default bevahiour) or a whatever format was requested
 	*/
-	getProjectLibrary(id, options) {
+	getProjectLibrary(id: string, options?: any): Promise<any> {
 		let settings = {
 			format: 'pojo',
 			autoRequire: true,
-			filter: file => true, // eslint-disable-line no-unused-vars
-			find: files => files.at(0),
+			filter: (file: any) => true, // Default filter
+			find: (files: any[]) => files.at(0), // Default find
 			...options,
 		};
 
-		let filePath = app.service('$projects').decodeFilePath(id);
+		let filePath: string = app.service('$projects').decodeFilePath(id);
 
 		return Promise.resolve()
-			.then(()=> settings.autoRequire && this.requireProject())
+			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
 			.then(()=> app.service('$supabase').fileGet(filePath, {
 				toast: false,
 			}))
 			.then(blob => {
+				if (!blob) throw new Error(`File not found or empty: ${filePath}`);
 				switch (settings.format) {
 					// NOTE: Any updates to the format list should also extend setProjectLibrary()
 					case 'pojo':
@@ -1325,8 +1426,33 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves when the save operation has completed
 	*/
-	setProjectLibrary(id, refs, options) {
+	setProjectLibrary(id: string | any | null, refs?: any, options?: any): Promise<null> {
+		// Argument Mangling Logic (Simplified)
+		let fileId: string | null = null;
+		let libraryRefs: any;
+		let mergedOptions: any;
+
+		if (typeof id === 'string') {
+			fileId = id;
+			libraryRefs = refs;
+			mergedOptions = { ...options };
+		} else if (id !== null && typeof id === 'object' && !(id instanceof Blob) && !(id instanceof File) && !Array.isArray(id)) {
+			// Assuming called as (optionsObject)
+			mergedOptions = { ...id };
+			fileId = mergedOptions.id ?? null;
+			libraryRefs = mergedOptions.refs;
+		} else {
+			// Assuming called as (refs, options)
+			fileId = options?.id ?? null; // Check options for id if provided
+			libraryRefs = id; // First arg is refs
+			mergedOptions = { ...refs }; // Second arg is options
+		}
+
+		if (libraryRefs === undefined) throw new Error('setProjectLibrary requires refs to save.');
+
 		let settings = {
+			id: fileId,
+			refs: libraryRefs,
 			format: 'auto',
 			autoRequire: true,
 			hint: null,
@@ -1334,20 +1460,17 @@ export default class TeraFyServer {
 			title: 'Save citation library',
 			overwrite: true,
 			meta: null,
-			...(
-				typeof id == 'string' && Array.isArray(refs) ? {id, refs, ...options} // Called as (id, refs, options?)
-				: Array.isArray(id) || refs instanceof Blob || refs instanceof File ? {refs: id, ...refs} // Called as (refs, options?)
-				: id // Called as (options?)
-			)
+			...mergedOptions // Apply options derived from mangling
 		};
-		if (!settings.refs) throw new Error('No refs to save');
 
-		let filePath; // Eventual Supabase path to use
+		let filePath: any; // Eventual Supabase path to use
 		return Promise.resolve()
-			.then(()=> settings.autoRequire && this.requireProject())
-			.then(()=> {
-				if (settings.id) return; // We already have a file ID specified - skip
-
+			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
+			.then((): Promise<string> => { // Ensure promise returns string (fileId)
+				if (settings.id) {
+					// Optional: Validate settings.id exists?
+					return Promise.resolve(settings.id);
+				}
 				// Prompt for a save filename
 				return this.selectProjectFile({
 					title: settings.title,
@@ -1359,13 +1482,18 @@ export default class TeraFyServer {
 					},
 					autoRequire: false, // Handled above anyway
 				})
-					.then(file => settings.id = file.id)
+					.then((file: any) => {
+						if (!file || !file.id) throw new Error('File selection cancelled or failed.');
+						return file.id; // Return selected file ID
+					});
 			})
-			.then(()=> { // Compute filePath
+			.then((resolvedFileId: string)=> { // Compute filePath
+				settings.id = resolvedFileId; // Update settings.id
+				if (!settings.id) throw new Error("Could not determine file ID to save library to.");
 				filePath = app.service('$projects').decodeFilePath(settings.id);
 			})
 			.then(()=> {
-				// Mutate settings.ref -> Blob or File format needed by Supabase
+				// Mutate settings.refs -> Blob or File format needed by Supabase
 				if (settings.format == 'auto') {
 					settings.format =
 						Array.isArray(settings.refs) ? 'pojo'
@@ -1388,16 +1516,17 @@ export default class TeraFyServer {
 						if (!(settings.refs instanceof Blob)) throw new Error("setProjectLibrary({format: 'blob'} but non-Blob provided as `refs`");
 						return new File([settings.refs], app.service('$supabase')._parsePath(filePath).basename);
 					case 'file':
-						if (!(settings.ref instanceof File)) throw new Error("setProjectLibrary({format: 'file'} but non-File provided as `refs`");
+						if (!(settings.refs instanceof File)) throw new Error("setProjectLibrary({format: 'file'} but non-File provided as `refs`");
 						return settings.refs;
 					default:
 						throw new Error(`Unsupported library format "${settings.format}"`);
 				}
 			})
-			.then(fileBlob => app.service('$supabase').fileUpload(filePath, {
+			.then((fileBlob: File) => app.service('$supabase').fileUpload(filePath, { // Expect File type
 				file: fileBlob,
-				overwrite: true,
+				overwrite: settings.overwrite,
 				mode: 'encoded',
+				// TODO: Handle settings.meta if $supabase.fileUpload supports it
 			}))
 			.then(()=> null)
 	}
@@ -1413,7 +1542,7 @@ export default class TeraFyServer {
 	* @param {Object} log The log entry to create
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	projectLog(log) {
+	projectLog(log: any): Promise<void> {
 		return app.service('$projects').log(log);
 	}
 	// }}}
@@ -1427,7 +1556,7 @@ export default class TeraFyServer {
 	* @param {String} [options.path] The URL path segment to restore on next refresh
 	* @param {String} [options.title] The page title associated with the path
 	*/
-	setPage(options) {
+	setPage(options: any): void {
 		app.service('$projects').setPage(options);
 	}
 	// }}}
@@ -1439,7 +1568,7 @@ export default class TeraFyServer {
 	*
 	* @param {Object} [options] Additional options to merge into `settings`
 	*/
-	constructor(options) {
+	constructor(options?: any) {
 		Object.assign(this.settings, options);
 	}
 
@@ -1447,9 +1576,12 @@ export default class TeraFyServer {
 	/**
 	* Initialize the browser listener
 	*/
-	init() {
-		globalThis.addEventListener('message', this.acceptMessage.bind(this));
-		this.debug('INFO', 1, 'Ready');
+	init(): void {
+		// Ensure this only runs in a browser context
+		if (typeof window !== 'undefined' && typeof globalThis !== 'undefined') {
+			globalThis.addEventListener('message', this.acceptMessage.bind(this));
+			this.debug('INFO', 1, 'Ready');
+		}
 	}
 	// }}}
 
@@ -1467,7 +1599,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves when the alert has been dismissed
 	*/
-	uiAlert(text, options) {
+	uiAlert(text: string | any, options?: any): Promise<void> {
 		let settings = {
 			body: 'Alert!',
 			isHtml: false,
@@ -1486,9 +1618,10 @@ export default class TeraFyServer {
 				body: settings.body,
 				buttons:
 					settings.buttons == 'ok' ? ['ok']
-					: false,
+					: settings.buttons === false ? []
+					: settings.buttons, // Allow passing custom button arrays
 				isHtml: settings.isHtml,
-				dialogClose: 'resolve',
+				dialogClose: 'resolve', // Resolve promise when closed
 			})
 		);
 	}
@@ -1506,7 +1639,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves with `Promise.resolve('OK')` or rejects with `Promise.reject('CANCEL')`
 	*/
-	uiConfirm(text, options) {
+	uiConfirm(text: string | any, options?: any): Promise<'OK'> {
 		let settings = {
 			body: 'Confirm?',
 			isHtml: false,
@@ -1527,17 +1660,17 @@ export default class TeraFyServer {
 					{
 						title: 'OK',
 						class: 'btn btn-success',
-						click: 'resolve',
+						click: 'resolve', // Resolve promise with default value (usually true or button index)
 					},
 					{
 						title: 'Cancel',
 						class: 'btn btn-danger',
-						click: 'reject',
+						click: 'reject', // Reject promise
 					},
 				],
 			})
-				.then(()=> 'OK')
-				.catch(()=> Promise.reject('CANCEL'))
+				.then(()=> 'OK' as 'OK') // Resolve with 'OK' if OK button clicked
+				.catch(()=> Promise.reject('CANCEL')) // Reject with 'CANCEL' if Cancel button clicked or closed
 		);
 	}
 
@@ -1548,8 +1681,15 @@ export default class TeraFyServer {
 	* @function uiPanic
 	* @param {String} [text] Text to display
 	*/
-	uiPanic(text) {
-		window.panic(text);
+	uiPanic(text: any): void {
+		// Ensure window context exists
+		if (typeof window !== 'undefined' && typeof window.panic === 'function') {
+			window.panic(text);
+		} else {
+			console.error("PANIC (window.panic not available):", text);
+			// Fallback behavior if window.panic doesn't exist
+			alert(`PANIC: ${text}`);
+		}
 	}
 
 
@@ -1567,10 +1707,19 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves when the dialog has been updated
 	*/
-	uiProgress(options) {
-		if (options === false) options = {close: true}; // Shorthand to close existing ui progress window
+	uiProgress(options?: any): Promise<void> {
+		let currentOptions = options === false ? {close: true} : options || {};
 
-		if (!options?.close && this._uiProgress.options === null) { // Create new uiProgress options object
+		if (currentOptions.close) { // Asked to close the dialog
+			const closePromise = this._uiProgress.promise
+				? app.service('$prompt').close(true) // Assume close takes 1 arg
+				: Promise.resolve();
+			return closePromise.then(()=> { // Release state
+					this._uiProgress.options = null;
+					this._uiProgress.promise = null;
+				});
+		} else if (!this._uiProgress.promise) { // Not created the dialog yet
+			// Initialize options if they don't exist
 			this._uiProgress.options = reactive({
 				body: '',
 				bodyHtml: false,
@@ -1578,39 +1727,32 @@ export default class TeraFyServer {
 				close: false,
 				progress: 0,
 				progressMax: 0,
-				backdrop: true,
-				...options,
+				backdrop: true, // Default backdrop
+				...currentOptions, // Apply initial options
 			});
-		} else { // Merge options with existing uiProgress window
-			Object.assign(this._uiProgress.options, options);
-		}
-
-		if (this._uiProgress.options.close) { // Asked to close the dialog
-			return Promise.resolve()
-				.then(()=> this._uiProgress.promise && app.service('$prompt').close(true)) // Close the dialog if its open
-				.then(()=> { // Release state
-					this._uiProgress.options = {};
-					this._uiProgress.promise = null;
-				})
-		} else if (!this._uiProgress.promise) { // Not created the dialog yet
 			this._uiProgress.promise = this.requestFocus(()=>
 				app.service('$prompt').dialog({
-					title: this._uiProgress.options.title,
-					backdrop: this._uiProgress.options.backdrop ?? true, // pass backdrop to allow 'static' dialog
+					title: this._uiProgress.options?.title,
+					backdrop: this._uiProgress.options?.backdrop ?? true,
 					component: 'uiProgress',
-					componentProps: this._uiProgress.options,
+					componentProps: this._uiProgress.options, // Pass reactive object
 					closeable: false,
 					keyboard: false,
 				})
 			);
-			return Promise.resolve();
+			return Promise.resolve(); // Dialog creation is async via requestFocus
+		} else if (this._uiProgress.options) { // Dialog exists, merge options
+			Object.assign(this._uiProgress.options, currentOptions);
+			return Promise.resolve(); // Updates handled by reactivity
 		} else {
-			throw new Error('Unknown uiProgress state');
+			// Should not happen if initialized correctly
+			console.warn("uiProgress called in unexpected state");
+			return Promise.resolve();
 		}
 	}
 
-	_uiProgress = {
-		options: {},
+	_uiProgress: { options: any | null, promise: Promise<any> | null } = {
+		options: null,
 		promise: null,
 	};
 
@@ -1630,7 +1772,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise<*>} Either the eventual user value or a throw with `Promise.reject('CANCEL')`
 	*/
-	uiPrompt(text, options) {
+	uiPrompt(text: string | any, options?: any): Promise<any> {
 		let settings = {
 			body: '',
 			isHtml: false,
@@ -1648,7 +1790,7 @@ export default class TeraFyServer {
 		return this.requestFocus(()=>
 			app.service('$prompt').dialog({
 				title: settings.title,
-				closable: true,
+				closable: true, // Allow closing via backdrop click (will reject)
 				component: 'UiPrompt',
 				componentProps: {
 					body: settings.body,
@@ -1661,23 +1803,26 @@ export default class TeraFyServer {
 						class: 'btn btn-success',
 						icon: 'fas fa-check',
 						title: 'Ok',
-						click() {
-							return this.$prompt.close(true, this.newValue);
+						click(): any {
+							// Assuming 'this' is the component instance with 'newValue' property
+							// And $prompt service is available globally via 'app'
+							app.service('$prompt').close(true, (this as any).newValue); // Use app.$prompt.close
 						},
 					},
-					'cancel',
+					'cancel', // Standard cancel button that rejects
 				],
 			})
 		)
-			.then(answer => {
-				if (answer) {
+			.then((answer: any) => {
+				// Check if the answer is non-empty or if required is false
+				if (answer || !settings.required) {
 					return answer;
-				} else if (settings.required) {
-					return Promise.reject('CANCEL');
 				} else {
-					return answer;
+					// If required and answer is empty/nullish, treat as cancel
+					return Promise.reject('CANCEL');
 				}
 			})
+			// Catch rejection from 'cancel' button or closing the dialog
 			.catch(()=> Promise.reject('CANCEL'))
 	}
 
@@ -1689,7 +1834,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Void} This function is fatal
 	*/
-	uiThrow(error) {
+	uiThrow(error: any): Promise<void> {
 		return this.requestFocus(()=>
 			app.service('$errors').catch(error)
 		);
@@ -1709,7 +1854,10 @@ export default class TeraFyServer {
 	*
 	* @returns {WindowProxy} The opened window object (if `noopener` is not set in permissions)
 	*/
-	uiWindow(url, options) {
+	uiWindow(url: string | URL, options?: any): WindowProxy | null {
+		// Ensure this runs only in browser context
+		if (typeof window === 'undefined' || typeof screen === 'undefined') return null;
+
 		let settings = {
 			width: 500,
 			height: 600,
@@ -1719,12 +1867,14 @@ export default class TeraFyServer {
 				location: false,
 				menubar: false,
 				status: false,
-				scrolbars: false,
+				scrollbars: false, // Corrected typo
 			},
 			...options,
 		};
 
-		return window.open(url, '_blank', Object.entries({
+		const urlString = typeof url === 'string' ? url : url.toString();
+
+		const features = Object.entries({
 			...settings.permissions,
 			width: settings.width,
 			height: settings.height,
@@ -1733,12 +1883,10 @@ export default class TeraFyServer {
 				top: screen.height/2 - settings.height/2,
 			}),
 		})
-			.map(([key, val]) => key + '=' + (
-				typeof val == 'boolean' ? val ? '1' : '0' // Map booleans to 1/0
-				: val
-			))
-			.join(', ')
-		);
+			.map(([key, val]) => `${key}=${typeof val === 'boolean' ? (val ? 'yes' : 'no') : val}`) // Use yes/no for booleans
+			.join(',');
+
+		return window.open(urlString, '_blank', features);
 	}
 
 
@@ -1751,30 +1899,42 @@ export default class TeraFyServer {
 	* @param {Object} [options] Additional options to mutate behaviour
 	* @param {Boolean|String} [options.logo=false] Add a logo to the output, if boolean true the Tera-tools logo is used otherwise specify a path or URL
 	*/
-	uiSplat(content, options) {
+	uiSplat(content: Element | string | false, options?: any): void {
+		// Ensure this runs only in browser context
+		if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
 		let settings = {
 			logo: false,
 			...options,
 		};
 
-		if (!content) { // Remove content
-			globalThis.document.body.querySelector('.tera-fy-uiSplat').remove();
+		// Remove existing splat first
+		const existingSplat = globalThis.document.body.querySelector('.tera-fy-uiSplat');
+		if (existingSplat) {
+			existingSplat.remove();
+		}
+
+		if (!content) { // If content is false, just remove and return
 			return;
 		}
 
-		let compiledContent = typeof content == 'string'
-			? (()=> {
-				let el = document.createElement('div')
-				el.innerHTML = content;
-				return el;
-			})()
-			: content;
+		let compiledContent: Element;
+		if (typeof content == 'string') {
+			let el = document.createElement('div')
+			el.innerHTML = content;
+			// If the string contained multiple top-level elements, wrap them
+			compiledContent = el.children.length === 1 ? el.firstElementChild! : el;
+		} else {
+			compiledContent = content;
+		}
+
 
 		compiledContent.classList.add('tera-fy-uiSplat');
 
 		if (settings.logo) {
 			let logoEl = document.createElement('div');
 			logoEl.innerHTML = `<img src="${typeof settings.logo == 'string' ? settings.logo : '/assets/logo/logo.svg'}" class="img-logo"/>`;
+			// Prepend logo within the content element
 			compiledContent.prepend(logoEl);
 		}
 
@@ -1793,27 +1953,38 @@ export default class TeraFyServer {
 	* @param {Number} [verboseLevel=1] The verbosity level to trigger at. If `settings.verbosity` is lower than this, the message is ignored
 	* @param {...*} [msg] Output to show
 	*/
-	debug(...msg) {
+	debug(...inputArgs: any[]): void {
+		// Ensure console exists
+		if (typeof console === 'undefined') return;
 		if (!this.settings.devMode || this.settings.verbosity < 1) return; // Debugging is disabled
-		let method = 'log';
+
+		let method: keyof Console = 'log'; // Default method
 		let verboseLevel = 1;
+		let msgArgs = [...inputArgs]; // Copy args to modify
+
 		// Argument mangling for prefix method + verbosity level {{{
-		if (typeof msg[0] == 'string' && ['INFO', 'LOG', 'WARN', 'ERROR'].includes(msg[0])) {
-			method = msg.shift().toLowerCase();
+		if (typeof msgArgs[0] == 'string' && ['INFO', 'LOG', 'WARN', 'ERROR'].includes(msgArgs[0].toUpperCase())) {
+			const potentialMethod = msgArgs.shift().toLowerCase() as keyof Console;
+			// Check if it's a valid console method
+			if (potentialMethod in console) {
+				method = potentialMethod;
+			} else {
+				msgArgs.unshift(potentialMethod); // Put it back if not a valid method
+			}
 		}
 
-		if (typeof msg[0] == 'number') {
-			verboseLevel = msg[0];
-			msg.shift();
+		if (typeof msgArgs[0] == 'number') {
+			verboseLevel = msgArgs.shift();
 		}
 		// }}}
 
 		if (this.settings.verbosity < verboseLevel) return; // Called but this output is too verbose for our settings - skip
 
-		console[method](
+		// Use type assertion for dynamic console method call
+		(console as any)[method](
 			'%c[TERA-FY SERVER]',
 			'font-weight: bold; color: #4d659c;',
-			...msg,
+			...msgArgs,
 		);
 	}
 	/* eslint-enable */

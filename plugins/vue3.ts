@@ -1,6 +1,6 @@
 import {cloneDeep} from 'lodash-es';
 import TeraFyPluginFirebase from './firebase.js';
-import {reactive as vueReactive, watch as vueWatch} from 'vue';
+import {reactive as vueReactive, watch as vueWatch, App, WatchCallback} from 'vue';
 
 /**
 * Vue observables plugin
@@ -33,29 +33,29 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 	*
 	* @type {Object}
 	*/
-	project = null;
+	project: any = null;
 
 
 	/**
 	* Init the project including create a reactive mount for the active project
 	*
 	* @param {Object} options Additional options to mutate behaviour
-	* @param {*...} [options...] see TeraFyPluginFirebase
+	* @param {*} [options...] see TeraFyPluginFirebase
 	*/
-	async init(options) {
+	async init(options: Record<string, any>) {
 		await super.init(options); // Initalize parent class Firebase functionality
 
 		// Mount the project namespace
-		this.project = await this.mountNamespace('_PROJECT');
+		this.project = await this._mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	getReactive(value) {
+	getReactive = (value: any) => {
 		let doc = vueReactive(value);
 		return {
 			doc,
-			setState(state) {
+			setState(state: any) {
 				// Shallow copy all sub-keys into existing object (keeping the object pointer)
 				Object.entries(state || {})
 					.forEach(([k, v]) => doc[k] = v)
@@ -63,7 +63,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 			getState() {
 				return cloneDeep(doc);
 			},
-			watch(cb) {
+			watch(cb: WatchCallback<any, any>) {
 				vueWatch(doc, cb, {deep: true});
 			},
 		};
@@ -88,7 +88,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 			* @param {Object} [options] Additional options to mutate behaviour
 			* @param {String} [options.globalName='$tera'] Global property to allocate this service as
 			*/
-			install(app, options) {
+			install(app: App, options: Record<string, any>) {
 				let settings = {
 					globalName: '$tera',
 					...options,

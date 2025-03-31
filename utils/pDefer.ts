@@ -3,8 +3,15 @@
 * The defer object has the keys {promise, resolve(), reject()}
 * @returns {Defer} A defered promise
 */
-export default function() {
-	var deferred = {};
+
+interface Defer {
+  promise: Promise<unknown>;
+  resolve: (value?: unknown | PromiseLike<unknown>) => void;
+  reject: (reason?: any) => void;
+}
+
+export default function(): Defer {
+	var deferred = {} as Defer;
 
 	deferred.promise = new Promise((resolve, reject) => {
 		deferred.resolve = resolve;

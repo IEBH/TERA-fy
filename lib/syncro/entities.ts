@@ -1,6 +1,9 @@
+// @ts-ignore
 import Reflib from '@iebh/reflib';
 import {v4 as uuid4} from 'uuid';
 import {nanoid} from 'nanoid';
+import { SupabaseClient } from '@supabase/supabase-js';
+
 
 /**
 * Entities we support Syncro paths for, each should correspond directly with a Firebase/Firestore collection name
@@ -14,20 +17,21 @@ import {nanoid} from 'nanoid';
 export default {
 	projects: { // {{{
 		singular: 'project',
-		async initState({supabase, id}) {
-			let data = await supabase(s => s
+		async initState({supabase, id}: {supabase: SupabaseClient, id: string}) {
+			let { data: projectData, error } = await supabase
 				.from('projects')
 				.select('data')
-				.maybeSingle()
 				.eq('id', id)
-			);
-			if (!data) throw new Error(`Syncro project "${id}" not found`);
-			data = data.data;
+				.maybeSingle();
+
+			if (error) throw error;
+			if (!projectData) throw new Error(`Syncro project "${id}" not found`);
+			let data = projectData.data;
 
 			// MIGRATION - Move data.temp{} into Supabase files + add pointer to filename {{{
 			if (
 				data.temp // Project contains no temp subkey
-				&& Object.values(data.temp).some(t => typeof t == 'object') // Some of the temp keys are objects
+				&& Object.values(data.temp).some((t: any) => typeof t == 'object') // Some of the temp keys are objects
 			) {
 				console.log('[MIGRATION] tera-fy project v1 -> v2', data.temp);
 
@@ -42,7 +46,8 @@ export default {
 							console.log('[MIGRATION] Creating filename:', fileName);
 
 							return Promise.resolve()
-								.then(()=> supabase(s => s // Split data.temp[toolKey] -> file {{{
+								.then(()=> supabase // Split data.temp[toolKey] -> file {{{
+									.storage
 									.from('projects')
 									.upload(
 										`${id}/${fileName}`,
@@ -67,7 +72,7 @@ export default {
 											upsert: true,
 										},
 									)
-								)) // }}}
+								) // }}}
 								.then(()=> data.temp[toolKey] = fileName) // Replace data.temp[toolKey] with new filename
 								.catch(e => {
 									console.warn('[MIGRATION] Failed to create file', fileName, '-', e);
@@ -80,33 +85,40 @@ export default {
 
 			return data;
 		},
-		flushState({supabase, state, fsId}) {
-			return supabase(s => s.rpc('syncro_merge_data', {
+		flushState({supabase, state, fsId}: {supabase: SupabaseClient, state: any, fsId: string}) {
+			return supabase.rpc('syncro_merge_data', {
 				table_name: 'projects',
 				entity_id: fsId,
 				new_data: state,
-			}))
+			})
 		},
 	}, // }}}
 	project_libraries: { // {{{
 		singular: 'project library',
-		initState({supabase, id, relation}) {
+		initState({supabase, id, relation}: {supabase: SupabaseClient, id: string, relation: string | undefined}) {
 			if (!relation || !/_\*$/.test(relation)) throw new Error('Project library relation missing, path should resemble "project_library::${PROJECT}::${LIBRARY_FILE_ID}_*"');
 
 			let fileId = relation.replace(/_\*$/, '');
 
 			return Promise.resolve()
-				.then(()=> supabase(s => s.storage
+				.then(()=> supabase.storage
 					.from('projects')
 					.list(id)
-				))
-				.then(files => files.find(f => f.id == fileId))
-				.then(file => file || Promise.reject(`Invalid file ID "${fileId}"`))
-				.then(file => supabase(s => s.storage
+				)
+				.then(({ data: files, error }) => {
+					if (error) throw error;
+					const file = files?.find((f: any) => f.id == fileId);
+					if (!file) return Promise.reject(`Invalid file ID "${fileId}"`);
+					return file;
+				})
+				.then((file: any) => supabase.storage
 					.from('projects')
 					.download(`${id}/${file.name}`)
-				)
-					.then(blob => ({blob, file}))
+					.then(({ data: blob, error }) => {
+						if (error) throw error;
+						if (!blob) throw new Error('Failed to download file blob');
+						return {blob, file}
+					})
 				)
 				.then(({blob, file}) => Reflib.uploadFile({
 					file: new File(
@@ -114,111 +126,117 @@ export default {
 						file.name.replace(/^.*[/\\]/, ''), // Extract basename from original file name
 					),
 				}))
-				.then(refs => Object.fromEntries(refs // Transform Reflib Ref array into a keyed UUID object
-					.map(ref => [ // Construct Object.fromEntries() compatible object [key, val] tuple
+				.then((refs: any[]) => Object.fromEntries(refs // Transform Reflib Ref array into a keyed UUID object
+					.map((ref: any) => [ // Construct Object.fromEntries() compatible object [key, val] tuple
 						uuid4(), // TODO: This should really be using V5 with some-kind of namespacing but I can't get my head around the documentation - MC 2025-02-21
 						ref, // The actual ref payload
 					])
 				))
 		},
-		flushState({supabase, id, relation}) {
+		flushState({supabase, id, relation}: {supabase: SupabaseClient, id: string, relation: string | undefined}) {
 			throw new Error('Flushing project_libraries::* namespace is not yet supported');
 		},
 	}, // }}}
 	project_namespaces: { // {{{
 		singular: 'project namespace',
-		initState({supabase, id, relation}) {
+		async initState({supabase, id, relation}: {supabase: SupabaseClient, id: string, relation: string | undefined}) {
 			if (!relation) throw new Error('Project namespace relation missing, path should resemble "project_namespaces::${PROJECT}::${RELATION}"');
-			return supabase(s => s
+			let { data: rows, error: selectError } = await supabase
 				.from('project_namespaces')
 				.select('data')
-				.limit(1)
 				.eq('project', id)
 				.eq('name', relation)
-			)
-				.then(rows => rows.length == 1
-					? rows[0]
-					: supabase(s => s
-						.from('project_namespaces') // Doesn't exist - create it
-						.insert({
-							project: id,
-							name: relation,
-							data: {},
-						})
-						.select('data')
-					)
-				)
-				.then(item => item.data);
+				.limit(1);
+
+			if (selectError) throw selectError;
+
+			if (rows && rows.length == 1) {
+					return rows[0].data;
+			} else {
+				const { data: newItem, error: insertError } = await supabase
+					.from('project_namespaces') // Doesn't exist - create it
+					.insert({
+						project: id,
+						name: relation,
+						data: {},
+					})
+					.select('data')
+					.single(); // Assuming insert returns the single inserted row
+
+				if (insertError) throw insertError;
+				if (!newItem) throw new Error('Failed to create project namespace');
+				return newItem.data;
+			}
 		},
-		flushState({supabase, state, id, relation}) {
-			return supabase(s => s
+		flushState({supabase, state, id, relation}: {supabase: SupabaseClient, state: any, id: string, relation: string | undefined}) {
+			return supabase
 				.from('project_namespaces')
 				.update({
-					edited_at: new Date(),
+					edited_at: new Date().toISOString(),
 					data: state,
 				})
 				.eq('project', id)
 				.eq('name', relation)
-			)
 		},
 	}, // }}}
 	test: { // {{{
 		singular: 'test',
-		initState({supabase, id}) {
-			return supabase(s => s
+		async initState({supabase, id}: {supabase: SupabaseClient, id: string}) {
+			const { data: rows, error } = await supabase
 				.from('test')
 				.select('data')
-				.limit(1)
 				.eq('id', id)
-			)
-				.then(rows => rows.length == 1 ? rows[0] : Promise.reject(`Syncro test item "${id}" not found`))
-				.then(item => item.data);
+				.limit(1);
+
+			if (error) throw error;
+			if (!rows || rows.length !== 1) return Promise.reject(`Syncro test item "${id}" not found`);
+			return rows[0].data;
 		},
-		flushState({supabase, state, fsId}) {
-			return supabase(s => s.rpc('syncro_merge_data', {
+		flushState({supabase, state, fsId}: {supabase: SupabaseClient, state: any, fsId: string}) {
+			return supabase.rpc('syncro_merge_data', {
 				table_name: 'test',
 				entity_id: fsId,
 				new_data: state,
-			}))
+			})
 		},
 	}, // }}}
 	users: { // {{{
 		singular: 'user',
-		initState({supabase, id}) {
-			return supabase(s => s
+		async initState({supabase, id}: {supabase: SupabaseClient, id: string}) {
+			const { data: user, error: selectError } = await supabase
 				.from('users')
 				.select('data')
-				.limit(1)
-				.maybeSingle()
 				.eq('id', id)
-			)
-				.then(user => {
-					if (user) return user.data; // User is valid and already exists
+				.maybeSingle();
 
-					// User row doesn't already exist - need to create stub
-					return supabase(s => s
-						.from('users')
-						.insert({
-							id,
-							data: {
-								id,
-								data: { // Create user prototype data
-									id,
-									credits: 1000,
-								},
-							},
-						})
-						.select('data')
-					)
-						.then(newUser => newUser.data) // Return back the data that eventually got created - allowing for database triggers, default field values etc.
+			if (selectError) throw selectError;
+
+			if (user) return user.data; // User is valid and already exists
+
+			// User row doesn't already exist - need to create stub
+			const { data: newUser, error: insertError } = await supabase
+				.from('users')
+				.insert({
+					id,
+					data: { // Create user prototype data
+						id,
+						credits: 1000,
+					},
 				})
+				.select('data')
+				.single(); // Assuming insert returns the single inserted row
+
+			if (insertError) throw insertError;
+			if (!newUser) throw new Error('Failed to create user');
+			return newUser.data; // Return back the data that eventually got created - allowing for database triggers, default field values etc.
+
 		},
-		flushState({supabase, state, fsId}) {
-			return supabase(s => s.rpc('syncro_merge_data', {
+		flushState({supabase, state, fsId}: {supabase: SupabaseClient, state: any, fsId: string}) {
+			return supabase.rpc('syncro_merge_data', {
 				table_name: 'users',
 				entity_id: fsId,
 				new_data: state,
-			}))
+			})
 		},
 	}, // }}}
 };

@@ -3,6 +3,20 @@ import {doc as FirestoreDocRef, getDoc as FirestoreGetDoc} from 'firebase/firest
 import Syncro from './syncro.js';
 import SyncroEntities from './entities.js';
 
+// Define a basic structure for what pathSplit should return
+interface PathSplitResult {
+	entity: string;
+	id: string;
+	relation?: string; // Making relation optional
+	fsCollection: string;
+	fsId: string;
+}
+
+// Define a structure for options passed to flush
+interface FlushOptions {
+	destroy?: boolean;
+}
+
 /**
 * @class SyncroKeyed
 * TERA Isomorphic SyncroKeyed class
@@ -27,7 +41,7 @@ export default class SyncroKeyed extends Syncro {
 	* Various storage about keyed path
 	*/
 	keyedPath = {
-		getKey(path, index) {
+		getKey(path: string, index: number): string {
 			return path + '_' + index;
 		},
 	};
@@ -38,7 +52,7 @@ export default class SyncroKeyed extends Syncro {
 	*
 	* @type {Array<Syncro>}
 	*/
-	members = [];
+	members: Syncro[] = [];
 
 
 	/**
@@ -47,13 +61,13 @@ export default class SyncroKeyed extends Syncro {
 	* @param {String} path Mount path for the Syncro. Should be in the form `${ENTITY}::${ID}(::${RELATION})?_*` (must contain a '*' operator)
 	* @param {Object} [options] Additional instance setters (mutates instance directly)
 	*/
-	constructor(path, options) {
+	constructor(path: string, options?: Record<string, any>) {
 		super(path, options);
 
 		if (!/\*/.test(path)) throw new Error('SyncroKeyed paths must contain at least one asterisk as an object pagination indicator');
 
-		let {prefix, suffix} = /^(?<prefix>.+)\*(?<suffix>.*)$/.exec(path).groups;
-		this.keyedPath.getKey = (path, index) => `${prefix}${index}${suffix}`;
+		let {prefix, suffix} = /^(?<prefix>.+)\*(?<suffix>.*)$/.exec(path)!.groups!;
+		this.keyedPath.getKey = (path: string, index: number): string => `${prefix}${index}${suffix}`;
 	}
 
 
@@ -62,7 +76,7 @@ export default class SyncroKeyed extends Syncro {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	async destroy() {
+	async destroy(): Promise<never[]> { // Match base class signature
 		this.debug('Destroy!');
 		await Promise.all(
 			this.members.map(member =>
@@ -71,6 +85,7 @@ export default class SyncroKeyed extends Syncro {
 		);
 
 		this.members = [];
+		return [] as never[]; // Return empty array cast to never[] to satisfy signature
 	}
 
 
@@ -78,16 +93,18 @@ export default class SyncroKeyed extends Syncro {
 	* Mount this SyncroKeyed instance
 	* i.e. Fetch all members and mount them locally creating a Proxy
 	*
+	* @param {any} [options] Optional mount options (ignored by SyncroKeyed but needed for signature match)
 	* @returns {Promise<Syncro>} A promise which resolves as this SyncroKeyed instance when completed
 	*/
-	mount() {
-		let {entity, id, relation, fsCollection, fsId} = Syncro.pathSplit(this.path, {allowAsterisk: true});
+	mount(options?: any): Promise<Syncro> {
+		// Cast the result to the expected interface
+		let {entity, id, relation, fsCollection, fsId} = Syncro.pathSplit(this.path, {allowAsterisk: true}) as PathSplitResult;
 
 		return Promise.resolve()
-			.then(()=> new Promise(resolve => { // Mount all members by looking for similar keys
+			.then(()=> new Promise<void>(resolve => { // Mount all members by looking for similar keys
 				this.members = []; // Reset member list
 
-				let seekMember = async (index) => {
+				let seekMember = async (index: number) => {
 					let memberId = fsId.replace('*', ''+index);
 					this.debug('Seek keyedMember', fsCollection, '#', memberId);
 
@@ -96,7 +113,7 @@ export default class SyncroKeyed extends Syncro {
 					let doc = await FirestoreGetDoc(docRef);
 					if (doc.exists()) { // Found a matching entry
 						// Expand member lookup with the new member by its numeric index
-						this.keyedMembersExpand(index);
+						await this.keyedMembersExpand(index);
 
 						// Queue up next member fetcher
 						setTimeout(()=> seekMember(index+1));
@@ -116,19 +133,21 @@ export default class SyncroKeyed extends Syncro {
 				this.debug('Populate initial SyncroKeyed state');
 
 				// Extract base data + add document and return new hook
-				if (!SyncroEntities[entity]) throw new Error(`Unknown Sync entity "${entity}"`);
+				const entityKey = entity as keyof typeof SyncroEntities;
+				if (!SyncroEntities[entityKey]) throw new Error(`Unknown Sync entity "${entity}"`);
 
 				// Go fetch the initial state object
-				let state = await SyncroEntities[entity].initState({
+				let state = await SyncroEntities[entityKey].initState({
 					supabase: Syncro.supabase,
-					fsCollection, fsId,
-					entity, id, relation,
+					id, relation,
 				});
 
 				await this.keyedAssign(state);
 			})
 			.then(()=> { // Create the reactive
 				let reactive = this.getReactive(this.proxy());
+				// Assuming this.value should hold the reactive proxy
+				// If this.value is inherited and has a specific type, this might need adjustment
 				this.value = reactive.doc;
 			})
 			.then(()=> this)
@@ -140,38 +159,46 @@ export default class SyncroKeyed extends Syncro {
 	*
 	* @returns {Proxy} A proxy of all combined members
 	*/
-	proxy() {
+	proxy(): Record<string | symbol, any> { // Return type can be more specific if needed
 		return new Proxy(this, {
 			// Return the full list of keys
-			ownKeys(target) {
-				return target.members.flatMap(m => Object.keys(m.value));
+			ownKeys(target: SyncroKeyed): ArrayLike<string | symbol> {
+				return target.members.flatMap(m => Object.keys(m.value || {}));
 			},
 
 			// Return if we have a lookup key
-			has(target, prop) {
-				return target.members.some(m => !! m.value[prop]);
+			has(target: SyncroKeyed, prop: string | symbol): boolean {
+				// Ensure m.value exists before checking property
+				return target.members.some(m => m.value && prop in m.value);
 			},
 
 			// Scope through members until we get a hit on the key
-			get(target, prop) {
-				let targetMember = target.members.find(m => prop in m.value);
-				return targetMember ? targetMember[prop] : undefined;
+			get(target: SyncroKeyed, prop: string | symbol): any {
+				let targetMember = target.members.find(m => m.value && prop in m.value);
+				// Access value via targetMember.value if found
+				return targetMember ? targetMember.value[prop] : undefined;
 			},
 
 			// Set the member key if one already exists, otherwise overflow onto the next member
-			set(target, prop, value) {
-				let targetMember = target.members.find(m => prop in m.value);
-				if (targetMember) {
-					targetMember[prop] = value;
+			set(target: SyncroKeyed, prop: string | symbol, value: any): boolean {
+				let targetMember = target.members.find(m => m.value && prop in m.value);
+				if (targetMember && targetMember.value) {
+					targetMember.value[prop] = value;
 				} else {
-					target.keyedSet(prop, value);
+					// Assuming keyedSet handles adding the value appropriately
+					target.keyedSet(prop as string, value); // Cast prop to string if keyedSet expects string
 				}
+				return true; // Proxy set must return boolean
 			},
 
 			// Remove a key
-			deleteProperty(target, prop) {
-				let targetMember = target.members.find(m => prop in m);
-				if (targetMember) targetMember.value[prop];
+			deleteProperty(target: SyncroKeyed, prop: string | symbol): boolean {
+				let targetMember = target.members.find(m => m.value && prop in m.value);
+				if (targetMember && targetMember.value) {
+					delete targetMember.value[prop];
+					return true; // Indicate success
+				}
+				return false; // Indicate key not found or failure
 			},
 		});
 	}
@@ -185,21 +212,22 @@ export default class SyncroKeyed extends Syncro {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	async flush(options) {
-		let settings = {
+	async flush(options?: FlushOptions): Promise<void> { // Match base class signature
+		let settings: FlushOptions = {
 			destroy: false,
 			...options,
 		};
 
 		await Promise.all(
 			this.members.map(member =>
-				member.flush({
+				member.flush({ // Assuming member.flush returns Promise<void> now
 					destroy: settings.destroy,
 				})
 			)
 		);
 
 		if (settings.destroy) await this.destroy();
+		return; // Return void to match signature
 	}
 
 
@@ -212,19 +240,28 @@ export default class SyncroKeyed extends Syncro {
 	*
 	* @returns {Promise<*>} A promise which resolves when the operation has completed with the set value
 	*/
-	async keyedSet(key, value) {
-		let candidateMember = this.members.find(m => Object.keys(m.value).length < this.config.maxKeys);
-		if (candidateMember) {
-			return candidateMember.value[key] = value;
+	async keyedSet(key: string, value: any): Promise<any> {
+		let candidateMember = this.members.find(m => m.value && Object.keys(m.value).length < this.keyedConfig.maxKeys);
+		if (candidateMember?.value) {
+			candidateMember.value[key] = value;
+			return value;
 		} else { // No candidate - need to expand then set
 			// Extend members
-			await this.keyedMembersExpand();
+			await this.keyedMembersExpand(); // Call without index to append
 
-			// Sanity check
-			let candidateMember = this.members.at(-1);
-			if (Object.keys(candidateMember).length >= this.config.maxKeys) throw new Error(`Need to append key "${key}" but newly added member doesnt have enough room. Member offset #${this.members.length-1} has size of ${Object.keys(candidateMember).length}`);
+			// Get the newly added member
+			let newMember = this.members.at(-1);
+			if (!newMember || !newMember.value) {
+				throw new Error('Failed to expand members or new member has no value object');
+			}
 
-			return candidateMember.value[key] = value;
+			// Sanity check (check the new member's value)
+			if (Object.keys(newMember.value).length >= this.keyedConfig.maxKeys) {
+				throw new Error(`Need to append key "${key}" but newly added member (offset #${this.members.length-1}) has size of ${Object.keys(newMember.value).length}, exceeding maxKeys ${this.keyedConfig.maxKeys}`);
+			}
+
+			newMember.value[key] = value;
+			return value;
 		}
 	}
 
@@ -236,9 +273,10 @@ export default class SyncroKeyed extends Syncro {
 	*
 	* @param {Object} state The value to merge
 	*/
-	async keyedAssign(state) {
+	async keyedAssign(state: Record<string, any>): Promise<void> {
 		// Can we assume we have a blank state - this speeds up existing key checks significantly
-		let isBlank = this.members.length == 1 && Object.keys(this.members[0].value).length == 0;
+		// Ensure members[0] and its value exist
+		let isBlank = this.members.length === 1 && this.members[0]?.value && Object.keys(this.members[0].value).length === 0;
 
 		if (isBlank) {
 			let chunks = chunk(Object.entries(state), this.keyedConfig.maxKeys)
@@ -251,16 +289,22 @@ export default class SyncroKeyed extends Syncro {
 					// Create chunk document if its missing
 					if (!this.members[chunkIndex]) await this.keyedMembersExpand(chunkIndex);
 
-					// Populate its state
-					await this.members[chunkIndex].setFirestoreState(chunk, {method: 'set'});
+					// Ensure the member exists and has setFirestoreState method
+                    const member = this.members[chunkIndex];
+                    if (member && typeof (member as any).setFirestoreState === 'function') {
+					    // Populate its state - Cast to any temporarily if setFirestoreState is not public/recognized
+					    await (member as any).setFirestoreState(chunk, {method: 'set'});
+                    } else {
+                        console.warn(`Member at index ${chunkIndex} is missing or does not have setFirestoreState`);
+                    }
 				})
 			);
 
 		} else { // Non-blank - call keyedSet() on each key of state, merging slowly
-			await Array.fromAsync( // In a promise-series chain call keyedSet for each item
-				Object.entries(state),
-				([key, val]) => this.keyedSet(key, val),
-			);
+			// Replace Array.fromAsync with a standard loop
+            for (const [key, val] of Object.entries(state)) {
+                await this.keyedSet(key, val);
+            }
 		}
 	}
 
@@ -271,12 +315,21 @@ export default class SyncroKeyed extends Syncro {
 	* @param {Number} [index] The index to use when expanding, if omitted the next index offset is used
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	async keyedMembersExpand(index) {
-		index ??= this.members.length;
-		if (this.members[index]) throw new Error(`keyedMembersExpand(${index}) but index already exists`);; // Member already exists
+	async keyedMembersExpand(index?: number): Promise<void> {
+		index = index ?? this.members.length; // Use provided index or next available slot
+		if (this.members[index]) {
+            // If member already exists (e.g., during initial seek), just ensure it's mounted.
+            // If it was called intentionally with an existing index, maybe log a warning or skip.
+            this.debug(`keyedMembersExpand called for existing index ${index}, ensuring mounted.`);
+            if (!this.members[index].value) { // If it exists but isn't mounted somehow
+                 await this.members[index].mount({ initialState: {} });
+            }
+            return; // Exit if member already exists
+        }
 
 		let syncroPath = this.keyedPath.getKey(this.path, index);
-		let {fsCollection, fsId} = Syncro.pathSplit(syncroPath);
+		// Pass empty options object {} or specify allowAsterisk: false if needed
+		let {fsCollection, fsId} = Syncro.pathSplit(syncroPath, {}) as PathSplitResult;
 		this.debug('Expand SyncroKeyed size to index=', index);
 
 		// Create a new Syncro member, inheriteing some details from this parent item
@@ -290,7 +343,12 @@ export default class SyncroKeyed extends Syncro {
 			initialState: {}, // Force intital state to empty object so we don't get stuck in a loop
 		});
 
-		this.members.push(syncro);
+		// Insert at the correct index if specified, otherwise push
+        if (index < this.members.length) {
+            this.members.splice(index, 0, syncro);
+        } else {
+		    this.members.push(syncro);
+        }
 	}
 
 }

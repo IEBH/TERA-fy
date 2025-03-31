@@ -33,7 +33,7 @@ import {
 *
 * @returns {*} The set value
 */
-export function set(target, path, value, options) {
+export function set(target: any, path: string | (string | number)[], value: any, options?: any): any {
 	let settings = {
 		strategy: 'overwrite',
 		...options,
@@ -76,7 +76,7 @@ export function set(target, path, value, options) {
 * @param {*} [fallback] Optional fallback to return if the end point does not exist
 * @returns {*} The fetched value
 */
-export function get(target, path, fallback) {
+export function get(target: any, path: string | (string | number)[], fallback?: any): any {
 	return _get(target, path, fallback);
 }
 
@@ -90,7 +90,7 @@ export function get(target, path, fallback) {
 * @param {String|Array} path The path within the target, to fetch in dotted or array notation
 * @returns {Boolean} True if the given path already exists within the subject
 */
-export function has(target, path) {
+export function has(target: any, path: string | (string | number)[]): boolean {
 	return _has(target, path);
 }
 
@@ -104,7 +104,8 @@ export function has(target, path) {
 *
 * @returns {*} The merged value
 */
-export function merge(target, path, value) {
+export function merge(target: any, path: string | (string | number)[], value: any): any {
+	// @ts-ignore
 	_merge(get(target, path), value);
 	return value;
 }
@@ -119,14 +120,15 @@ export function merge(target, path, value) {
 *
 * @returns {*} The resulting object with defaults applied
 */
-export function defaults(target, path, value) {
+export function defaults(target: any, path: string | (string | number)[] | any, value?: any): any {
 	if (typeof path == 'string' || Array.isArray(path)) { // Called as (target, path, value)
 		if (!has(target, path)) { // Target path doesn't exist at all
-			return set(target, path, value);
+			return set(target, path, value, undefined);
 		} else { // Target path exists - apply Lodash defaults
 			return _defaults(get(target, path), value);
 		}
 	} else { // Called as (target, value)
+		// @ts-ignore
 		return _defaults(target, path);
 	}
 }

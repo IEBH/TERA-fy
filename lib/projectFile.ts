@@ -1,5 +1,16 @@
-import {filesize} from 'filesize';
-import {pick} from 'lodash-es';
+import { filesize } from 'filesize';
+import { pick } from 'lodash-es';
+import type TeraFy from './terafy.client';
+
+// TODO: Refactor terafy.client.ts so that we don't need to extend the class with injected functions
+interface TeraClient extends TeraFy {
+	getProjectFileContents: (id: any, options?: any) => any
+	setProjectFileContents: (id: any, contents: any, options?: any) => any
+	getProjectLibrary: (id: any, options?: any) => any
+	setProjectLibrary: (id: any, refs:any, options?: any) => any
+};
+type SupabaseFile = any;
+type RefLibRef = any;
 
 /**
 * A project file fetched from TERA
@@ -12,7 +23,7 @@ export default class ProjectFile {
 	* @type {TeraClient}
 	* @private
 	*/
-	_tera;
+	_tera!: TeraClient;
 
 
 	/**
@@ -20,28 +31,28 @@ export default class ProjectFile {
 	* NOTE: This is computed each time from the Base64 of the file path
 	* @type {String}
 	*/
-	id;
+	id!: string;
 
 
 	/**
 	* The raw Supabase UUID of the file
 	* @type {String}
 	*/
-	sbId;
+	sbId!: string;
 
 
 	/**
 	* Relative name path (can contain prefix directories) for the human readable file name
 	* @type {String}
 	*/
-	name;
+	name!: string;
 
 
 	/**
 	* CSS class to use as the file icon
 	* @type {String}
 	*/
-	icon;
+	icon!: string;
 
 
 	/**
@@ -49,7 +60,7 @@ export default class ProjectFile {
 	* This is also used as the unique identifier within the project
 	* @type {String}
 	*/
-	path;
+	path!: string;
 
 
 	/**
@@ -57,7 +68,7 @@ export default class ProjectFile {
 	* This will usually open an edit UI within the TERA site
 	* @type {String}
 	*/
-	url;
+	url!: string;
 
 
 	/**
@@ -65,7 +76,7 @@ export default class ProjectFile {
 	* This is used to direct to the edit/view/download UI when the files project is active and is usually used in place of URL for TERA related operations
 	* @type {String}
 	*/
-	teraUrl;
+	teraUrl!: string;
 
 
 	/**
@@ -76,77 +87,83 @@ export default class ProjectFile {
 	* @property {String} ext The extension portion of the name (always lower case)
 	* @property {String} dirName The directory path portion of the name
 	*/
-	parsedName;
+	// Using 'any' for simplicity, define an interface for better type safety if desired
+	parsedName: any;
 
 
 	/**
 	* A date representing when the file was created
 	* @type {Date}
 	*/
-	created;
+	// Using Date | undefined because constructor checks if it exists
+	created: Date | undefined;
 
 
 	/**
 	* A human readable, formatted version of "created"
 	* @type {String}
 	*/
-	createdFormatted;
+	createdFormatted!: string;
 
 
 	/**
 	* A date representing when the file was created
 	* @type {Date}
 	*/
-	modified;
+	// Using Date | undefined because constructor checks if it exists
+	modified: Date | undefined;
 
 
 	/**
 	* A human readable, formatted version of "modified"
 	* @type {String}
 	*/
-	modifiedFormatted;
+	modifiedFormatted!: string;
 
 
 	/**
 	* A date representing when the file was last accessed
 	* @type {Date}
 	*/
-	accessed;
+	// Using Date | undefined because constructor checks if it exists
+	accessed: Date | undefined;
 
 
 	/**
 	* A human readable, formatted version of "accessed"
 	* @type {String}
 	*/
-	accessedFormatted;
+	accessedFormatted!: string;
 
 
 	/**
 	* Size, in bytes, of the file
 	* @type {Number}
 	*/
-	size;
+	// Using number | undefined because constructor uses `|| 0`
+	size: number | undefined;
 
 
 	/**
 	* A human readable, formatted version of the file size
 	* @type {String}
 	*/
-	sizeFormatted;
+	sizeFormatted!: string;
 
 
 	/**
 	* The associated mime type for the file
 	* @type {String}
 	*/
-	mime;
+	mime!: string;
 
 
 	/**
 	* Additional meta information for the file
 	* @type {Object}
 	*/
-	meta = {};
+	// Using Record<string, any> for a generic object, adjust if meta has a known structure
+	meta: Record<string, any> = {};
 
 
 	/**
@@ -155,12 +172,14 @@ export default class ProjectFile {
 	* @param {SupabaseFile} baseFile The basic Supabase file to extend
 	* @param {TeraFyClient} baseFile.tera The associated TeraFyClient instance to use for some file methods
 	*/
-	constructor(baseFile) {
+
+	constructor(baseFile: SupabaseFile) {
+		// Note: baseFile.tera is assumed to exist based on the check below and the SupabaseFile type definition above
 		if (!baseFile.tera) throw new Error('Basic file requires a `tera` key to access the Tera instance');
 		Object.assign(this, baseFile);
 
 		// Translate baseFile.tera -> this._tera (non-enumerable, non-configurable)
-		const tera = this.tera;
+		const tera = (this as any).tera;
 		Object.defineProperty(this, '_tera', {
 			enumerable: false,
 			configurable: false,
@@ -169,13 +188,15 @@ export default class ProjectFile {
 				return tera;
 			},
 		});
-		delete this.tera; // Remove original ref we merged above
+
+		delete (this as any).tera; // Remove original ref we merged above
 
 		// Calculate `teraUrl` from URL
+		// Assuming this.url is always defined after Object.assign
 		this.teraUrl = this.url.replace(/^https?:\/\/(?:.+?)\/projects\/(?:.+?)\/project\/(.+)$/, '/project/$1');
 
 		// Set all `*Formatted` fields
-		this.sizeFormatted = filesize(this.size || 0, {spacer: ''});
+		this.sizeFormatted = filesize(this.size || 0, { spacer: '' });
 		this.createdFormatted = this.created ? this.created.toLocaleDateString() : 'Unknown created date';
 		this.modifiedFormatted = this.modified ? this.modified.toLocaleDateString() : 'Unknown modified date';
 		this.accessedFormatted = this.accessed ? this.accessed.toLocaleDateString() : 'Unknown access date';
@@ -187,11 +208,13 @@ export default class ProjectFile {
 	*
 	* @param {Object} [options] Additioanl options to mutate behaviour
 	*
-	* @returns {Blob} The eventual raw file contents as a Blob
+	* @returns {Promise<Blob>} The eventual raw file contents as a Blob
 	*
 	* @see getProjectFile()
 	*/
-	getContents(options) {
+
+	getContents(options?: any): Promise<Blob> {
+		// Assuming _tera has this method and it returns Promise<Blob>
 		return this._tera.getProjectFileContents(this.id, options);
 	}
 
@@ -201,11 +224,13 @@ export default class ProjectFile {
 	*
 	* @param {File|Blob|FormData|Object|Array} contents The new file contents
 	*
-	* @returns {Promise} A promise which resolves when the operation has completed
+	* @returns {Promise<void>} A promise which resolves when the operation has completed
 	*
 	* @see setProjectFileContents()
 	*/
-	setContents(contents) {
+
+	setContents(contents: File | Blob | FormData | object | any[]): Promise<void> {
+		// Assuming _tera has this method and it returns Promise<void> or similar
 		return this._tera.setProjectFileContents(this.id, contents, {});
 	}
 
@@ -213,11 +238,13 @@ export default class ProjectFile {
 	/**
 	* Fetch the file contents as an array of Reflib refs
 	*
-	* @returns {Promise<Array<Ref>>} An eventual array of RefLib references
+	* @returns {Promise<Array<RefLibRef>>} An eventual array of RefLib references
 	*
 	* @see getProjectLibrary()
 	*/
-	getRefs() {
+
+	getRefs(): Promise<Array<RefLibRef>> {
+		// Assuming _tera has this method and it returns Promise<Array<RefLibRef>>
 		return this._tera.getProjectLibrary(this.id);
 	}
 
@@ -227,11 +254,13 @@ export default class ProjectFile {
 	*
 	* @param {Array<RefLibRef>} refs Collection of references for the selected library
 	*
-	* @returns {Promise} A promise which resolves when the operation has completed
+	* @returns {Promise<void>} A promise which resolves when the operation has completed
 	*
 	* @see setProjectLibrary()
 	*/
-	setRefs(refs) {
+
+	setRefs(refs: Array<RefLibRef>): Promise<void> {
+		// Assuming _tera has this method and it returns Promise<void> or similar
 		return this._tera.setProjectLibrary(this.id, refs);
 	}
 
@@ -243,7 +272,8 @@ export default class ProjectFile {
 	* @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
 	* @returns {Object} A Structured Clone compatible representation of this ProjectFile instance
 	*/
-	serialize() {
+
+	serialize(): Partial<ProjectFile> { // Using Partial<ProjectFile> as it returns a subset
 		return pick(this, [
 			'id',
 			'sbId',
@@ -265,13 +295,25 @@ export default class ProjectFile {
 
 	/**
 	* Restore an entity created with serialize
+	* NOTE: This requires the 'tera' instance to be manually added to the 'data' object before calling deserialize,
+	*       as it's not included in the serialized output.
 	*
-	* @param {Object} data An input object created via `ProjectFiles.serialize()`
+	* @param {Object} data An input object created via `ProjectFiles.serialize()` (MUST include a 'tera' property added manually)
 	* @returns {ProjectFile} A ProjectFile instance setup against the deserializzed data
 	*/
-	static deserialize(data) {
-		return new ProjectFile(pick(data, [
-			'tera',
+
+	static deserialize(data: any): ProjectFile {
+		// TODO: Check the below
+		// WARNING: The original 'serialize' method does NOT include 'tera'.
+		// The caller of 'deserialize' MUST add the correct 'tera' instance to the 'data' object
+		// before passing it here, otherwise the constructor will fail.
+		// e.g., const serializedData = file.serialize();
+		//       serializedData.tera = myTeraClientInstance;
+		//       const restoredFile = ProjectFile.deserialize(serializedData);
+
+		// This pick includes 'tera', assuming it was added to 'data' externally.
+		const constructorArg = pick(data, [
+			'tera', // Assumes 'tera' exists on the input 'data' object
 			'id',
 			'sbId',
 			'name',
@@ -285,6 +327,7 @@ export default class ProjectFile {
 			'size',
 			'mime',
 			'meta',
-		]));
+		]);
+		return new ProjectFile(constructorArg);
 	}
 }

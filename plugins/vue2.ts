@@ -31,15 +31,21 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	*
 	* @type {Vue}
 	*/
-	Vue;
+	Vue: any;
+
+	/**
+	* The root Vue app instance
+	* @type {any}
+	*/
+	app: any;
 
 
 	/**
 	* The bound, reactive state of the active TERA project
 	*
-	* @type {Object}
+	* @type {Object | null}
 	*/
-	project = null;
+	project: any = null;
 
 
 	/**
@@ -61,7 +67,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	*
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
-	async init(options) {
+	async init(options: any) {
 		let settings = {
 			app: null,
 			Vue: null,
@@ -81,12 +87,12 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 
 		await super.init(settings); // Initalize parent class Firebase functionality
 
-		this.project = await this.mountNamespace('_PROJECT');
+		this.project = await this._mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	getReactive(value) {
+	getReactive = (value: any) => {
 		let doc = this.Vue.observable(value);
 
 		let watcherPath = `_teraFy_${this.reactiveId++}`;
@@ -94,16 +100,16 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 
 		return {
 			doc,
-			setState(state) {
+			setState: (state: any) => {
 				// Shallow copy all sub-keys into existing object (keeping the object pointer)
 				Object.entries(state || {})
 					.filter(([k]) => !isEqual(doc[k], state[k])) // Only accept changed keys
 					.forEach(([k, v]) => doc[k] = v)
 			},
-			getState() {
+			getState: () => {
 				return cloneDeep(doc);
 			},
-			watch: cb => {
+			watch: (cb: Function) => {
 				this.app.$watch(watcherPath, cb, {deep: true});
 			},
 		};

@@ -2,6 +2,19 @@ import {create as createDomain} from 'node:domain';
 import detectPort from 'detect-port';
 import Proxy from 'http-proxy';
 
+// Define options interface based on JSDoc and settings
+interface TeraProxyOptions {
+    force?: boolean;
+    autoStart?: boolean;
+    host?: string;
+    port?: number;
+    targetProtocol?: string;
+    targetHost?: string;
+    targetPort?: number;
+    portConflict?: 'ignore' | 'throw';
+    onLog?: (level: 'INFO' | 'WARN', ...msg: any[]) => void;
+}
+
 export class TeraProxy {
 	/**
 	* Setup a local loopback proxy for TERA-tools.com
@@ -27,8 +40,8 @@ export class TeraProxy {
 		targetProtocol: 'https',
 		targetHost: 'dev.tera-tools.com',
 		targetPort: 443,
-		portConflict: 'ignore',
-		onLog: (level, ...msg) => console.log(...msg),
+		portConflict: 'ignore' as 'ignore' | 'throw', // Add type assertion for stricter checking if needed elsewhere
+		onLog: (level: 'INFO' | 'WARN', ...msg: any[]) => console.log(...msg),
 	}
 
 
@@ -36,7 +49,7 @@ export class TeraProxy {
 	* Eventual proxy server when the plugin has booted
 	* @type {ProxyServer}
 	*/
-	proxyServer;
+	proxyServer: Proxy | undefined;
 
 
 	/**
@@ -49,7 +62,12 @@ export class TeraProxy {
 
 		return Promise.resolve()
 			.then(()=> detectPort(this.settings.port))
-			.then(gotPort => gotPort != this.settings.port && Promise.reject('PORT-CONFLICT'))
+			.then(gotPort => {
+				if (gotPort != this.settings.port) {
+					return Promise.reject('PORT-CONFLICT');
+				}
+				// Only return void if the port is available
+			})
 			.then(() => this.proxyServer = Proxy.createProxyServer({ // Create proxy pass-thru
 				changeOrigin: true,
 				target: {
@@ -58,20 +76,29 @@ export class TeraProxy {
 					port: this.settings.targetPort,
 				},
 			}))
-			.then(()=> new Promise((resolve, reject) => {
+			.then(()=> new Promise<void>((resolve, reject) => {
 				// Wrap listener in a domain so we can correctly catch EADDRINUSE
 				let domain = createDomain();
-				domain.on('error', err => {
+				domain.on('error', (err: NodeJS.ErrnoException) => { // Add type to err
 					if (err.code == 'EADDRINUSE') {
 						reject('PORT-CONFLICT');
 					} else {
 						reject(err);
 					}
 				});
-				this.proxyServer.listen(this.settings.port, ()=> {
-					this.settings.onLog('INFO', 'Routing TERA traffic from', `http://${this.settings.host}:${this.settings.port}`, '→', `${this.settings.targetProtocol}://${this.settings.targetHost}:${this.settings.targetPort}`);
-					resolve();
-				})
+				// Run the server creation and listening within the domain
+				domain.run(() => {
+					if (!this.proxyServer) return reject(new Error('Proxy server not initialized')); // Guard against undefined proxyServer
+					this.proxyServer.listen(this.settings.port, this.settings.host)
+					// Handle errors on the proxy server itself, although domain should catch listen errors
+					this.proxyServer.on('error', (err: NodeJS.ErrnoException) => {
+						if (err.code == 'EADDRINUSE') {
+							reject('PORT-CONFLICT');
+						} else {
+							reject(err);
+						}
+					});
+				});
 			}))
 			.catch(e => {
 				if (e === 'PORT-CONFLICT') {
@@ -79,7 +106,7 @@ export class TeraProxy {
 						this.settings.onLog('WARN', 'Port', this.settings.port, 'is already allocated - assuming TERA is already running locally and skipping proxy');
 						return false; // Do nothing
 					} else {
-						throw err;
+						throw e; // Throw the 'PORT-CONFLICT' string or a new Error
 					}
 				} else {
 					throw e; // Re-throw everything else
@@ -94,15 +121,15 @@ export class TeraProxy {
 	*/
 	stop() {
 		return Promise.resolve()
-			.then(()=> this.proxyServer && new Promise(resolve => this.proxyServer.close(()=> resolve())))
+			.then(()=> this.proxyServer && new Promise<void>(resolve => this.proxyServer!.close(()=> resolve()))) // Use non-null assertion if sure it exists here
 	}
 
 
-	constructor(options) {
+	constructor(options?: TeraProxyOptions) { // Add type annotation and make optional
 		if (options) Object.assign(this.settings, options);
 
 		// Auto start?
-		if (options?.autoStart ?? true) this.start();
+		if (this.settings.autoStart) this.start(); // Use resolved settings.autoStart
 	}
 }
 
@@ -113,6 +140,6 @@ export class TeraProxy {
 * @param {Object} [options] Options to pass to the Proxy module
 * @returns {TeraProxy} A TeraProxy instance
 */
-export default function(options) {
+export default function(options?: TeraProxyOptions) { // Add type annotation and make optional
 	return new TeraProxy(options);
 }

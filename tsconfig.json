@@ -13,10 +13,10 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     // Add path mappings if needed, mirroring "imports" in package.json
-    // "paths": {
-    //   "#terafy": ["./lib/terafy.client.ts"],
-    //   "#utils/*": ["./utils/*.ts"]
-    // }
+    "paths": {
+      // "#terafy": ["./lib/terafy.client.ts"],
+      "#utils/*": ["./utils/*.ts"]
+    }
   },
   "include": ["lib/**/*.ts", "plugins/**/*.ts", "utils/**/*.ts", "widgets/**/*.ts"],
   "exclude": ["node_modules", "dist"]
