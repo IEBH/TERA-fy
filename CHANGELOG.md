@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.18](https://github.com/IEBH/TERA-fy/compare/v2.0.16...v2.0.18) (2025-03-31)
+
+
+### fix
+
+* Supabase(y) invokation issues + bug addressing DB which should point at storage system ([8e4beff](https://github.com/IEBH/TERA-fy/commit/8e4beff42704c70afb88668659e8b9940f4c87a3))
+
 ## [2.0.16](https://github.com/IEBH/TERA-fy/compare/v2.0.15...v2.0.16) (2025-03-27)
 
 
