@@ -3,41 +3,44 @@
   "version": "2.0.17",
   "description": "TERA website worker",
   "scripts": {
-    "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --serve --servedir=.",
-    "build": "concurrently 'npm:build:*'",
-    "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify",
-    "build:client:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle lib/terafy.client.js --outfile=dist/terafy.es2019.js --minify",
-    "build:bootstrapper": "esbuild --platform=browser --format=esm --bundle lib/terafy.bootstrapper.js --outfile=dist/terafy.bootstrapper.js --minify",
-    "build:bootstrapper:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle lib/terafy.bootstrapper.js --outfile=dist/terafy.bootstrapper.es2019.js --minify",
-    "build:plugins:vue2:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle plugins/vue2.js --outfile=dist/plugin.vue2.es2019.js --minify",
-    "build:docs:api": "documentation build lib/terafy.client.js lib/projectFile.js --format html --config documentation.yml --output docs/",
-    "build:docs:markdown": "documentation build lib/terafy.client.js lib/projectFile.js --format md --markdown-toc --output api.md",
-    "lint": "eslint lib plugins utils widgets",
+    "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.ts --outfile=dist/terafy.js --minify --serve --servedir=.",
+    "build": "concurrently 'npm:build:types' 'npm:build:client' 'npm:build:client:es2019' 'npm:build:bootstrapper' 'npm:build:bootstrapper:es2019' 'npm:build:plugins:vue2:es2019' 'npm:build:docs:api' 'npm:build:docs:markdown'",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.ts --outfile=dist/terafy.js --minify",
+    "build:client:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle lib/terafy.client.ts --outfile=dist/terafy.es2019.js --minify",
+    "build:bootstrapper": "esbuild --platform=browser --format=esm --bundle lib/terafy.bootstrapper.ts --outfile=dist/terafy.bootstrapper.js --minify",
+    "build:bootstrapper:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle lib/terafy.bootstrapper.ts --outfile=dist/terafy.bootstrapper.es2019.js --minify",
+    "build:plugins:vue2:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle plugins/vue2.ts --outfile=dist/plugin.vue2.es2019.js --minify",
+    "build:docs:api": "documentation build lib/terafy.client.ts lib/projectFile.ts --format html --config documentation.yml --output docs/",
+    "build:docs:markdown": "documentation build lib/terafy.client.ts lib/projectFile.ts --format md --markdown-toc --output api.md",
+    "lint": "eslint lib plugins utils widgets --ext .ts",
     "release": "release-it",
-    "watch": "nodemon --watch lib --watch plugins --exec npm run build"
+    "watch": "nodemon --watch lib --watch plugins --exec \"npm run build\""
   },
   "type": "module",
   "imports": {
-    "#terafy": "./lib/terafy.client.js",
-    "#utils/*": "./utils/*.js"
+    "#terafy": "./lib/terafy.client.ts",
+    "#utils/*": "./utils/*.ts"
   },
   "exports": {
     ".": {
-      "browser": "./lib/terafy.client.js",
-      "import": "./lib/terafy.client.js",
+      "types": "./dist/terafy.client.d.ts",
+      "browser": "./lib/terafy.client.ts",
+      "import": "./lib/terafy.client.ts",
       "require": "./dist/terafy.js",
       "default": "./dist/terafy.js"
     },
-    "./bootstrap": "./lib/terafy.bootstrap.js",
+    "./bootstrap": "./lib/terafy.bootstrap.ts",
     "./dist/*": "./dist/*",
-    "./projectFile": "./lib/projectFile.js",
-    "./proxy": "./lib/terafy.proxy.js",
-    "./server": "./lib/terafy.server.js",
-    "./syncro": "./lib/syncro/syncro.js",
-    "./syncro/*": "./lib/syncro/*.js",
-    "./plugins/*": "./plugins/*.js",
+    "./projectFile": "./lib/projectFile.ts",
+    "./proxy": "./lib/terafy.proxy.ts",
+    "./server": "./lib/terafy.server.ts",
+    "./syncro": "./lib/syncro/syncro.ts",
+    "./syncro/*": "./lib/syncro/*.ts",
+    "./plugins/*": "./plugins/*.ts",
     "./widgets/*": "./widgets/*"
   },
+  "types": "./dist/terafy.client.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IEBH/TERA-fy.git"
@@ -88,11 +91,19 @@
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^2.1.2",
     "@release-it/conventional-changelog": "^10.0.0",
+    "@types/detect-port": "^1.3.5",
+    "@types/http-proxy": "^1.17.14",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^18.0.0",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "concurrently": "^9.1.2",
     "documentation": "^14.0.3",
     "esbuild": "^0.25.0",
     "eslint": "^9.21.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "@iebh/reflib": "^2.5.4",
