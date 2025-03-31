@@ -64,7 +64,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 			...options,
 		};
 
-		let emptyValues = Object.keys(settings).filter(k => settings[k as keyof typeof settings] === null);
+		let emptyValues = Object.keys(settings).filter(k => k === null);
 		if (emptyValues.length > 0)
 			throw new Error('Firebase plugin requires mandatory options: ' + emptyValues.join(', '));
 
