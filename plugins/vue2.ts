@@ -86,13 +86,14 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 			this.Vue.prototype[settings.globalName] = this;
 
 		await super.init(settings); // Initalize parent class Firebase functionality
-
-		this.project = await this._mountNamespace('_PROJECT');
+		// @ts-ignore
+		this.project = await this.mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	getReactive = (value: any) => {
+	// @ts-ignore
+	getReactive(value: any) {
 		let doc = this.Vue.observable(value);
 
 		let watcherPath = `_teraFy_${this.reactiveId++}`;

@@ -46,12 +46,14 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 		await super.init(options); // Initalize parent class Firebase functionality
 
 		// Mount the project namespace
-		this.project = await this._mountNamespace('_PROJECT');
+		// @ts-ignore
+		this.project = await this.mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	getReactive = (value: any) => {
+	// @ts-ignore
+	getReactive(value: any) {
 		let doc = vueReactive(value);
 		return {
 			doc,
