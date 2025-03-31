@@ -38,27 +38,6 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
         * @type {Number}
         */
         this.reactiveId = 1001;
-        /** @override */
-        this.getReactive = (value) => {
-            let doc = this.Vue.observable(value);
-            let watcherPath = `_teraFy_${this.reactiveId++}`;
-            this.app[watcherPath] = doc; // Attach onto app so we can use $watch later on
-            return {
-                doc,
-                setState: (state) => {
-                    // Shallow copy all sub-keys into existing object (keeping the object pointer)
-                    Object.entries(state || {})
-                        .filter(([k]) => !isEqual(doc[k], state[k])) // Only accept changed keys
-                        .forEach(([k, v]) => doc[k] = v);
-                },
-                getState: () => {
-                    return cloneDeep(doc);
-                },
-                watch: (cb) => {
-                    this.app.$watch(watcherPath, cb, { deep: true });
-                },
-            };
-        };
     }
     /**
     * Install into Vue@2
@@ -88,7 +67,30 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
         if (settings.globalName)
             this.Vue.prototype[settings.globalName] = this;
         await super.init(settings); // Initalize parent class Firebase functionality
-        this.project = await this._mountNamespace('_PROJECT');
+        // @ts-ignore
+        this.project = await this.mountNamespace('_PROJECT');
+    }
+    /** @override */
+    // @ts-ignore
+    getReactive(value) {
+        let doc = this.Vue.observable(value);
+        let watcherPath = `_teraFy_${this.reactiveId++}`;
+        this.app[watcherPath] = doc; // Attach onto app so we can use $watch later on
+        return {
+            doc,
+            setState: (state) => {
+                // Shallow copy all sub-keys into existing object (keeping the object pointer)
+                Object.entries(state || {})
+                    .filter(([k]) => !isEqual(doc[k], state[k])) // Only accept changed keys
+                    .forEach(([k, v]) => doc[k] = v);
+            },
+            getState: () => {
+                return cloneDeep(doc);
+            },
+            watch: (cb) => {
+                this.app.$watch(watcherPath, cb, { deep: true });
+            },
+        };
     }
 }
 //# sourceMappingURL=vue2.js.map

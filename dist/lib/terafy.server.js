@@ -260,7 +260,7 @@ class TeraFyServer {
         })
             .then(response => {
             // Only send response if it was an RPC call that returned something
-            if (message.action === 'rpc' && response !== undefined && rawMessage.source) {
+            if (message.action === 'rpc' && rawMessage.source) {
                 this.sendRaw({
                     id: message.id,
                     action: 'response',

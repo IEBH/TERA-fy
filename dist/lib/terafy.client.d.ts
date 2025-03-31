@@ -1,4 +1,3 @@
-import Mitt from 'mitt';
 /**
 * Main Tera-Fy Client (class singleton) to be used in a frontend browser
 *
@@ -44,7 +43,7 @@ export default class TeraFy {
     * Event emitter subscription endpoint
     * @type {Mitt}
     */
-    events: Mitt.Emitter<Record<Mitt.EventType, unknown>>;
+    events: any;
     /**
     * DOMElements for this TeraFy instance
     *
@@ -112,7 +111,7 @@ export default class TeraFy {
     *
     * @returns {Promise} A promise which will resolve when the message has been processed
     */
-    acceptMessage(rawMessage: any): Promise<void>;
+    acceptMessage(rawMessage: any): Promise<any>;
     /**
     * Listening postboxes, these correspond to outgoing message IDs that expect a response
     */

@@ -59,7 +59,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
     */
     init(options: any): Promise<void>;
     /** @override */
-    getReactive: (value: any) => {
+    getReactive(value: any): {
         doc: any;
         setState: (state: any) => void;
         getState: () => any;

@@ -34,24 +34,6 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
         * @type {Object}
         */
         this.project = null;
-        /** @override */
-        this.getReactive = (value) => {
-            let doc = vueReactive(value);
-            return {
-                doc,
-                setState(state) {
-                    // Shallow copy all sub-keys into existing object (keeping the object pointer)
-                    Object.entries(state || {})
-                        .forEach(([k, v]) => doc[k] = v);
-                },
-                getState() {
-                    return cloneDeep(doc);
-                },
-                watch(cb) {
-                    vueWatch(doc, cb, { deep: true });
-                },
-            };
-        };
     }
     /**
     * Init the project including create a reactive mount for the active project
@@ -62,7 +44,27 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
     async init(options) {
         await super.init(options); // Initalize parent class Firebase functionality
         // Mount the project namespace
-        this.project = await this._mountNamespace('_PROJECT');
+        // @ts-ignore
+        this.project = await this.mountNamespace('_PROJECT');
+    }
+    /** @override */
+    // @ts-ignore
+    getReactive(value) {
+        let doc = vueReactive(value);
+        return {
+            doc,
+            setState(state) {
+                // Shallow copy all sub-keys into existing object (keeping the object pointer)
+                Object.entries(state || {})
+                    .forEach(([k, v]) => doc[k] = v);
+            },
+            getState() {
+                return cloneDeep(doc);
+            },
+            watch(cb) {
+                vueWatch(doc, cb, { deep: true });
+            },
+        };
     }
     /**
     * Provide a Vue@3 compatible plugin

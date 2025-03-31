@@ -44,7 +44,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
             ...await this.getCredentials(),
             ...options,
         };
-        let emptyValues = Object.keys(settings).filter(k => settings[k] === null);
+        let emptyValues = Object.keys(settings).filter(k => k === null);
         if (emptyValues.length > 0)
             throw new Error('Firebase plugin requires mandatory options: ' + emptyValues.join(', '));
         Syncro.firebase = Firebase({

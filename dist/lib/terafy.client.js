@@ -261,7 +261,8 @@ export default class TeraFy {
         * Event emitter subscription endpoint
         * @type {Mitt}
         */
-        this.events = Mitt.default();
+        // @ts-ignore
+        this.events = Mitt();
         /**
         * DOMElements for this TeraFy instance
         *
