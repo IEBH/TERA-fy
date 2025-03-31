@@ -1,11 +1,11 @@
 {
   "name": "@iebh/tera-fy",
-  "version": "2.0.17",
+  "version": "2.1.0",
   "description": "TERA website worker",
   "scripts": {
     "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.ts --outfile=dist/terafy.js --minify --serve --servedir=.",
-    "build": "concurrently 'npm:build:types' 'npm:build:client' 'npm:build:client:es2019' 'npm:build:bootstrapper' 'npm:build:bootstrapper:es2019' 'npm:build:plugins:vue2:es2019' 'npm:build:docs:api' 'npm:build:docs:markdown'",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "build": "concurrently 'npm:build:*'",
+    "build:tsc": "tsc --outDir dist",
     "build:client": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.ts --outfile=dist/terafy.js --minify",
     "build:client:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle lib/terafy.client.ts --outfile=dist/terafy.es2019.js --minify",
     "build:bootstrapper": "esbuild --platform=browser --format=esm --bundle lib/terafy.bootstrapper.ts --outfile=dist/terafy.bootstrapper.js --minify",
@@ -24,23 +24,50 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/terafy.client.d.ts",
-      "browser": "./lib/terafy.client.ts",
-      "import": "./lib/terafy.client.ts",
+      "types": "./dist/lib/terafy.client.d.ts",
+      "browser": "./dist/lib/terafy.client.js",
+      "import": "./dist/lib/terafy.client.js",
       "require": "./dist/terafy.js",
       "default": "./dist/terafy.js"
     },
-    "./bootstrap": "./lib/terafy.bootstrap.ts",
-    "./dist/*": "./dist/*",
-    "./projectFile": "./lib/projectFile.ts",
-    "./proxy": "./lib/terafy.proxy.ts",
-    "./server": "./lib/terafy.server.ts",
-    "./syncro": "./lib/syncro/syncro.ts",
-    "./syncro/*": "./lib/syncro/*.ts",
-    "./plugins/*": "./plugins/*.ts",
+    "./bootstrap": {
+      "types": "./dist/lib/terafy.bootstrapper.d.ts",
+      "import": "./dist/lib/terafy.bootstrapper.js",
+      "default": "./dist/lib/terafy.bootstrapper.js"
+    },
+    "./projectFile": {
+      "types": "./dist/lib/projectFile.d.ts",
+      "import": "./dist/lib/projectFile.js",
+      "default": "./dist/lib/projectFile.js"
+    },
+    "./proxy": {
+      "types": "./dist/lib/terafy.proxy.d.ts",
+      "import": "./dist/lib/terafy.proxy.js",
+      "default": "./dist/lib/terafy.proxy.js"
+    },
+    "./server": {
+      "types": "./dist/lib/terafy.server.d.ts",
+      "import": "./dist/lib/terafy.server.js",
+      "default": "./dist/lib/terafy.server.js"
+    },
+    "./syncro": {
+      "types": "./dist/lib/syncro/syncro.d.ts",
+      "import": "./dist/lib/syncro/syncro.js",
+      "default": "./dist/lib/syncro/syncro.js"
+    },
+    "./syncro/*": {
+      "types": "./dist/lib/syncro/*.d.ts",
+      "import": "./dist/lib/syncro/*.js",
+      "default": "./dist/lib/syncro/*.js"
+    },
+    "./plugins/*": {
+      "types": "./dist/plugins/*.d.ts",
+      "import": "./dist/plugins/*.js",
+      "default": "./dist/plugins/*.js"
+    },
     "./widgets/*": "./widgets/*"
   },
-  "types": "./dist/terafy.client.d.ts",
+  "types": "./dist/lib/terafy.client.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IEBH/TERA-fy.git"
@@ -57,7 +84,7 @@
       "url": "https://github.com/connorf25"
     },
     {
-      "name": "Justin Cark",
+      "name": "Justin Clark",
       "email": "jclark@bond.edu.au",
       "url": "https://github.com/Justin-Clarc"
     },
