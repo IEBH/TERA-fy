@@ -55,12 +55,41 @@ This module exports various plugins which are availble as `import from '@iebh/te
 
 `@iebh/tera-fy/plugins/vue2`
 ----------------------------
-FIXME: To add documentation
+```javascript
+// Somewhere in your boot process - usually src/main.js
+import TeraFy from '@iebh/tera-fy';
+import TerafyVue from '@iebh/tera-fy/plugins/vue2';
+let terafy = new TeraFy()
+  .set('devMode', false) // Uncomment this line if you want TeraFy to be chatty and use all `setIfDev` settings
+  .setIfDev('siteUrl', 'http://localhost:7334/embed')
+  .use(TerafyVue, { // Add the Vue plugin
+    vue: window.Vue, // Assumes Vue is available on the window object
+  })
+
+// Include after app boot
+const app = new Vue({ /* ... */ })
+app.$mount("#app");
+await terafy.init({app});
+```
 
 
 `@iebh/tera-fy/plugins/vue3`
 ----------------------------
-FIXME: To add documentation
+```javascript
+// Somewhere in your boot process - usually src/main.js
+import TeraFy from '@iebh/tera-fy';
+import TerafyVue from '@iebh/tera-fy/plugins/vue';
+let terafy = new TeraFy()
+  .set('devMode', import.meta.env.DEV) // TeraFy should be chatty and use all `setIfDev` settings
+  .setIfDev('siteUrl', 'http://localhost:7334/embed')
+  .use(TerafyVue) // Add the Vue plugin
+
+terafy.init(); // Initialize everything
+
+app.use(terafy.vuePlugin({
+  globalName: '$tera', // Install as vm.$tera into every component
+}));
+```
 
 
 `@iebh/tera-fy/plugins/vite`
