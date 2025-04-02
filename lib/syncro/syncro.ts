@@ -69,9 +69,9 @@ export default class Syncro {
 
 
 	/**
-	* Supabasey wrapper function in use
+	* Supabase instance in use
 	*
-	* @type {Supabasey}
+	* @type {SupabaseClient}
 	*/
 	static supabase: SupabaseClient;
 
