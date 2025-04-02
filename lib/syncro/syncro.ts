@@ -69,9 +69,9 @@ export default class Syncro {
 
 
 	/**
-	* Supabase instance in use
+	* Supabasey wrapper function in use
 	*
-	* @type {SupabaseClient}
+	* @type {Supabasey}
 	*/
 	static supabase: SupabaseClient;
 
@@ -476,37 +476,6 @@ export default class Syncro {
 				}
 			})
 			.then(()=> state)
-	}
-
-
-	/**
-	* Wrap a Supabase query so it works more like a classic-JS promise
-	*
-	* 1. Flatten non-promise responses into thennables
-	* 2. The query is forced to respond as a promise (prevents accidental query chaining)
-	* 3. The response data object is forced as a POJO (if any data is returned, otherwise void)
-	* 4. Error responses throw with a logical error message rather than a weird object return
-	* 5. Translate various error messages to something logical
-	*
-	* @param {SupabaseQuery} query A Supabase query object or method to execute
-	* @returns {Object} The data response as a plain JavaScript Object
-	*/
-	static wrapSupabase(query: any): Promise<any> {
-		return Promise.resolve(query)
-			.then(res => {
-				if (res?.error) {
-					if (/JSON object requested, multiple \(or no\) rows returned$/.test(res.error.message)) {
-						console.warn('Supabase query threw record not found against query', (query as any)?.url?.search);
-						console.warn('Supabase raw error', res);
-						throw new Error('NOT-FOUND');
-					} else {
-						console.warn('Supabase query threw', res.error.message);
-						throw new Error(`${res.error?.code || 'UnknownError'}: ${res.error?.message || 'Unknown Supabase error'}`);
-					}
-				} else if (res.data !== undefined) { // Check if data exists, even if null
-					return res.data;
-				}
-			})
 	}
 
 

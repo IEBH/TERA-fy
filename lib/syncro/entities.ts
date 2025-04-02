@@ -218,7 +218,7 @@ export default {
 				.from('users')
 				.insert({
 					id,
-					data: { // Create user prototype data
+					data: {
 						id,
 						credits: 1000,
 					},
