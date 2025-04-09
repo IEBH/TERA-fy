@@ -11,9 +11,4 @@ export default [
 		],
 	},
 	...RulesMFDC,
-	{
-		rules: {
-			'unicorn/prefer-global-this': ['off'],
-		},
-	},
 ]
