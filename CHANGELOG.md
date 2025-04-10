@@ -1,5 +1,7 @@
 # Changelog
 
+## [2.0.22](https://github.com/IEBH/TERA-fy/compare/v2.0.21...v2.0.22) (2025-04-10)
+
 ## [2.0.21](https://github.com/IEBH/TERA-fy/compare/v2.0.18...v2.0.21) (2025-04-10)
 
 
