@@ -1,6 +1,5 @@
 import {
 	isEmpty,
-	isEqual,
 	cloneDeep,
 	random,
 	sample,
@@ -626,67 +625,6 @@ export default class Syncro {
 
 		return this;
 	}
-
-	/**
-	* Merge a single or multiple values into a Syncro data object
-	* NOTE: Default behaviour is to flush (if any changes apply), use direct object mutation or disable with `flush:false` to disable
-	*
-	* @param {String|Object} key Either the single named key to set OR the object to merge
-	* @param {*} [value] The value to set if `key` is a string
-	*
-	* @param {Object} [options] Additional options to mutate behaviour
-	* @param {Boolean} [options.delta=true] Only merge keys that differ, skipping flush if no changes are made
-	* @param {Boolean} [options.flush=true] Send a flush signal that Firebase should sync to Supabase on changes
-	* @param {Boolean} [options.forceFlush=false] Flush even if no changes were made
-	* @param {Boolean} [options.flushDestroy=false] Destroy the Syncro after flushing
-	*
-	* @returns {Promise<Syncro>} A promise which resolves with this Syncro instance on completion
-	*/
-	async set(key, value, options) {
-		// Argument mangling - [key, value, settings] -> changes{}, settings {{{
-		let changes;
-		if (typeof key == 'string') { // Called as (key:String, value:*, options?:Object)
-			changes[key] = value;
-		} else if (typeof key == 'object') { // Called as (changes:Object, options?:Object)
-			[changes, options] = [key, value];
-		} else {
-			throw new Error('Unknown call signature for set() - call with string+value or object');
-		}
-		// }}}
-
-		let settings = {
-			delta: true,
-			flush: true,
-			forceFlush: false,
-			flushDestroy: false,
-			...options,
-		};
-
-		// Perform merge
-		let hasChanges = false;
-		if (settings.delta) { // Merge changes lazily
-			Object.entries(changes)
-				.filter(([k, v]) => !isEqual(this.value[k], v))
-				.forEach(([k, v]) => {
-					hasChanges = true;
-					this.value[k] = v;
-				})
-		} else {
-			hasChanges = true;
-			Object.assign(this.value, changes);
-		}
-
-		// Optionally perform flush
-		if (
-			(settings.forceFlush || hasChanges)
-			&& settings.flush
-		) {
-			await this.flush({destroy: settings.flushDestroy});
-		}
-
-		return this;
-	}
-
 
 	/**
 	* Schedule Syncro heartbeats
