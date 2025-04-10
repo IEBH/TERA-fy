@@ -14,7 +14,6 @@ export default tseslint.config(
 
 	// Include the base configuration from MFDC
 	...RulesMFDC,
-
 	// Add TypeScript specific configurations
 	{
 		// Apply these settings ONLY to .ts files

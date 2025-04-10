@@ -122,7 +122,7 @@ export function merge(target: any, path: string | (string | number)[], value: an
 export function defaults(target: any, path: string | (string | number)[] | any, value?: any): any {
 	if (typeof path == 'string' || Array.isArray(path)) { // Called as (target, path, value)
 		if (!has(target, path)) { // Target path doesn't exist at all
-			return set(target, path, value, undefined);
+			return set(target, path, value);
 		} else { // Target path exists - apply Lodash defaults
 			return _defaults(get(target, path), value);
 		}

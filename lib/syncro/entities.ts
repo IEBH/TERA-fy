@@ -133,7 +133,7 @@ export default {
 					])
 				))
 		},
-		flushState({supabase, id, relation}: {supabase: SupabaseClient, id: string, relation: string | undefined}) {
+		flushState() {
 			throw new Error('Flushing project_libraries::* namespace is not yet supported');
 		},
 	}, // }}}

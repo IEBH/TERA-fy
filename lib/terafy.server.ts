@@ -339,8 +339,10 @@ export default class TeraFyServer {
 						id: message.id,
 						action: 'response',
 						isError: true,
-						response: e instanceof Error ? e.message : String(e), // Send error message
+						response: e instanceof Error ? e.message : String(e), // Return error message to requester
 					}, rawMessage.source);
+				} else {
+					console.warn(`Unable to respond with errored RPC:${message.method} as reply postbox is invalid`);
 				}
 			})
 	}
@@ -900,7 +902,6 @@ export default class TeraFyServer {
 	*/
 	setProjectState(path: string | string[], value: any, options?: any): Promise<any> {
 		let settings = {
-			save: true, // Note: This save flag isn't used in the current implementation
 			strategy: 'set',
 			...options,
 		};
@@ -924,7 +925,7 @@ export default class TeraFyServer {
 			},
 		);
 
-		// Assuming this modifies a reactive object and doesn't need explicit saving via API here
+		// Sync functionality for the moment but could be async in the future
 		return Promise.resolve(value);
 	}
 
@@ -965,7 +966,6 @@ export default class TeraFyServer {
 				defaults: actualValue,
 				newState: cloneDeep(target),
 			});
-			// Note: Save operation mentioned in docs isn't implemented here.
 			return Promise.resolve(target); // Resolve with the modified target state
 		}
 	}
@@ -1688,7 +1688,7 @@ export default class TeraFyServer {
 	* Display, update or dispose of windows for long running tasks
 	* All options are cumulative - i.e. they are merged with other options previously provided
 	*
-	* @param {Object|Boolean} [options] Additional options to mutate behaviour, if boolean false `{close: true}` is assumed
+	* @param {Object|Boolean} [options] Additional options to mutate behaviour, if boolean false `close: true` is assumed
 	* @param {String} [options.body=''] Window body text
 	* @param {Boolean} [options.bodyHtml=false] If truthy, treat the body as HTML
 	* @param {String} [options.title='TERA'] Window title, can only be set on the initial call
@@ -1858,7 +1858,7 @@ export default class TeraFyServer {
 				location: false,
 				menubar: false,
 				status: false,
-				scrollbars: false, // Corrected typo
+				scrollbars: false,
 			},
 			...options,
 		};

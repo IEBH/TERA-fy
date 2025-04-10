@@ -1,5 +1,57 @@
 # Changelog
 
+## [2.0.22](https://github.com/IEBH/TERA-fy/compare/v2.0.21...v2.0.22) (2025-04-10)
+
+## [2.0.21](https://github.com/IEBH/TERA-fy/compare/v2.0.18...v2.0.21) (2025-04-10)
+
+
+### chore
+
+* Bump eslint ruleset ([143fc00](https://github.com/IEBH/TERA-fy/commit/143fc006cf7efa69f15e4e8fa7c432339fce6718))
+* Various eslint tidyups ([8ff306e](https://github.com/IEBH/TERA-fy/commit/8ff306e99c4b9cefda1a5314d95c3cd90b16d26d))
+
+### devops
+
+* Add /dist to gitignore ([13c8d19](https://github.com/IEBH/TERA-fy/commit/13c8d190858150e0219d9e7ecc1196ab61c0bfea))
+* Clear `dist` directory ([c7583aa](https://github.com/IEBH/TERA-fy/commit/c7583aa403008cea2be7ce224b7cc3d06110bc18))
+* Force add dist/ to avoid issues with .gitignore rules ([ea84f5c](https://github.com/IEBH/TERA-fy/commit/ea84f5cb958405006bf37fe01499ef8e1cca32c6))
+* Untrack dist between subsequent releases ([747ef0a](https://github.com/IEBH/TERA-fy/commit/747ef0a912329122f71484b1a0c7df8816e9f111))
+
+### docs
+
+* Missing documentation for Vue plugins ([8b00cbc](https://github.com/IEBH/TERA-fy/commit/8b00cbcd39d1089fd54589e9e71437f80923a68d))
+
+### fix
+
+* Ported bugfixes from "typescript" branch ([d6a29e6](https://github.com/IEBH/TERA-fy/commit/d6a29e60e11b930daef33d234e77a7ef277d00dc))
+* Treat supabase as a SupabaseClient rather than Supabasey ([7d5fe1d](https://github.com/IEBH/TERA-fy/commit/7d5fe1d2aa7275b4a1a5be0f1182c6a60674876e))
+* Wrong level of nesting when setting inital user credits ([675cd44](https://github.com/IEBH/TERA-fy/commit/675cd445f38183d5aa8dd27a1b8d04a6ed6a6c4b))
+
+## [2.0.20](https://github.com/IEBH/TERA-fy/compare/v2.0.18...v2.0.20) (2025-04-10)
+
+
+### chore
+
+* Bump eslint ruleset ([143fc00](https://github.com/IEBH/TERA-fy/commit/143fc006cf7efa69f15e4e8fa7c432339fce6718))
+* Various eslint tidyups ([8ff306e](https://github.com/IEBH/TERA-fy/commit/8ff306e99c4b9cefda1a5314d95c3cd90b16d26d))
+
+### devops
+
+* Add /dist to gitignore ([13c8d19](https://github.com/IEBH/TERA-fy/commit/13c8d190858150e0219d9e7ecc1196ab61c0bfea))
+* Clear `dist` directory ([c7583aa](https://github.com/IEBH/TERA-fy/commit/c7583aa403008cea2be7ce224b7cc3d06110bc18))
+* Force add dist/ to avoid issues with .gitignore rules ([ea84f5c](https://github.com/IEBH/TERA-fy/commit/ea84f5cb958405006bf37fe01499ef8e1cca32c6))
+* Untrack dist between subsequent releases ([747ef0a](https://github.com/IEBH/TERA-fy/commit/747ef0a912329122f71484b1a0c7df8816e9f111))
+
+### docs
+
+* Missing documentation for Vue plugins ([8b00cbc](https://github.com/IEBH/TERA-fy/commit/8b00cbcd39d1089fd54589e9e71437f80923a68d))
+
+### fix
+
+* Ported bugfixes from "typescript" branch ([d6a29e6](https://github.com/IEBH/TERA-fy/commit/d6a29e60e11b930daef33d234e77a7ef277d00dc))
+* Treat supabase as a SupabaseClient rather than Supabasey ([7d5fe1d](https://github.com/IEBH/TERA-fy/commit/7d5fe1d2aa7275b4a1a5be0f1182c6a60674876e))
+* Wrong level of nesting when setting inital user credits ([675cd44](https://github.com/IEBH/TERA-fy/commit/675cd445f38183d5aa8dd27a1b8d04a6ed6a6c4b))
+
 ## [2.0.18](https://github.com/IEBH/TERA-fy/compare/v2.0.16...v2.0.18) (2025-03-31)
 
 
