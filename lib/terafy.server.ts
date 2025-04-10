@@ -389,13 +389,12 @@ export default class TeraFyServer {
 	emitClients(event: string, ...args: any[]): Promise<void> {
 		// Use getClientContext to get the appropriate sendRaw method
 		const context = this.getClientContext();
-		context.sendRaw({
+		return context.sendRaw({
 			action: 'event',
 			id: nanoid(),
 			event,
 			payload: args,
 		});
-		return Promise.resolve(); // sendRaw is fire-and-forget
 	}
 
 
@@ -479,7 +478,7 @@ export default class TeraFyServer {
 	requireUser(): Promise<any> {
 		let user: any; // Last getUser() response
 		return Promise.resolve() // NOTE: This promise is upside down, it only continues down the chain if the user is NOT valid, otherwise it throws to exit
-			.then(()=> this.getUser()) // Removed {} - call seems valid
+			.then(()=> this.getUser())
 			.then(res => user = res)
 			.then(()=> {
 				if (user) {
@@ -614,7 +613,7 @@ export default class TeraFyServer {
 
 				// Store local copy of user image - this only applies to dev mode (localhost connecting to embed) so we can ignore the security implications here
 				Promise.resolve()
-					.then(()=> this.getUser({ // Removed {} - call seems valid
+					.then(()=> this.getUser({
 						forceRetry: false, // Avoid loops
 						waitPromises: false, // We have a partially resolved state so we don't care about outer promises resolving
 					}))
@@ -874,7 +873,7 @@ export default class TeraFyServer {
 		};
 
 		return Promise.resolve()
-			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
+			.then(()=> settings.autoRequire && this.requireProject())
 			.then(()=> app.service('$projects').active)
 	}
 
@@ -1051,7 +1050,7 @@ export default class TeraFyServer {
 		};
 
 		return app.service('$projects').promise()
-			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
+			.then(()=> settings.autoRequire && this.requireProject())
 			.then(()=> this.requestFocus(()=>
 				app.service('$prompt').dialog({
 					title: settings.title,
@@ -1069,10 +1068,10 @@ export default class TeraFyServer {
 					},
 					componentEvents: {
 						fileSave(file: any) {
-							app.service('$prompt').close(true, file); // Assume close takes 2 args
+							app.service('$prompt').close(true, file);
 						},
 						fileSelect(file: any) {
-							app.service('$prompt').close(true, file); // Assume close takes 2 args
+							app.service('$prompt').close(true, file);
 						},
 					},
 					modalDialogClass: 'modal-dialog-lg',
@@ -1102,7 +1101,7 @@ export default class TeraFyServer {
 
 		return Promise.resolve()
 			.then(()=> app.service('$projects').promise())
-			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
+			.then(()=> settings.autoRequire && this.requireProject())
 			.then(()=>
 				app.service('$projects').activeFiles.length == 0 // If we have no files in the cache
 				|| !settings.lazy // OR lazy/cache use is disabled
@@ -1267,7 +1266,7 @@ export default class TeraFyServer {
 
 		return Promise.resolve()
 			.then(()=> {
-				settings.autoRequire && this.requireProject() // Removed {} - call seems valid
+				settings.autoRequire && this.requireProject()
 			})
 			.then((): Promise<string> => { // Ensure the promise returns a string (fileId)
 				if (settings.id) {
@@ -1333,8 +1332,6 @@ export default class TeraFyServer {
 			},
 			...options,
 		};
-		// Remove filters from top-level settings if it exists to avoid conflict
-		delete settings.filter;
 
 
 		return app.service('$projects').promise()
@@ -1342,13 +1339,7 @@ export default class TeraFyServer {
 			.then((selectedFile: any) => {
 				if (!selectedFile || !selectedFile.id) throw new Error('Library selection failed or was cancelled.');
 				// Pass relevant options down to getProjectLibrary
-				return this.getProjectLibrary(selectedFile.id, {
-					format: options?.format,
-					autoRequire: false, // Already required
-					// Pass filter/find if they were part of the original options
-					filter: options?.filter,
-					find: options?.find,
-				});
+				return this.getProjectLibrary(selectedFile.id, settings);
 			})
 	}
 
@@ -1378,7 +1369,7 @@ export default class TeraFyServer {
 		let filePath: string = app.service('$projects').decodeFilePath(id);
 
 		return Promise.resolve()
-			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
+			.then(()=> settings.autoRequire && this.requireProject())
 			.then(()=> app.service('$supabase').fileGet(filePath, {
 				toast: false,
 			}))
@@ -1465,7 +1456,7 @@ export default class TeraFyServer {
 
 		let filePath: any; // Eventual Supabase path to use
 		return Promise.resolve()
-			.then(()=> settings.autoRequire && this.requireProject()) // Removed {} - call seems valid
+			.then(()=> settings.autoRequire && this.requireProject())
 			.then((): Promise<string> => { // Ensure promise returns string (fileId)
 				if (settings.id) {
 					// Optional: Validate settings.id exists?

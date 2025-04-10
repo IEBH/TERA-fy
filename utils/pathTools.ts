@@ -105,7 +105,6 @@ export function has(target: any, path: string | (string | number)[]): boolean {
 * @returns {*} The merged value
 */
 export function merge(target: any, path: string | (string | number)[], value: any): any {
-	// @ts-ignore
 	_merge(get(target, path), value);
 	return value;
 }
@@ -128,7 +127,6 @@ export function defaults(target: any, path: string | (string | number)[] | any, 
 			return _defaults(get(target, path), value);
 		}
 	} else { // Called as (target, value)
-		// @ts-ignore
 		return _defaults(target, path);
 	}
 }
