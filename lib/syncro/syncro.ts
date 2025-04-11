@@ -15,18 +15,13 @@ import {
 	DocumentReference,
 	Firestore,
 	Unsubscribe,
-	DocumentData,
-	SetOptions,
-	UpdateData,
-	WithFieldValue,
-	PartialWithFieldValue
 } from 'firebase/firestore';
 // @ts-ignore
 import marshal from '@momsfriendlydevco/marshal';
 import {nanoid} from 'nanoid';
 import PromiseRetry from 'p-retry';
 import {FirebaseApp} from 'firebase/app';
-import Supabasey from '@iebh/supabasey';
+import { BoundSupabaseyFunction } from '@iebh/supabasey';
 
 
 interface ReactiveWrapper<T = any> {
@@ -74,7 +69,7 @@ export default class Syncro {
 	*
 	* @type {Supabasey}
 	*/
-	static supabasey: Supabasey;
+	static supabasey: BoundSupabaseyFunction;
 
 
 	/**

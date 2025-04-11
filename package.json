@@ -104,6 +104,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@iebh/supabasey": "^1.1.0",
     "@momsfriendlydevco/marshal": "^2.1.4",
     "detect-port": "^2.1.0",
     "filesize": "^10.1.6",
