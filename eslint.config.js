@@ -1,4 +1,4 @@
-import RulesMFDC from '@momsfriendlydevco/eslint-config';
+import RulesMFDC, {JSCommon} from '@momsfriendlydevco/eslint-config';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
@@ -14,6 +14,7 @@ export default tseslint.config(
 
 	// Include the base configuration from MFDC
 	...RulesMFDC,
+
 	// Add TypeScript specific configurations
 	{
 		// Apply these settings ONLY to .ts files
@@ -35,6 +36,7 @@ export default tseslint.config(
 			// For example:
 			// '@typescript-eslint/no-explicit-any': 'warn',
 			// '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+			...JSCommon,
 		},
 	},
 
