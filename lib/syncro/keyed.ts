@@ -93,10 +93,9 @@ export default class SyncroKeyed extends Syncro {
 	* Mount this SyncroKeyed instance
 	* i.e. Fetch all members and mount them locally creating a Proxy
 	*
-	* @param {any} [options] Optional mount options (ignored by SyncroKeyed but needed for signature match)
 	* @returns {Promise<Syncro>} A promise which resolves as this SyncroKeyed instance when completed
 	*/
-	mount(options?: any): Promise<Syncro> {
+	mount(): Promise<Syncro> {
 		// Cast the result to the expected interface
 		let {entity, id, relation, fsCollection, fsId} = Syncro.pathSplit(this.path, {allowAsterisk: true}) as PathSplitResult;
 
@@ -138,7 +137,7 @@ export default class SyncroKeyed extends Syncro {
 
 				// Go fetch the initial state object
 				let state = await SyncroEntities[entityKey].initState({
-					supabase: Syncro.supabase,
+					supabasey: Syncro.supabasey,
 					id, relation,
 				});
 

@@ -1,6 +1,6 @@
 import {initializeApp as Firebase, FirebaseApp} from 'firebase/app';
 import {getFirestore as Firestore, Firestore as FirestoreInstance} from 'firebase/firestore';
-import {createClient as Supabase, SupabaseClient} from '@supabase/supabase-js'
+import Supabasey from '@iebh/supabasey';
 import Syncro from '../lib/syncro/syncro.js';
 import TeraFyPluginBase from './base.js';
 
@@ -76,7 +76,12 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 		});
 		Syncro.firestore = Firestore(Syncro.firebase); // Use Syncro.firebase
 
-		Syncro.supabase = Supabase(settings.supabaseUrl!, settings.supabaseKey!); // Add non-null assertions
+		Syncro.supabasey = await Supabasey.init({
+			env: {
+				SUPABASE_URL: settings.supabaseUrl!,
+				SUPABASE_KEY: settings.supabaseKey!, // Add non-null assertions
+			},
+		});
 	}
 
 

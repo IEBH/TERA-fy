@@ -25,8 +25,8 @@ import {
 import marshal from '@momsfriendlydevco/marshal';
 import {nanoid} from 'nanoid';
 import PromiseRetry from 'p-retry';
-import { FirebaseApp } from 'firebase/app';
-import { SupabaseClient } from '@supabase/supabase-js';
+import {FirebaseApp} from 'firebase/app';
+import Supabasey from '@iebh/supabasey';
 
 
 interface ReactiveWrapper<T = any> {
@@ -70,11 +70,11 @@ export default class Syncro {
 
 
 	/**
-	* Supabase instance in use
+	* Supabasey instance in use
 	*
-	* @type {SupabaseClient}
+	* @type {Supabasey}
 	*/
-	static supabase: SupabaseClient;
+	static supabasey: Supabasey;
 
 
 	/**
