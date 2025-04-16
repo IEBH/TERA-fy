@@ -1,5 +1,41 @@
 # Changelog
 
+# [2.2.0](https://github.com/IEBH/TERA-fy/compare/v2.0.22...v2.2.0) (2025-04-16)
+
+
+### chore
+
+* Build dist ([a4291ac](https://github.com/IEBH/TERA-fy/commit/a4291acb9343a57721e55e9da849a986144fca0b))
+* Build dist ([cc32061](https://github.com/IEBH/TERA-fy/commit/cc32061f5267f47b7bea8fe3f0da7dfdd14dc10b))
+* Rename all files to TS, need to fix errors ([ffd793e](https://github.com/IEBH/TERA-fy/commit/ffd793eeed09f3e3921f7007a6fd9621bbbccb7d))
+
+### devops
+
+* Compile js files using tsc and export those ([0993b9c](https://github.com/IEBH/TERA-fy/commit/0993b9c02e9d7c43b16eb6d1cfea0b7e2853e6bf))
+* Finish clearing `dist` directory on TS branch ([06758e9](https://github.com/IEBH/TERA-fy/commit/06758e98208cfa73326e9ae205c411075ee20c2a))
+
+### feat
+
+* Update build process for typescript ([72de0a2](https://github.com/IEBH/TERA-fy/commit/72de0a22017d7b60911c2209849f652524db7eb3))
+
+### fix
+
+* .default is undefined ([3e5c74e](https://github.com/IEBH/TERA-fy/commit/3e5c74ebe1d7dce3e424477f5bfb7eb5e708d8d1))
+* Issue with TERA hanging and not loading embedded page ([a5ed9f8](https://github.com/IEBH/TERA-fy/commit/a5ed9f86264cb944d9365194eb5036592136b4f7))
+* Issues from merge and resolving conflicts ([70d92e5](https://github.com/IEBH/TERA-fy/commit/70d92e5f0dd7c46bc39088e364c5d23b234f00a2))
+* Matt's code review ([7725b5f](https://github.com/IEBH/TERA-fy/commit/7725b5f1fbf808334e7e99e362864203d1587ded))
+* Minor build fixes ([e05a9fd](https://github.com/IEBH/TERA-fy/commit/e05a9fdfe02ea53973c1bdd971ee69d978d7104f))
+* Prevent required argument error ([78c7710](https://github.com/IEBH/TERA-fy/commit/78c7710705dfeec4865ef597eb02984f94decfb9))
+* This not binding correctly ([096d00c](https://github.com/IEBH/TERA-fy/commit/096d00c73408d27c6c0e9dc8e6c57369fa678841))
+
+### major
+
+* Fix all TypeScript compilation errors ([8c28b99](https://github.com/IEBH/TERA-fy/commit/8c28b9940a135fbf773a14dd25b615d057764751))
+
+### refactor
+
+* Inject MFDC JS rules into TS linter rules ([23d3b13](https://github.com/IEBH/TERA-fy/commit/23d3b13adda21a98e3b612817f35e949e084a10c))
+
 ## [2.0.22](https://github.com/IEBH/TERA-fy/compare/v2.0.21...v2.0.22) (2025-04-10)
 
 ## [2.0.21](https://github.com/IEBH/TERA-fy/compare/v2.0.18...v2.0.21) (2025-04-10)
