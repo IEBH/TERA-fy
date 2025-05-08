@@ -875,12 +875,14 @@ Prompt the user to select a library to operate on
     *   `options.title` **[String][164]** The title of the dialog to display (optional, default `"Select a file"`)
     *   `options.hint` **([String][164] | [Array][171]<[String][164]>)?** Hints to identify the file to select in array order of preference
     *   `options.save` **[Boolean][173]** Set to truthy if saving a new file, UI will adjust to allowing overwrite OR new file name input (optional, default `false`)
+    *   `options.saveFilename` **[String][164]?** File name to save as, if omitted the hinting system is used otherwise 'My File.unknown' is assumed
     *   `options.filters` **[FileFilters][116]?** Optional file filters
     *   `options.allowUpload` **[Boolean][173]** Allow uploading new files (optional, default `true`)
     *   `options.allowRefresh` **[Boolean][173]** Allow the user to manually refresh the file list (optional, default `true`)
     *   `options.allowDownloadZip` **[Boolean][173]** Allow the user to download a Zip of all files (optional, default `true`)
     *   `options.allowCancel` **[Boolean][173]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
     *   `options.autoRequire` **[Boolean][173]** Run `requireProject()` automatically before continuing (optional, default `true`)
+    *   `options.showHiddenFiles` **[Boolean][173]** Whether hidden data.json files should be shown (optional, default `false`)
     *   `options.filter` **[FileFilters][116]?** Optional file filters
 
 Returns **[Promise][168]<[ProjectFile][1]>** The eventually selected file, if in save mode new files are created as stubs

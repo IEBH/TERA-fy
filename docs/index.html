@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 2.2.2 | Documentation</title>
+  <title>@iebh/tera-fy 2.2.3 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>2.2.2</code></div>
+          <div class='mb1'><code>2.2.3</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -7107,6 +7107,15 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
 
               
                 <tr>
+  <td class='break-word'><span class='code bold'>options.saveFilename</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>?</code>
+  </td>
+  <td class='break-word'><span>File name to save as, if omitted the hinting system is used otherwise 'My File.unknown' is assumed
+</span></td>
+</tr>
+
+
+              
+                <tr>
   <td class='break-word'><span class='code bold'>options.filters</span> <code class='quiet'><a href="#filefilters">FileFilters</a>?</code>
   </td>
   <td class='break-word'><span>Optional file filters
@@ -7169,6 +7178,17 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
   <td class='break-word'><span>Run 
 <code>requireProject()</code>
  automatically before continuing
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.showHiddenFiles</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>Whether hidden data.json files should be shown
 </span></td>
 </tr>
 

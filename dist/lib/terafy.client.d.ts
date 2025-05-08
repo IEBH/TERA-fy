@@ -475,12 +475,14 @@ export default class TeraFy {
     * @param {String} [options.title="Select a file"] The title of the dialog to display
     * @param {String|Array<String>} [options.hint] Hints to identify the file to select in array order of preference
     * @param {Boolean} [options.save=false] Set to truthy if saving a new file, UI will adjust to allowing overwrite OR new file name input
+    * @param {String} [options.saveFilename] File name to save as, if omitted the hinting system is used otherwise 'My File.unknown' is assumed
     * @param {FileFilters} [options.filters] Optional file filters
     * @param {Boolean} [options.allowUpload=true] Allow uploading new files
     * @param {Boolean} [options.allowRefresh=true] Allow the user to manually refresh the file list
     * @param {Boolean} [options.allowDownloadZip=true] Allow the user to download a Zip of all files
     * @param {Boolean} [options.allowCancel=true] Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed
     * @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
+    * @param {Boolean} [options.showHiddenFiles=false] Whether hidden data.json files should be shown
     * @param {FileFilters} [options.filter] Optional file filters
     *
     * @returns {Promise<ProjectFile>} The eventually selected file, if in save mode new files are created as stubs
