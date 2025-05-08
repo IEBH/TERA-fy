@@ -137,6 +137,10 @@ export default class TeraFy {
 		'deleteProjectFile',
 		'setProjectFileContents',
 
+		// Project folders
+		'createProjectFolder',
+		'deleteProjectFolder',
+
 		// Project Libraries
 		'selectProjectLibrary',
 		'getProjectLibrary',
@@ -1312,6 +1316,30 @@ export default class TeraFy {
 	* @returns {Promise} A promise which will resolve when the write operation has completed
 	*/
 
+		/**
+	* Creates a new "folder" within the project's file storage.
+	* Folders in Supabase storage are typically represented by creating a placeholder file (e.g., .emptyFolderPlaceholder) within the desired path.
+	* This operation is idempotent: if the folder (via its placeholder) already exists, it will not error.
+	*
+	* @function createProjectFolder
+	* @param {String} folderPath The relative path of the folder to create (e.g., "myDocuments/reports").
+	* @param {Object} [options] Additional options.
+	* @param {Boolean} [options.autoRequire=true] Automatically run `requireProject()` to ensure an active project context.
+	* @returns {Promise<void>} A promise that resolves when the folder is created or ensured.
+	* @throws {Error} If no project is active (and autoRequire is false), or if folderPath is invalid, or if the creation fails.
+	*/
+
+		/**
+	* Deletes a "folder" and all its contents from the project's file storage.
+	* This involves listing all files under the given folder path (prefix) and removing them.
+	*
+	* @function deleteProjectFolder
+	* @param {String} folderPath The relative path of the folder to delete (e.g., "myDocuments/reports").
+	* @param {Object} [options] Additional options.
+	* @param {Boolean} [options.autoRequire=true] Automatically run `requireProject()` to ensure an active project context.
+	* @returns {Promise<null>} A promise that resolves with null when the folder and its contents are deleted.
+	* @throws {Error} If no project is active (and autoRequire is false), or if folderPath is invalid, or if deletion fails.
+	*/
 
 	/**
 	* Prompt the user to select a library to operate on and return a array of references in a given format

@@ -417,6 +417,33 @@ export default class TeraFyServer {
     */
     setProjectFileContents(id: string | any | null, contents: any, options?: any): Promise<null>;
     /**
+    * Creates a new "folder" within the project's file storage.
+    * Folders in Supabase storage are typically represented by creating a placeholder file (e.g., .emptyFolderPlaceholder) within the desired path.
+    * This operation is idempotent: if the folder (via its placeholder) already exists, it will not error.
+    *
+    * @param {String} folderPath The relative path of the folder to create (e.g., "myDocuments/reports").
+    * @param {Object} [options] Additional options.
+    * @param {Boolean} [options.autoRequire=true] Automatically run `requireProject()` to ensure an active project context.
+    * @returns {Promise<void>} A promise that resolves when the folder is created or ensured.
+    * @throws {Error} If no project is active (and autoRequire is false), or if folderPath is invalid, or if the creation fails.
+    */
+    createProjectFolder(folderPath: string, options?: {
+        autoRequire?: boolean;
+    }): Promise<void>;
+    /**
+    * Deletes a "folder" and all its contents from the project's file storage.
+    * This involves listing all files under the given folder path (prefix) and removing them.
+    *
+    * @param {String} folderPath The relative path of the folder to delete (e.g., "myDocuments/reports").
+    * @param {Object} [options] Additional options.
+    * @param {Boolean} [options.autoRequire=true] Automatically run `requireProject()` to ensure an active project context.
+    * @returns {Promise<null>} A promise that resolves with null when the folder and its contents are deleted.
+    * @throws {Error} If no project is active (and autoRequire is false), or if folderPath is invalid, or if deletion fails.
+    */
+    deleteProjectFolder(folderPath: string, options?: {
+        autoRequire?: boolean;
+    }): Promise<null>;
+    /**
     * Prompt the user to select a library to operate on and return a array of references in a given format
     *
     * @param {Object} [options] Additional options to mutate behaviour - see `getProjectLibrary()` for parent list of options

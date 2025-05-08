@@ -1115,6 +1115,128 @@ class TeraFyServer {
             .then(() => null);
     }
     // }}}
+    // Project Folders - createProjectFolder(), deleteProjectFolder() {{{
+    /**
+    * Creates a new "folder" within the project's file storage.
+    * Folders in Supabase storage are typically represented by creating a placeholder file (e.g., .emptyFolderPlaceholder) within the desired path.
+    * This operation is idempotent: if the folder (via its placeholder) already exists, it will not error.
+    *
+    * @param {String} folderPath The relative path of the folder to create (e.g., "myDocuments/reports").
+    * @param {Object} [options] Additional options.
+    * @param {Boolean} [options.autoRequire=true] Automatically run `requireProject()` to ensure an active project context.
+    * @returns {Promise<void>} A promise that resolves when the folder is created or ensured.
+    * @throws {Error} If no project is active (and autoRequire is false), or if folderPath is invalid, or if the creation fails.
+    */
+    async createProjectFolder(folderPath, options) {
+        const settings = {
+            autoRequire: true,
+            ...options,
+        };
+        if (settings.autoRequire) {
+            await this.requireProject(); // Ensures user and project context are established
+        }
+        else if (!app.service('$projects').active) {
+            throw new Error('No active project. Please select or require a project first.');
+        }
+        if (!folderPath || typeof folderPath !== 'string' || folderPath.trim() === '' || folderPath.includes('..')) {
+            throw new Error('Invalid folderPath provided. Path cannot be empty, contain ".." or be invalid.');
+        }
+        let cleanFolderPath = folderPath.trim();
+        if (cleanFolderPath.startsWith('/')) {
+            cleanFolderPath = cleanFolderPath.substring(1);
+        }
+        if (cleanFolderPath.endsWith('/')) {
+            cleanFolderPath = cleanFolderPath.slice(0, -1);
+        }
+        if (cleanFolderPath === '') {
+            throw new Error('Folder path cannot resolve to project root or be an empty string after normalization.');
+        }
+        const placeholderFileName = '.emptyFolderPlaceholder'; // Common convention for representing an empty folder
+        const relativePlaceholderPath = cleanFolderPath + '/' + placeholderFileName;
+        // `convertRelativePath` typically creates the full path including project ID, etc.
+        const supabasePath = app.service('$projects').convertRelativePath(relativePlaceholderPath);
+        try {
+            await app.service('$supabase').fileUpload(supabasePath, {
+                file: new Blob([''], { type: 'text/plain' }), // Consistent with createProjectFile
+                mode: 'encoded',
+                overwrite: true, // Makes the operation idempotent
+                toast: false,
+                transcoders: false,
+            });
+            // Refresh the local file list cache to include the new placeholder/folder
+            await app.service('$projects').refreshFiles({ lazy: false });
+            this.debug('INFO', 2, `Project folder "${cleanFolderPath}" ensured/created via placeholder at "${relativePlaceholderPath}".`);
+        }
+        catch (error) {
+            this.debug('ERROR', 1, `Failed to create/ensure project folder "${cleanFolderPath}" via placeholder "${relativePlaceholderPath}"`, error);
+            throw new Error(`Failed to create project folder "${cleanFolderPath}": ${error.message || String(error)}`);
+        }
+    }
+    /**
+    * Deletes a "folder" and all its contents from the project's file storage.
+    * This involves listing all files under the given folder path (prefix) and removing them.
+    *
+    * @param {String} folderPath The relative path of the folder to delete (e.g., "myDocuments/reports").
+    * @param {Object} [options] Additional options.
+    * @param {Boolean} [options.autoRequire=true] Automatically run `requireProject()` to ensure an active project context.
+    * @returns {Promise<null>} A promise that resolves with null when the folder and its contents are deleted.
+    * @throws {Error} If no project is active (and autoRequire is false), or if folderPath is invalid, or if deletion fails.
+    */
+    async deleteProjectFolder(folderPath, options) {
+        const settings = {
+            autoRequire: true,
+            ...options,
+        };
+        if (settings.autoRequire) {
+            await this.requireProject(); // Ensures user and project context
+        }
+        else if (!app.service('$projects').active) {
+            throw new Error('No active project. Please select or require a project first.');
+        }
+        if (!folderPath || typeof folderPath !== 'string' || folderPath.trim() === '' || folderPath.includes('..')) {
+            throw new Error('Invalid folderPath provided. Path cannot be empty, contain ".." or be invalid.');
+        }
+        let cleanFolderPath = folderPath.trim();
+        if (cleanFolderPath.startsWith('/')) {
+            cleanFolderPath = cleanFolderPath.substring(1);
+        }
+        if (cleanFolderPath.endsWith('/')) {
+            cleanFolderPath = cleanFolderPath.slice(0, -1);
+        }
+        if (cleanFolderPath === '') {
+            throw new Error('Folder path cannot resolve to project root or be an empty string after normalization; deleting root is not allowed via this function.');
+        }
+        const pathPrefix = cleanFolderPath + '/'; // Files inside the folder will start with this prefix
+        // Fetch all files, ensuring the list is up-to-date
+        const allFiles = await this.getProjectFiles({ autoRequire: false, lazy: false, meta: true });
+        const filesToDelete = allFiles.filter(file => {
+            // file.name is the relative path like "documents/report.pdf" or "documents/archive/old.zip"
+            // This will also include any placeholder file like "myFolder/.emptyFolderPlaceholder" if pathPrefix is "myFolder/"
+            return file.name.startsWith(pathPrefix);
+        });
+        if (filesToDelete.length === 0) {
+            this.debug('INFO', 2, `No files found under project folder prefix "${pathPrefix}". The folder might be empty or not exist.`);
+            // It's possible the folder was already empty or never existed.
+            // Refresh files just in case, though `getProjectFiles` with `lazy: false` should be current.
+            await app.service('$projects').refreshFiles({ lazy: false });
+            return null;
+        }
+        // `decodeFilePath` converts the ProjectFile's ID to the actual Supabase storage path.
+        const supabasePathsToDelete = filesToDelete.map(file => app.service('$projects').decodeFilePath(file.id));
+        try {
+            // Assuming `fileRemove` can take an array of paths, common for Supabase client.
+            await app.service('$supabase').fileRemove(supabasePathsToDelete);
+            // Refresh the local file list cache
+            await app.service('$projects').refreshFiles({ lazy: false });
+            this.debug('INFO', 2, `Project folder "${cleanFolderPath}" (prefix "${pathPrefix}") and its ${filesToDelete.length} contents deleted.`);
+        }
+        catch (error) {
+            this.debug('ERROR', 1, `Failed to delete contents of project folder "${cleanFolderPath}" (prefix "${pathPrefix}")`, error);
+            throw new Error(`Failed to delete project folder "${cleanFolderPath}": ${error.message || String(error)}`);
+        }
+        return null;
+    }
+    // }}}
     // Project Libraries - selectProjectLibrary(), getProjectLibrary(), setProjectLibrary() {{{
     /**
     * Prompt the user to select a library to operate on and return a array of references in a given format

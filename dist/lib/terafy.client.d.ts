@@ -65,7 +65,7 @@ export default class TeraFy {
     *
     * @type {Array<String>}
     */
-    methods: readonly ["handshake", "setServerVerbosity", "getUser", "requireUser", "getCredentials", "bindProject", "getProject", "getProjects", "setActiveProject", "requireProject", "selectProject", "getNamespace", "setNamespace", "listNamespaces", "getProjectState", "setProjectState", "setProjectStateDefaults", "setProjectStateRefresh", "getProjectFileContents", "deleteProjectFile", "setProjectFileContents", "selectProjectLibrary", "getProjectLibrary", "setProjectLibrary", "projectLog", "setPage", "uiAlert", "uiConfirm", "uiPanic", "uiProgress", "uiPrompt", "uiThrow", "uiSplat", "uiWindow"];
+    methods: readonly ["handshake", "setServerVerbosity", "getUser", "requireUser", "getCredentials", "bindProject", "getProject", "getProjects", "setActiveProject", "requireProject", "selectProject", "getNamespace", "setNamespace", "listNamespaces", "getProjectState", "setProjectState", "setProjectStateDefaults", "setProjectStateRefresh", "getProjectFileContents", "deleteProjectFile", "setProjectFileContents", "createProjectFolder", "deleteProjectFolder", "selectProjectLibrary", "getProjectLibrary", "setProjectLibrary", "projectLog", "setPage", "uiAlert", "uiConfirm", "uiPanic", "uiProgress", "uiPrompt", "uiThrow", "uiSplat", "uiWindow"];
     /**
     * Loaded plugins via Use()
     * @type {Array<TeraFyPlugin>}

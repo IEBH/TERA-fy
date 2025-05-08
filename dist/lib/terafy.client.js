@@ -318,6 +318,9 @@ export default class TeraFy {
             // 'createProjectFile', - Handled below (requires return mapped to ProjectFile)
             'deleteProjectFile',
             'setProjectFileContents',
+            // Project folders
+            'createProjectFolder',
+            'deleteProjectFolder',
             // Project Libraries
             'selectProjectLibrary',
             'getProjectLibrary',

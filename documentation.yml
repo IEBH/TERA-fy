@@ -48,6 +48,8 @@ toc:
       - getProjectFiles
       - selectProjectFile
       - setProjectFileContents
+      - createProjectFolder
+      - deleteProjectFolder
   - name: Project Libraries
     children:
       - getProjectLibrary
