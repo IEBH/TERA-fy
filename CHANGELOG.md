@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.4](https://github.com/IEBH/TERA-fy/compare/v2.2.3...v2.2.4) (2025-05-08)
+
+
+### feat
+
+* `showHiddenFilesProp` in `selectProjectFile()` ([c925c50](https://github.com/IEBH/TERA-fy/commit/c925c50608f671d4c78e50efd0c9455e51ce7a8c))
+
 ## [2.2.3](https://github.com/IEBH/TERA-fy/compare/v2.2.2...v2.2.3) (2025-05-08)
 
 # [2.2.0](https://github.com/IEBH/TERA-fy/compare/v2.0.22...v2.2.0) (2025-04-16)
