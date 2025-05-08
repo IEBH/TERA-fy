@@ -1197,6 +1197,107 @@ export default class TeraFyServer {
 			.then((file: any) => file || Promise.reject(`Could not create new file "${name}"`))
 	}
 
+	/**
+	* Moves a project file to a new name/path.
+	* The file's unique ID (UUID) remains the same, but its 'name' (relative path) and associated properties will be updated.
+	*
+	* @param {String} sourceId The unique ID (UUID) of the file to move.
+	* @param {String} newName The new relative name for the file (e.g., "documents/report-final.pdf" or "image.png").
+	*                         This path is relative to the project's root file directory.
+	*
+	* @param {Object} [options] Additional options to mutate behaviour.
+	* @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing.
+	* @param {Boolean} [options.overwrite=true] If true (default), moving a file to a `newName` that already exists will overwrite the existing file.
+	*                                          This aligns with the default behavior of the underlying Supabase storage `move` operation.
+	*                                          If set to false, the function would ideally check and prevent overwrite, but current implementation relies on underlying storage behavior.
+	*
+	* @returns {Promise<ProjectFile | null>} A promise which resolves to the updated ProjectFile object for the moved file if found after the operation,
+	*                                        or null if the file could not be located post-move (e.g., if its ID changed unexpectedly or it was deleted).
+	*/
+	async moveProjectFile(sourceId: string, newName: string, options?: any): Promise<any | null> {
+		const settings = {
+			autoRequire: true,
+			overwrite: true, // Matches Supabase client's default behavior for move.
+			...options,
+		};
+
+		if (settings.autoRequire) {
+			await this.requireProject(); // Ensures an active project context.
+		}
+
+		const projectService = app.service('$projects');
+		const supabaseService = app.service('$supabase');
+
+		if (!projectService.active) {
+			throw new Error('moveProjectFile: No active project. Cannot move file.');
+		}
+		if (!sourceId || typeof sourceId !== 'string') {
+			throw new Error('moveProjectFile: sourceId (string) is required.');
+		}
+		if (!newName || typeof newName !== 'string') {
+			throw new Error('moveProjectFile: newName (string) is required.');
+		}
+		if (newName.includes('..') || newName.startsWith('/') || newName.endsWith('/')) {
+			throw new Error('moveProjectFile: newName must be a valid relative file path, cannot contain ".." segments, start with "/", or end with "/".');
+		}
+
+		// Get the full Supabase storage path for the source file using its unique ID.
+		// e.g., "project_id_123/path/to/original_file.txt"
+		const sourceStoragePath = projectService.decodeFilePath(sourceId);
+		if (!sourceStoragePath) {
+			// This could happen if the sourceId is invalid or decodeFilePath fails.
+			throw new Error(`moveProjectFile: Could not determine storage path for sourceId "${sourceId}". File may not exist or ID is incorrect.`);
+		}
+
+		// Construct the full Supabase storage path for the target (new name).
+		// e.g., "project_id_123/new_path/to/new_file.txt"
+		const targetStoragePath = projectService.convertRelativePath(newName);
+
+		if (sourceStoragePath === targetStoragePath) {
+			this.debug('INFO', 2, `moveProjectFile: Source path "${sourceStoragePath}" and target path "${targetStoragePath}" are identical. No move operation needed.`);
+			// Attempt to find the file by ID, as its name should match newName if paths are identical.
+			const currentFile = projectService.activeFiles?.find((f: any) => f.id === sourceId);
+			return currentFile || null;
+		}
+
+		this.debug('INFO', 2, `Attempting to move project file from "${sourceStoragePath}" to "${targetStoragePath}". Overwrite: ${settings.overwrite}`);
+
+		try {
+			// Perform the move operation via the Supabase service.
+			// Assumes $supabase.fileMove handles the underlying Supabase client `storage.from(bucket).move(from, to)`.
+			// The standard Supabase `move` overwrites by default. If settings.overwrite is false,
+			// a more complex $supabase.fileMove or a pre-check here would be needed.
+			// For now, we pass the conceptual overwrite intent, but actual behavior depends on $supabase.fileMove.
+			await supabaseService.fileMove(sourceStoragePath, targetStoragePath, { overwrite: settings.overwrite });
+
+			this.debug('INFO', 2, `Project file successfully moved from "${sourceStoragePath}" to "${targetStoragePath}".`);
+
+			// After a successful move, refresh the local cache of project files.
+			await projectService.refreshFiles({ lazy: false });
+			this.debug('INFO', 3, 'Project files list refreshed after move operation.');
+
+			// The file's unique ID (UUID) should remain the same.
+			// Find the updated ProjectFile entry in the refreshed cache using the original sourceId.
+			const refreshedFiles = projectService.activeFiles as any[]; // Assuming activeFiles is Array<ProjectFile>
+			const movedFileEntry = refreshedFiles?.find((file: any) => file.id === sourceId);
+
+			if (movedFileEntry) {
+				if (movedFileEntry.name !== newName) {
+					this.debug('WARN', 1, `moveProjectFile: File (ID: ${sourceId}) found after move, but its name property is "${movedFileEntry.name}", which differs from the requested newName "${newName}". This might be due to server-side name sanitization or an unexpected outcome.`);
+				} else {
+					this.debug('INFO', 3, `Successfully located updated ProjectFile (ID: ${sourceId}) with new name "${newName}".`);
+				}
+				return movedFileEntry; // Return the updated ProjectFile object.
+			} else {
+				this.debug('ERROR', 1, `moveProjectFile: Failed to find file with original ID "${sourceId}" in the refreshed list after the move. The file might have been deleted or its ID changed unexpectedly.`);
+				return null;
+			}
+		} catch (error: any) {
+			this.debug('ERROR', 1, `Error during project file move from "${sourceStoragePath}" to "${targetStoragePath}":`, error);
+			// Re-throw a more specific error or the original error for the caller to handle.
+			throw new Error(`Failed to move project file "${sourceId}" to "${newName}": ${error.message || String(error)}`);
+		}
+	}
 
 	/**
 	* Remove a project file by its ID

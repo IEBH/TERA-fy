@@ -42,6 +42,7 @@ toc:
   - name: Project files
     children:
       - createProjectFile
+      - moveProjectFile
       - deleteProjectFile
       - getProjectFile
       - getProjectFileContents

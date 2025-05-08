@@ -1,3 +1,4 @@
+import ProjectFile from './projectFile.js';
 /**
 * Main Tera-Fy Client (class singleton) to be used in a frontend browser
 *
@@ -529,4 +530,23 @@ export default class TeraFy {
     * @returns {Promise<ProjectFile>} The eventual ProjectFile created
     */
     createProjectFile(name: any): any;
+    /**
+    * Moves a project file to a new name/path.
+    * The file's unique ID (UUID) remains the same, but its 'name' (relative path) and associated properties will be updated.
+    *
+    * @function moveProjectFile
+    * @param {String} sourceId The unique ID (UUID) of the file to move.
+    * @param {String} newName The new relative name for the file (e.g., "documents/report-final.pdf" or "image.png").
+    *                         This path is relative to the project's root file directory.
+    *
+    * @param {Object} [options] Additional options to mutate behaviour.
+    * @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing.
+    * @param {Boolean} [options.overwrite=true] If true (default), moving a file to a `newName` that already exists will overwrite the existing file.
+    *                                          This aligns with the default behavior of the underlying Supabase storage `move` operation.
+    *                                          If set to false, the function would ideally check and prevent overwrite, but current implementation relies on underlying storage behavior.
+    *
+    * @returns {Promise<ProjectFile | null>} A promise which resolves to the updated ProjectFile object for the moved file if found after the operation,
+    *                                        or null if the file could not be located post-move (e.g., if its ID changed unexpectedly or it was deleted).
+    */
+    moveProjectFile(sourceId: string, newName: string, options?: any): Promise<ProjectFile | null>;
 }
