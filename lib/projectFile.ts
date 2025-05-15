@@ -1,5 +1,5 @@
 import { filesize } from 'filesize';
-import { pick } from 'lodash-es';
+import { pick, omit } from 'lodash-es';
 import type TeraFy from './terafy.client.ts';
 
 // TODO: Refactor terafy.client.ts so that we don't need to extend the class with injected functions
@@ -165,6 +165,15 @@ export default class ProjectFile {
 	// Using Record<string, any> for a generic object, adjust if meta has a known structure
 	meta: Record<string, any> = {};
 
+	/**
+	 * Whether this is a folder or not
+	 */
+	isFolder!: boolean;
+
+	/**
+	 * If it is a folder, it will have an array of files in the folder
+	 */
+	files?: ProjectFile[];
 
 	/**
 	* ProjectFile constructor
@@ -176,7 +185,12 @@ export default class ProjectFile {
 	constructor(baseFile: SupabaseFile) {
 		// Note: baseFile.tera is assumed to exist based on the check below and the SupabaseFile type definition above
 		if (!baseFile.tera) throw new Error('Basic file requires a `tera` key to access the Tera instance');
-		Object.assign(this, baseFile);
+		Object.assign(this, omit(baseFile, 'encodeIdFunction')); // don't copy encodeIdFunction
+
+		// Check whether encodeIdFunction exists and if it does then parse the id
+		if (baseFile.encodeIdFunction && typeof baseFile.encodeIdFunction === 'function') {
+			this.id = baseFile.encodeIdFunction(this.id);
+		}
 
 		// Translate baseFile.tera -> this._tera (non-enumerable, non-configurable)
 		const tera = (this as any).tera;
@@ -190,6 +204,27 @@ export default class ProjectFile {
 		});
 
 		delete (this as any).tera; // Remove original ref we merged above
+
+		if (this.isFolder) {
+			// Process all files in the folder
+			this.files = this.files?.map(file => {
+				let path = file.path.split(/\//).slice(3).join('/');
+				let url = this.url + '/' + file.name // Add file name to url
+				// Parse url to show library instead of download if reflib file
+				if (file.meta.reflib) {
+					url = url.replace(/\/project\/download\//, '/project/library/');
+				}
+				return new ProjectFile({
+					tera: this._tera,
+					...file,
+					sbId: file.id, // Sash the original Supabase ID under sbId
+					id: file.path,
+					encodeIdFunction: baseFile.encodeIdFunction,
+					path,
+					url,
+				})
+			})
+		}
 
 		// Calculate `teraUrl` from URL
 		// Assuming this.url is always defined after Object.assign
