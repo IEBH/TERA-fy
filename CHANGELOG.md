@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.6](https://github.com/IEBH/TERA-fy/compare/v2.2.5...v2.2.6) (2025-05-15)
+
+
+### fix
+
+* Version bump supabasey to fix login issues ([58a9b83](https://github.com/IEBH/TERA-fy/commit/58a9b837d6251b2dda065d2c6387c5bfc28d9638))
+
 ## [2.2.5](https://github.com/IEBH/TERA-fy/compare/v2.2.4...v2.2.5) (2025-05-15)
 
 
