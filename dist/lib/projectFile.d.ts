@@ -117,6 +117,14 @@ export default class ProjectFile {
     */
     meta: Record<string, any>;
     /**
+     * Whether this is a folder or not
+     */
+    isFolder: boolean;
+    /**
+     * If it is a folder, it will have an array of files in the folder
+     */
+    files?: ProjectFile[];
+    /**
     * ProjectFile constructor
     * Takes the input basic file type from Supabase and adds additional formatted fields
     * @param {SupabaseFile} baseFile The basic Supabase file to extend

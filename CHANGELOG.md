@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.5](https://github.com/IEBH/TERA-fy/compare/v2.2.4...v2.2.5) (2025-05-15)
+
+
+### feat
+
+* Call ProjectFile recursively for all files in a folder ([de32fe7](https://github.com/IEBH/TERA-fy/commit/de32fe74016bfb1bf800e66c7a64791248e89a41))
+
 ## [2.2.4](https://github.com/IEBH/TERA-fy/compare/v2.2.3...v2.2.4) (2025-05-08)
 
 
