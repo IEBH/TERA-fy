@@ -715,7 +715,7 @@ export default class Syncro {
 			if (e instanceof FirebaseError && e.code === 'not-found') {
 				if (retries < 3) {
 					console.warn('Firebase syncro document does not exist during document update, reinitializing...');
-					// TODO: Reinitialize the firestore syncro document
+					// Reinitialize the firestore syncro document
 					const response = await fetch(`${this.config.syncroRegistryUrl}/${this.path}?force=1`);
 					if (!response.ok) {
 						console.error('Failed to reinitialize Syncro');
