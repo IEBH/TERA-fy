@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.7](https://github.com/IEBH/TERA-fy/compare/v2.2.6...v2.2.7) (2025-05-29)
+
+
+### fix
+
+* If the firestore document gets deleted for whatever reason, recover it ([5cd4b94](https://github.com/IEBH/TERA-fy/commit/5cd4b94f8a230d88bec0bbfb102f7fcc6c581ba7))
+
 ## [2.2.6](https://github.com/IEBH/TERA-fy/compare/v2.2.5...v2.2.6) (2025-05-15)
 
 
