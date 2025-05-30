@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.2.8](https://github.com/IEBH/TERA-fy/compare/v2.2.7...v2.2.8) (2025-05-30)
+
+
+### chore
+
+* Remove TODO ([91472ee](https://github.com/IEBH/TERA-fy/commit/91472ee1f3242d3b8f3e3ab3079aa4b038cf2dce))
+
+### fix
+
+* Use javascript imports instead of ts ([177f419](https://github.com/IEBH/TERA-fy/commit/177f419e1cb98b29b551237ee6fb31ba1c1fa28c))
+
 ## [2.2.7](https://github.com/IEBH/TERA-fy/compare/v2.2.6...v2.2.7) (2025-05-29)
 
 
