@@ -1,5 +1,5 @@
 import {merge} from 'lodash-es';
-import type { default as TeraClient } from './terafy.client.ts';
+import type { default as TeraClient } from './terafy.client.js';
 
 // Define interface for deferred methods
 interface DeferredMethod {

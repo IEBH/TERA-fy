@@ -1,6 +1,6 @@
 import { filesize } from 'filesize';
 import { pick, omit } from 'lodash-es';
-import type TeraFy from './terafy.client.ts';
+import type TeraFy from './terafy.client.js';
 
 // TODO: Refactor terafy.client.ts so that we don't need to extend the class with injected functions
 interface TeraClient extends TeraFy {
