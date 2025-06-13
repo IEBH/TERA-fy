@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.9](https://github.com/IEBH/TERA-fy/compare/v2.2.8...v2.2.9) (2025-06-13)
+
+
+### fix
+
+* Ensure created, modified and accessed are dates ([8b39d07](https://github.com/IEBH/TERA-fy/commit/8b39d07b2b9cb2c759f6b1525d5761453b8b553e))
+
 ## [2.2.8](https://github.com/IEBH/TERA-fy/compare/v2.2.7...v2.2.8) (2025-05-30)
 
 
