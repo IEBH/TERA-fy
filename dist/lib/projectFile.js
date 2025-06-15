@@ -38,6 +38,17 @@ export default class ProjectFile {
             },
         });
         delete this.tera; // Remove original ref we merged above
+        // Ensure date properties are actual Date objects, not strings.
+        // This makes the class resilient to the format of the input data.
+        if (this.created && typeof this.created === 'string') {
+            this.created = new Date(this.created);
+        }
+        if (this.modified && typeof this.modified === 'string') {
+            this.modified = new Date(this.modified);
+        }
+        if (this.accessed && typeof this.accessed === 'string') {
+            this.accessed = new Date(this.accessed);
+        }
         if (this.isFolder) {
             // Process all files in the folder
             this.files = this.files?.map(file => {

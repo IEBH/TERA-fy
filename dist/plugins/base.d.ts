@@ -1,4 +1,4 @@
-import type TeraFy from "../lib/terafy.client.ts";
+import type TeraFy from "../lib/terafy.client.js";
 /**
 * Base TeraFy plugin interface
 * This is included as a documentation exanple only

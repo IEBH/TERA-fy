@@ -20,7 +20,7 @@ import {
 import marshal from '@momsfriendlydevco/marshal';
 import {nanoid} from 'nanoid';
 import PromiseRetry from 'p-retry';
-import {FirebaseApp} from 'firebase/app';
+import {FirebaseApp, FirebaseError} from 'firebase/app';
 import { BoundSupabaseyFunction } from '@iebh/supabasey';
 
 
@@ -696,7 +696,7 @@ export default class Syncro {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	setFirestoreState(state: any, options?: { method?: 'merge' | 'set' }): Promise<void> {
+	async setFirestoreState(state: any, options?: { method?: 'merge' | 'set' }, retries = 0): Promise<void> {
 		let settings = {
 			method: 'merge',
 			...options,
@@ -705,10 +705,29 @@ export default class Syncro {
 
 		const firestoreData = Syncro.toFirestore(state);
 
-		if (settings.method === 'merge') {
-			return FirestoreUpdateDoc(this.docRef, firestoreData);
-		} else { // method === 'set'
-			return FirestoreSetDoc(this.docRef, firestoreData);
+		try {
+			if (settings.method === 'merge') {
+				return await FirestoreUpdateDoc(this.docRef, firestoreData);
+			} else { // method === 'set'
+				return await FirestoreSetDoc(this.docRef, firestoreData);
+			}
+		} catch(e) {
+			if (e instanceof FirebaseError && e.code === 'not-found') {
+				if (retries < 3) {
+					console.warn('Firebase syncro document does not exist during document update, reinitializing...');
+					// Reinitialize the firestore syncro document
+					const response = await fetch(`${this.config.syncroRegistryUrl}/${this.path}?force=1`);
+					if (!response.ok) {
+						console.error('Failed to reinitialize Syncro');
+					}
+					// Retry the request
+					return await this.setFirestoreState(state, options, retries + 1);
+				} else {
+					console.warn('Max retries exceeded while trying to recover firestore syncro document, throwing error')
+				}
+			}
+			console.error(`Error during Firestore operation (${settings.method}) on doc: ${this.docRef.path}`, e);
+			throw e;
 		}
 	}
 

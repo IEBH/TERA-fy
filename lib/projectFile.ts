@@ -1,6 +1,6 @@
 import { filesize } from 'filesize';
 import { pick, omit } from 'lodash-es';
-import type TeraFy from './terafy.client.ts';
+import type TeraFy from './terafy.client.js';
 
 // TODO: Refactor terafy.client.ts so that we don't need to extend the class with injected functions
 interface TeraClient extends TeraFy {
@@ -204,6 +204,18 @@ export default class ProjectFile {
 		});
 
 		delete (this as any).tera; // Remove original ref we merged above
+
+		// Ensure date properties are actual Date objects, not strings.
+		// This makes the class resilient to the format of the input data.
+		if (this.created && typeof this.created === 'string') {
+			this.created = new Date(this.created);
+		}
+		if (this.modified && typeof this.modified === 'string') {
+			this.modified = new Date(this.modified);
+		}
+		if (this.accessed && typeof this.accessed === 'string') {
+			this.accessed = new Date(this.accessed);
+		}
 
 		if (this.isFolder) {
 			// Process all files in the folder

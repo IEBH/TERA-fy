@@ -1,4 +1,4 @@
-import type TeraFy from './terafy.client.ts';
+import type TeraFy from './terafy.client.js';
 interface TeraClient extends TeraFy {
     getProjectFileContents: (id: any, options?: any) => any;
     setProjectFileContents: (id: any, contents: any, options?: any) => any;

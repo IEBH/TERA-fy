@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.2.9](https://github.com/IEBH/TERA-fy/compare/v2.2.8...v2.2.9) (2025-06-13)
+
+
+### fix
+
+* Ensure created, modified and accessed are dates ([8b39d07](https://github.com/IEBH/TERA-fy/commit/8b39d07b2b9cb2c759f6b1525d5761453b8b553e))
+
+## [2.2.8](https://github.com/IEBH/TERA-fy/compare/v2.2.7...v2.2.8) (2025-05-30)
+
+
+### chore
+
+* Remove TODO ([91472ee](https://github.com/IEBH/TERA-fy/commit/91472ee1f3242d3b8f3e3ab3079aa4b038cf2dce))
+
+### fix
+
+* Use javascript imports instead of ts ([177f419](https://github.com/IEBH/TERA-fy/commit/177f419e1cb98b29b551237ee6fb31ba1c1fa28c))
+
+## [2.2.7](https://github.com/IEBH/TERA-fy/compare/v2.2.6...v2.2.7) (2025-05-29)
+
+
+### fix
+
+* If the firestore document gets deleted for whatever reason, recover it ([5cd4b94](https://github.com/IEBH/TERA-fy/commit/5cd4b94f8a230d88bec0bbfb102f7fcc6c581ba7))
+
 ## [2.2.6](https://github.com/IEBH/TERA-fy/compare/v2.2.5...v2.2.6) (2025-05-15)
 
 

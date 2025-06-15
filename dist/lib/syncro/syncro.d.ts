@@ -284,7 +284,7 @@ export default class Syncro {
     */
     setFirestoreState(state: any, options?: {
         method?: 'merge' | 'set';
-    }): Promise<void>;
+    }, retries?: number): Promise<void>;
     /**
     * Utility method to fetch the Firestore state for this Syncro
     * NOTE: This directly extracts the state of the Firestore, not its wrapping doc object returned by `FirestoreGetDoc`
