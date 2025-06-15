@@ -10,6 +10,14 @@ export default tseslint.config(
 			'node_modules/', // Ignore dependencies
 			'api.md', // Ignore generated markdown API file
 		],
+
+		// Generic globals
+		languageOptions: {
+			globals: {
+				console: 'readonly',
+				fetch: 'readonly',
+			},
+		},
 	},
 
 	// Include the base configuration from MFDC
