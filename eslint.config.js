@@ -1,16 +1,17 @@
+import {defineConfig, globalIgnores} from "eslint/config";
 import RulesMFDC, {JSCommon} from '@momsfriendlydevco/eslint-config';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
+	globalIgnores([
+		'.*',
+		'docs/',
+		'dist/',
+		'node_modules/',
+		'public/',
+		'**/.wrangler/',
+	]),
 	{
-		ignores: [
-			'.*', // Ignore dotfiles/folders
-			'docs/', // Ignore documentation output
-			'dist/', // Ignore build output
-			'node_modules/', // Ignore dependencies
-			'api.md', // Ignore generated markdown API file
-		],
-
 		// Generic globals
 		languageOptions: {
 			globals: {

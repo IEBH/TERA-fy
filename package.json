@@ -13,7 +13,7 @@
     "build:plugins:vue2:es2019": "esbuild --platform=browser --format=esm --target=es2019 --bundle plugins/vue2.ts --outfile=dist/plugin.vue2.es2019.js --minify",
     "build:docs:api": "documentation build lib/terafy.client.ts lib/projectFile.ts --format html --config documentation.yml --output docs/",
     "build:docs:markdown": "documentation build lib/terafy.client.ts lib/projectFile.ts --format md --markdown-toc --output api.md",
-    "lint": "eslint lib plugins utils widgets --ext .ts",
+    "lint": "eslint",
     "release": "release-it",
     "watch": "nodemon --watch lib --watch plugins --exec \"npm run build\""
   },
@@ -117,7 +117,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@momsfriendlydevco/eslint-config": "^2.2.0",
+    "@momsfriendlydevco/eslint-config": "^2.3.1",
     "@release-it/conventional-changelog": "^10.0.0",
     "@types/detect-port": "^1.3.5",
     "@types/http-proxy": "^1.17.14",
@@ -129,9 +129,10 @@
     "concurrently": "^9.1.2",
     "documentation": "^14.0.3",
     "esbuild": "^0.25.0",
-    "eslint": "^9.29.0",
+    "eslint": "^9.31.0",
     "nodemon": "^3.1.9",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.37.0"
   },
   "peerDependencies": {
     "@iebh/reflib": "^2.5.4",
