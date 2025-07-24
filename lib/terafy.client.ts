@@ -1252,7 +1252,7 @@ export default class TeraFy {
 	* Fetch a project file by its name
 	*
 	* @function getProjectFile
-	* @param {String} name The file name
+	* @param {String} name The file name (or path if inside a directory)
 	*
 	* @param {Object|String} [options] Additional options to mutate behaviour, if a string is given `options.subkey` is assumed
 	* @param {String} [options.subkey] If specified only the extracted subkey is returned rather than the full object
