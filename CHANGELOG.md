@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.11](https://github.com/IEBH/TERA-fy/compare/v2.2.10...v2.2.11) (2025-07-24)
+
+
+### fix
+
+* getProjectFile now correctly recursively searches ([9262a28](https://github.com/IEBH/TERA-fy/commit/9262a2899a700d0f639d82cc95bfda2e2c4ba4e4))
+
 ## [2.2.10](https://github.com/IEBH/TERA-fy/compare/v2.2.9...v2.2.10) (2025-07-24)
 
 

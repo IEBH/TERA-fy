@@ -1087,7 +1087,6 @@ export default class TeraFy {
     * @returns {Promise<ProjectFile>} The eventual fetched ProjectFile (or requested subkey)
     */
     getProjectFile(name, options) {
-        console.log('Getting project file with name/path:', name);
         return this.rpc('getProjectFile', name, options)
             .then((file) => file
             ? new ProjectFile({
