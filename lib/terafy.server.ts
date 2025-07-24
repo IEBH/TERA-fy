@@ -1135,6 +1135,29 @@ export default class TeraFyServer {
 			...(typeof options == 'string' ? {subkey: options} : options),
 		};
 
+		// This helper function performs a depth-first search on the file tree.
+		const findFileRecursively = (items: any[], path: string): any | undefined => {
+			// Iterate over each item at the current level (files or folders)
+			for (const item of items) {
+				console.log(item);
+				console.log(path === item.path, `${path} - ${item.path}`);
+				// If it's a folder with files, search recursively inside it
+				if (item.files && Array.isArray(item.files) && item.files.length > 0) {
+					const found = findFileRecursively(item.files, path);
+					// If the file was found in the recursive call, return it immediately.
+					if (found) {
+						return found;
+					}
+				}
+				// Check if the current item is the file we're looking for
+				else if (item.path === path) {
+					return item; // Found it!
+				}
+			}
+			// If the loop completes, the file was not found at this level or any sub-levels.
+			return undefined;
+		};
+
 		return Promise.resolve()
 			.then(()=>
 				!app.service('$projects').activeFiles // If active files is null/undefined
@@ -1146,26 +1169,11 @@ export default class TeraFyServer {
 				: app.service('$projects').activeFiles // Otherwise use file cache
 			)
 			.then((files: any[]) => {
-				// Get the path prefix for the current project to strip it from the full path
-				// This will be something like: '/projects/c713357f-ee39-4033-9dde-00e426835c3f/'
-				const projectPathPrefix = app.service('$projects').convertRelativePath('');
-
-				return files.find((file: any) => {
-					if (!file.path) return false; // Guard against malformed file objects
-
-					// Get the file's path relative to the project root
-					// e.g., '/projects/ID/assets/logo.png' -> 'assets/logo.png'
-					const fileRelativePath = file.path.startsWith(projectPathPrefix)
-						? file.path.substring(projectPathPrefix.length)
-						: file.path; // Fallback just in case
-
-					// Now compare the project-relative path with the input name
-					return fileRelativePath == name;
-				});
+				// Recursively search for the file to handle searching folders
+				return findFileRecursively(files, name);
 			})
 			.then((file: any) => file && settings.subkey ? (file as any)[settings.subkey] : file)
 	}
-
 
 	/**
 	* Fetch the raw contents of a file by its ID
