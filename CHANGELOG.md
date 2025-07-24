@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.10](https://github.com/IEBH/TERA-fy/compare/v2.2.9...v2.2.10) (2025-07-24)
+
+
+### chore
+
+* Added debug log ([8ab5006](https://github.com/IEBH/TERA-fy/commit/8ab50065ed1d3cc584cc35b9c4040e4613f9ca8e))
+* Bump eslint to latest ([ef5d649](https://github.com/IEBH/TERA-fy/commit/ef5d64984bc28c5a18067d69dbe0b0112af0e30c))
+* Bump Eslint to latest + patch config globals ([132931b](https://github.com/IEBH/TERA-fy/commit/132931b01743d2d42330fbffb2be56d6623e9578))
+* Fix documentation for `getProjectFile()` ([59c00b1](https://github.com/IEBH/TERA-fy/commit/59c00b100934c7519256af9fd8511d454604a31f))
+
+### fix
+
+* getProjectFile now supports files in directories ([7e6457c](https://github.com/IEBH/TERA-fy/commit/7e6457c0f119cf336377e5e438b8dd7f10e749f9))
+
 ## [2.2.9](https://github.com/IEBH/TERA-fy/compare/v2.2.8...v2.2.9) (2025-06-13)
 
 

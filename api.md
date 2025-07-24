@@ -934,7 +934,7 @@ Fetch a project file by its name
 
 ### Parameters
 
-*   `id` **[String][166]** The name + relative directory path component
+*   `name` **[String][166]** The file name (or path if inside a directory)
 *   `options` **([Object][167] | [String][166])?** Additional options to mutate behaviour, if a string is given `options.subkey` is assumed
 
     *   `options.subkey` **[String][166]?** If specified only the extracted subkey is returned rather than the full object

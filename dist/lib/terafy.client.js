@@ -1078,7 +1078,7 @@ export default class TeraFy {
     * Fetch a project file by its name
     *
     * @function getProjectFile
-    * @param {String} id The name + relative directory path component
+    * @param {String} name The file name (or path if inside a directory)
     *
     * @param {Object|String} [options] Additional options to mutate behaviour, if a string is given `options.subkey` is assumed
     * @param {String} [options.subkey] If specified only the extracted subkey is returned rather than the full object
@@ -1086,8 +1086,9 @@ export default class TeraFy {
     *
     * @returns {Promise<ProjectFile>} The eventual fetched ProjectFile (or requested subkey)
     */
-    getProjectFile(id, options) {
-        return this.rpc('getProjectFile', id, options)
+    getProjectFile(name, options) {
+        console.log('Getting project file with name/path:', name);
+        return this.rpc('getProjectFile', name, options)
             .then((file) => file
             ? new ProjectFile({
                 tera: this,

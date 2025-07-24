@@ -974,7 +974,22 @@ class TeraFyServer {
             })
             : app.service('$projects').activeFiles // Otherwise use file cache
         )
-            .then((files) => files.find((file) => file.name == name))
+            .then((files) => {
+            // Get the path prefix for the current project to strip it from the full path
+            // This will be something like: '/projects/c713357f-ee39-4033-9dde-00e426835c3f/'
+            const projectPathPrefix = app.service('$projects').convertRelativePath('');
+            return files.find((file) => {
+                if (!file.path)
+                    return false; // Guard against malformed file objects
+                // Get the file's path relative to the project root
+                // e.g., '/projects/ID/assets/logo.png' -> 'assets/logo.png'
+                const fileRelativePath = file.path.startsWith(projectPathPrefix)
+                    ? file.path.substring(projectPathPrefix.length)
+                    : file.path; // Fallback just in case
+                // Now compare the project-relative path with the input name
+                return fileRelativePath == name;
+            });
+        })
             .then((file) => file && settings.subkey ? file[settings.subkey] : file);
     }
     /**

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 2.2.8 | Documentation</title>
+  <title>@iebh/tera-fy 2.2.9 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>2.2.8</code></div>
+          <div class='mb1'><code>2.2.9</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -6791,7 +6791,7 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getProjectFile(id, options?)</span>
+            <span class='code strong strong truncate'>getProjectFile(name, options?)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6801,7 +6801,7 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
 
   <p>Fetch a project file by its name</p>
 
-    <div class='pre p1 fill-light mt0'>getProjectFile(id: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#projectfile">ProjectFile</a>></div>
+    <div class='pre p1 fill-light mt0'>getProjectFile(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, options: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#projectfile">ProjectFile</a>></div>
   
   
 
@@ -6818,8 +6818,8 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>id</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    The name + relative directory path component
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The file name (or path if inside a directory)
 
           </div>
           
