@@ -292,6 +292,7 @@ export default class TeraFy {
             'getUser',
             'requireUser',
             'getCredentials',
+            'getKindeToken',
             // Projects
             'bindProject',
             'getProject',

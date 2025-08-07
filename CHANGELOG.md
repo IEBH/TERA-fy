@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.12](https://github.com/IEBH/TERA-fy/compare/v2.2.11...v2.2.12) (2025-08-07)
+
+
+### feat
+
+* Function to get kinde access token ([2086fe2](https://github.com/IEBH/TERA-fy/commit/2086fe25a37f91f1a21272ac10308ead2c0e3fc3))
+
 ## [2.2.11](https://github.com/IEBH/TERA-fy/compare/v2.2.10...v2.2.11) (2025-07-24)
 
 
