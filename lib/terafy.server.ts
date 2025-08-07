@@ -534,12 +534,30 @@ export default class TeraFyServer {
 	/**
 	* Provide an object of credentials for 3rd party services like Firebase/Supabase
 	*
-	* @returns {Object} An object containing 3rd party service credentials
+	* @returns An object containing 3rd party service credentials
 	*/
-	getCredentials(): any {
+	getCredentials(): {
+		firebaseApiKey: string;
+		firebaseAppId: string;
+		firebaseAuthDomain: string;
+		firebaseProjectId: string;
+		kindeClientId: string;
+		kindeDomain: string;
+		logrocketProject: string;
+		supabaseKey: string;
+		supabaseUrl: string;
+	} {
 		return app.service('$auth').credentials;
 	}
 
+	/**
+	 * Get auth credentials for kinde
+	 * @returns The kinde auth token
+	 */
+	getKindeToken(): Promise<string> {
+		const $auth = app.service('$auth');
+		return $auth.kinde.getToken();
+	}
 
 	/**
 	* In embed mode only - create a popup window and try to auth via that
