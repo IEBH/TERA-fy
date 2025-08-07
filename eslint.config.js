@@ -41,10 +41,15 @@ export default tseslint.config(
 			},
 		},
 		rules: {
-			// Add any TypeScript specific rule overrides here if needed
-			// For example:
-			// '@typescript-eslint/no-explicit-any': 'warn',
-			// '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+			// Not needed with TS
+			'jsdoc/require-returns-type': 'off',
+			// Loosen rules until proper TS annotation
+			'@typescript-eslint/no-explicit-any': 'warn',
+			'@typescript-eslint/no-unsafe-return': 'warn',
+			'@typescript-eslint/no-unsafe-call': 'warn',
+			'@typescript-eslint/no-unsafe-assignment': 'warn',
+			'@typescript-eslint/no-unsafe-argument': 'warn',
+			'@typescript-eslint/no-unsafe-member-access': 'warn',
 			...JSCommon,
 		},
 	},
@@ -53,7 +58,7 @@ export default tseslint.config(
 	// If you only want this for JS, you could add `files: ['**/*.js']` here.
 	{
 		rules: {
-			'unicorn/prefer-global-this': 'off', // Keep your specific override
+			'unicorn/prefer-global-this': 'off',
 		},
 	},
 );
