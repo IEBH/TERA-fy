@@ -61,4 +61,23 @@ export default tseslint.config(
 			'unicorn/prefer-global-this': 'off',
 		},
 	},
+
+	// MC overrides so the TypeScript linter can STFU
+	...(['rhino', 'slab', 'snow'].includes(process.env.NODE_ENV) ? [{
+		rules: {
+			'no-undef': 'warn',
+			'no-unused-vars': 'off', // Dupe of '@typescript-eslint/no-unused-vars'
+			'prefer-const': 'off',
+			'@typescript-eslint/ban-ts-comment': 'off', // Allow `// @ts-ignore`
+			'@typescript-eslint/no-explicit-any': 'off', // Stop complaining about `:any` definitions
+			'@typescript-eslint/no-unsafe-argument': 'off',
+			'@typescript-eslint/no-unsafe-assignment': 'off',
+			'@typescript-eslint/no-unsafe-call': 'off',
+			'@typescript-eslint/no-unsafe-member-access': 'off',
+			'@typescript-eslint/no-unsafe-return': 'off',
+			'@typescript-eslint/no-unused-vars': 'warn',
+			'@typescript-eslint/no-unnecessary-type-assertion': 'warn',
+			'unicorn/numeric-separators-style': 'warn',
+		},
+	}] : []),
 );
