@@ -3,7 +3,7 @@ import Mitt from 'mitt';
 import {nanoid} from 'nanoid';
 import ProjectFile from './projectFile.js';
 
-/* globals globalThis */
+/* globals window, document */
 
 
 /**
@@ -70,7 +70,6 @@ export default class TeraFy {
 	* Event emitter subscription endpoint
 	* @type {Mitt}
 	*/
-	// @ts-ignore
 	events = Mitt();
 
 
@@ -501,7 +500,7 @@ export default class TeraFy {
 
 					this.rpc('handshake')
 						.then(()=> clearTimeout(timeoutHandle))
-						.then(()=> resolve(undefined))
+						.then(()=> resolve())
 						.catch(reject); // Propagate RPC errors
 				}))
 				.then(()=> 'parent' as 'parent')
@@ -523,24 +522,24 @@ export default class TeraFy {
 
 					this.dom.el = document.createElement('div')
 					this.dom.el.id = 'tera-fy';
-					this.dom.el!.classList.toggle('dev-mode', this.settings.devMode);
-					this.dom.el!.classList.add('minimized');
+					this.dom.el.classList.toggle('dev-mode', this.settings.devMode);
+					this.dom.el.classList.add('minimized');
 					document.body.append(this.dom.el!);
 
-					this.dom.el!.addEventListener('click', ()=> this.dom.el!.classList.toggle('minimized'));
+					this.dom.el.addEventListener('click', ()=> this.dom.el!.classList.toggle('minimized'));
 
 					this.dom.iframe = document.createElement('iframe')
 
 					// Queue up event chain when document loads
-					this.dom.iframe!.setAttribute('sandbox', this.settings.frameSandbox.join(' '));
-					this.dom.iframe!.addEventListener('load', ()=> {
+					this.dom.iframe.setAttribute('sandbox', this.settings.frameSandbox.join(' '));
+					this.dom.iframe.addEventListener('load', ()=> {
 						this.debug('INFO', 3, 'Embeded iframe ready');
-						resolve(undefined);
+						resolve();
 					});
 
 					// Start document load sequence + append to DOM
-					this.dom.iframe!.src = this.settings.siteUrl;
-					this.dom.el!.append(this.dom.iframe!);
+					this.dom.iframe.src = this.settings.siteUrl;
+					this.dom.el.append(this.dom.iframe!);
 				}))
 				.then(()=> this.handshakeLoop())
 
@@ -598,7 +597,7 @@ export default class TeraFy {
 						clearTimeout(handshakeTimeout);
 						clearTimeout(handshakeTimer);
 					})
-					.then(()=> resolve(undefined))
+					.then(()=> resolve())
 					.catch(reject) // Let RPC errors propagate
 			};
 			tryHandshake(); // Kick off initial handshake
@@ -615,7 +614,7 @@ export default class TeraFy {
 		switch (this.settings.mode) {
 			case 'child':
 				this.dom.stylesheet = document.createElement('style');
-				this.dom.stylesheet!.innerHTML = [
+				this.dom.stylesheet.innerHTML = [
 					':root {',
 						'--TERA-accent: #4d659c;',
 					'}',
@@ -813,7 +812,7 @@ export default class TeraFy {
 			Object.assign(this.settings, key);
 		}
 
-		return this.toggleDevMode(this.settings.devMode as boolean);
+		return this.toggleDevMode(this.settings.devMode);
 	}
 
 
