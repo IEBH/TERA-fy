@@ -105,7 +105,7 @@
   },
   "dependencies": {
     "@iebh/supabasey": "^1.1.4",
-    "@momsfriendlydevco/marshal": "^2.1.4",
+    "@momsfriendlydevco/marshal": "^2.2.0",
     "detect-port": "^2.1.0",
     "filesize": "^10.1.6",
     "http-proxy": "^1.18.1",
