@@ -13,6 +13,10 @@ interface ProjectRow {
 	// TODO: Define other columns in project table
 }
 
+interface InstituteRow {
+  data: any;
+}
+
 interface UserRow {
 	id: string;
 	data: {
@@ -65,6 +69,25 @@ type SyncroConfig = Record<string, SyncroEntityConfig>;
 * @property {Function} flushState Function called to flush state from Firebase to Supabase. Called the same as `initState` + `{state:Object}`
 */
 const syncroConfig: SyncroConfig = {
+	institutes: { // {{{
+		singular: 'institute',
+		async initState({supabasey, id}: {supabasey: BoundSupabaseyFunction, id: string}) {
+			let institute = await supabasey((supabase) => supabase
+				.from('institutes')
+				.select('data')
+				.eq('id', id)
+				.maybeSingle<InstituteRow>()
+			);
+			if (institute) return institute.data; // institute is valid and already exists
+		},
+		flushState({supabasey, state, fsId}) {
+			return supabasey(supabase => supabase.rpc('syncro_merge_data', {
+				table_name: 'institutes',
+				entity_id: fsId,
+				new_data: state,
+			}));
+		},
+	}, // }}}
 	projects: { // {{{
 		singular: 'project',
 		async initState({supabasey, id}) {
