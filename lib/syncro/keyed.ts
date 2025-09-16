@@ -249,6 +249,7 @@ export default class SyncroKeyed extends Syncro {
 			await this.keyedMembersExpand(); // Call without index to append
 
 			// Get the newly added member
+			// @ts-ignore
 			let newMember = this.members.at(-1);
 			if (!newMember || !newMember.value) {
 				throw new Error('Failed to expand members or new member has no value object');

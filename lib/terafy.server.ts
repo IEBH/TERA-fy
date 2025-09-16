@@ -1647,6 +1647,7 @@ export default class TeraFyServer {
 			format: 'pojo',
 			autoRequire: true,
 			filter: (file: any) => true, // Default filter
+			// @ts-ignore
 			find: (files: any[]) => files.at(0), // Default find
 			...options,
 		};
