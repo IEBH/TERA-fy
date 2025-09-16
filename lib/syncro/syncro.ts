@@ -313,12 +313,7 @@ export default class Syncro {
 	*/
 	static toFirestore(snapshot: any = {}): any {
 		return marshal.serialize(snapshot, {
-			circular: false,
-			clone: true, // Clone away from the original Vue Reactive so we dont mangle it while traversing
-			modules: [
-				marshalFlattenArrays,
-				...marshal.settings.modules,
-			],
+			...marshalBaseConfig,
 			stringify: false,
 		});
 	}
@@ -333,12 +328,7 @@ export default class Syncro {
 	*/
 	static fromFirestore(snapshot: any = {}): any {
 		return marshal.deserialize(snapshot, {
-			circular: false,
-			clone: true, // Clone away from original so we don't trigger a loop within Firebase
-			modules: [
-				marshalFlattenArrays,
-				...marshal.settings.modules,
-			],
+			...marshalBaseConfig,
 			destringify: false,
 		});
 	}
@@ -826,21 +816,40 @@ export function randomBranch(depth: number = 0): any {
 
 
 /**
-* NPM:@momsfriendlydevco/marshal Compatible module for flattening arrays
-* @type {MarshalModule}
+* Syncro specific version of the base NPM:@momsfriendlydevco/marshal config
+* Designed to be used when calling marshal.serialize() + marshal.deserialize()
 */
-const marshalFlattenArrays = {
-	id: `~array`,
-	recursive: true,
-	test: (v: any): boolean => Array.isArray(v),
-	serialize: (v: any): any => ({_: '~array', ...v}),
-	deserialize: (v: any): any[] => {
-		let arr: any[] = Array.from({length: Object.keys(v).length - 1});
+const marshalBaseConfig = {
+	circular: false,
+	clone: true, // Clone away from original so we don't trigger a loop within Firebase
+	modules: [
+		{ // Flatten arrays into something Firebase can handle
+			id: `~array`,
+			recursive: true,
+			test: v => Array.isArray(v),
+			serialize: v => ({_: '~array', ...v}),
+			deserialize: v => {
+				let arr = Array.from({length: Object.keys(v).length - 1});
 
-		Object.entries(v)
-			.filter(([k]) => k !== '_')
-			.forEach(([k, val]) => arr[+k] = val); // Changed v to val to avoid shadowing
+				Object.entries(v)
+					.filter(([k]) => k !== '_')
+					.forEach(([k, val]) => arr[+k] = val); // Changed v to val to avoid shadowing
 
-		return arr;
-	},
+				return arr;
+			},
+		},
+		{ // Strip Functions during {,de-}serialization
+			id: '~function',
+			test: v => typeof v == 'function',
+			serialize: (v, path) => {
+				console.warn('Marshal Warning: Stripping function from path', path.join('.'));
+				throw new Error('Function serializing is forbidden');
+			},
+			deserialize: (v, path) => {
+				console.warn('Marshal Warning: Stripping function from path', path.join('.'));
+			},
+		},
+		...marshal.settings.modules // Use default Marshal modules excepting...
+			.filter(mod => mod.id != '~function') // Remove the Marshal function module as this upsets Cloudflare workers by using the `eval` built-in
+	],
 };
