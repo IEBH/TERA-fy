@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.2.13](https://github.com/IEBH/TERA-fy/compare/v2.2.12...v2.2.13) (2025-09-16)
+
+
+### chore
+
+* Bump @mfdc/marshal to report errors when flattening function values ([08bdcf6](https://github.com/IEBH/TERA-fy/commit/08bdcf62e6b550f2e187b6ce83aba8b78ecfe1de))
+* Bumped Eslint NPMs ([12902a1](https://github.com/IEBH/TERA-fy/commit/12902a19f766a18a709a883779fff0db0b26aae8))
+
+### docs
+
+* Updated initState() docs to include Hyperdrive binding ([ee2d69a](https://github.com/IEBH/TERA-fy/commit/ee2d69ac568ca35dc72fafb644ef1d3049055801))
+
+### feat
+
+* Add future compatibility with Institute type ([dab7b28](https://github.com/IEBH/TERA-fy/commit/dab7b283d9ea82bd1e1e19386d61849d9d0ac4da))
+
+### fix
+
+* Added MC TS STFU rules PDQ BBQ ([5be0bdc](https://github.com/IEBH/TERA-fy/commit/5be0bdcd443f5feeadcebd8a674cb89061ec5b3d))
+
+### refactor
+
+* Bring {to,from}Firebase() encoders up to date with main TERA project - mainly stripping out eval function handling ([546d33c](https://github.com/IEBH/TERA-fy/commit/546d33c1529597519d813c9d0dbcb31add802288))
+* Misc ESlint/TS fixes ([84dae3b](https://github.com/IEBH/TERA-fy/commit/84dae3b08963c3d6887dfa23ae032204f86b576d))
+* More @ts-ignore markers to avoid TS induced headaches ([259570e](https://github.com/IEBH/TERA-fy/commit/259570e3dce63a0018f68b0c92e4e569ee6d4396))
+
 ## [2.2.12](https://github.com/IEBH/TERA-fy/compare/v2.2.11...v2.2.12) (2025-08-07)
 
 

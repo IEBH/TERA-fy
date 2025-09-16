@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash-es';
 import Mitt from 'mitt';
 import { nanoid } from 'nanoid';
 import ProjectFile from './projectFile.js';
-/* globals globalThis */
+/* globals window, document */
 /**
 * Main Tera-Fy Client (class singleton) to be used in a frontend browser
 *
@@ -457,7 +457,7 @@ export default class TeraFy {
                 let timeoutHandle = setTimeout(() => reject('TIMEOUT'), this.settings.modeTimeout);
                 this.rpc('handshake')
                     .then(() => clearTimeout(timeoutHandle))
-                    .then(() => resolve(undefined))
+                    .then(() => resolve())
                     .catch(reject); // Propagate RPC errors
             }))
                 .then(() => 'parent')
@@ -485,7 +485,7 @@ export default class TeraFy {
                 this.dom.iframe.setAttribute('sandbox', this.settings.frameSandbox.join(' '));
                 this.dom.iframe.addEventListener('load', () => {
                     this.debug('INFO', 3, 'Embeded iframe ready');
-                    resolve(undefined);
+                    resolve();
                 });
                 // Start document load sequence + append to DOM
                 this.dom.iframe.src = this.settings.siteUrl;
@@ -536,7 +536,7 @@ export default class TeraFy {
                     clearTimeout(handshakeTimeout);
                     clearTimeout(handshakeTimer);
                 })
-                    .then(() => resolve(undefined))
+                    .then(() => resolve())
                     .catch(reject); // Let RPC errors propagate
             };
             tryHandshake(); // Kick off initial handshake

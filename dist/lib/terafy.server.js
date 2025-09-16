@@ -1424,6 +1424,7 @@ class TeraFyServer {
             format: 'pojo',
             autoRequire: true,
             filter: (file) => true, // Default filter
+            // @ts-ignore
             find: (files) => files.at(0), // Default find
             ...options,
         };

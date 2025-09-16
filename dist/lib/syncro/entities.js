@@ -8,10 +8,29 @@ import { nanoid } from 'nanoid';
 * @type {Object} An object lookup of entities
 *
 * @property {String} singular The singular noun for the item
-* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({supabase:BoundSupabaseyFunction, entity:String, id:String, relation?:string})` and expected to return the initial data object state
+* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({supabase:BoundSupabaseyFunction, db:BoundHyperdriveInstance, entity:String, id:String, relation?:string})` and expected to return the initial data object state
 * @property {Function} flushState Function called to flush state from Firebase to Supabase. Called the same as `initState` + `{state:Object}`
 */
 const syncroConfig = {
+    institutes: {
+        singular: 'institute',
+        async initState({ supabasey, id }) {
+            let institute = await supabasey((supabase) => supabase
+                .from('institutes')
+                .select('data')
+                .eq('id', id)
+                .maybeSingle());
+            if (institute)
+                return institute.data; // institute is valid and already exists
+        },
+        flushState({ supabasey, state, fsId }) {
+            return supabasey(supabase => supabase.rpc('syncro_merge_data', {
+                table_name: 'institutes',
+                entity_id: fsId,
+                new_data: state,
+            }));
+        },
+    }, // }}}
     projects: {
         singular: 'project',
         async initState({ supabasey, id }) {
