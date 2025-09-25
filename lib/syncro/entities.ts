@@ -80,12 +80,13 @@ const syncroConfig: SyncroConfig = {
 			);
 			if (institute) return institute.data; // institute is valid and already exists
 		},
-		flushState({supabasey, state, fsId}) {
-			return supabasey(supabase => supabase.rpc('syncro_merge_data', {
+		flushState({supabasey, state, id}) {
+			// @ts-ignore
+			return supabasey.rpc('syncro_merge_data', {
 				table_name: 'institutes',
-				entity_id: fsId,
+				entity_id: id,
 				new_data: state,
-			}));
+			});
 		},
 	}, // }}}
 	projects: { // {{{
