@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/IEBH/TERA-fy/compare/v2.3.0...v2.3.1) (2025-09-25)
+
+
+### fix
+
+* Fixes for new uiJson view ([65a916c](https://github.com/IEBH/TERA-fy/commit/65a916cdb989df11e16374c12ce0a42303f13da7))
+
 # [2.3.0](https://github.com/IEBH/TERA-fy/compare/v2.2.14...v2.3.0) (2025-09-25)
 
 

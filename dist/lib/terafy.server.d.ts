@@ -586,7 +586,7 @@ export default class TeraFyServer {
     * Present some JSON to the user
     *
     * @function uiJson
-    * @param {String|Object} [data] Data to display, if (and this doesn't contain 'body' or 'title') this populates `options.body`
+    * @param {String|Object} data Data to display
     *
     * @param {Object} [options] Additional options to mutate behaviour
     * @param {String} [options.body=""] The body text to display above the JSON

@@ -1744,7 +1744,7 @@ class TeraFyServer {
     * Present some JSON to the user
     *
     * @function uiJson
-    * @param {String|Object} [data] Data to display, if (and this doesn't contain 'body' or 'title') this populates `options.body`
+    * @param {String|Object} data Data to display
     *
     * @param {Object} [options] Additional options to mutate behaviour
     * @param {String} [options.body=""] The body text to display above the JSON
@@ -1759,9 +1759,7 @@ class TeraFyServer {
             body: '',
             isHtml: false,
             title: 'TERA',
-            ...(typeof data == 'string' ? { data: JSON.parse(data), ...options }
-                : typeof data == 'object' && !data.body && !data.title ? { data, ...options }
-                    : options),
+            ...options,
         };
         return this.requestFocus(() => app.service('$prompt').dialog({
             title: settings.title,
@@ -1770,7 +1768,7 @@ class TeraFyServer {
             componentProps: {
                 body: settings.body,
                 isHtml: settings.isHtml,
-                data: settings.data,
+                data: data,
             },
         })
             .then(() => 'OK') // Resolve with 'OK' if OK button clicked

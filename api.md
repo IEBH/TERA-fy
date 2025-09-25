@@ -1160,7 +1160,7 @@ Present some JSON to the user
 
 ### Parameters
 
-*   `data` **([String][168] | [Object][169])?** Data to display, if (and this doesn't contain 'body' or 'title') this populates `options.body`
+*   `data` **([String][168] | [Object][169])** Data to display
 *   `options` **[Object][169]?** Additional options to mutate behaviour
 
     *   `options.body` **[String][168]** The body text to display above the JSON (optional, default `""`)
