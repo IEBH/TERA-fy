@@ -157,6 +157,7 @@ export default class TeraFy {
 		// UI
 		'uiAlert',
 		'uiConfirm',
+		'uiJson',
 		'uiPanic',
 		'uiProgress',
 		'uiPrompt',
@@ -1482,6 +1483,22 @@ export default class TeraFy {
 	* @param {String} [options.title='TERA'] The title of the confirmation box
 	*
 	* @returns {Promise} A promise which resolves with `Promise.resolve('OK')` or rejects with `Promise.reject('CANCEL')`
+	*/
+
+
+	/**
+	* Present some JSON to the user
+	*
+	* @function uiJson
+	* @param {String|Object} [data] Data to display, if (and this doesn't contain 'body' or 'title') this populates `options.body`
+	*
+	* @param {Object} [options] Additional options to mutate behaviour
+	* @param {String} [options.body=""] The body text to display above the JSON
+	* @param {Boolean} [options.isHtml=false] If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content
+	* @param {String|Object} [options.json] The JSON data to display
+	* @param {String} [options.title='TERA'] The title of the confirmation box
+	*
+	* @returns {Promise} A promise which resolves with `Promise.resolve('OK')`
 	*/
 
 

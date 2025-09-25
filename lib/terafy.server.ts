@@ -1953,6 +1953,49 @@ export default class TeraFyServer {
 
 
 	/**
+	* Present some JSON to the user
+	*
+	* @function uiJson
+	* @param {String|Object} [data] Data to display, if (and this doesn't contain 'body' or 'title') this populates `options.body`
+	*
+	* @param {Object} [options] Additional options to mutate behaviour
+	* @param {String} [options.body=""] The body text to display above the JSON
+	* @param {Boolean} [options.isHtml=false] If falsy the text is rendered as plain-text otherwise it will be assumed as HTML content
+	* @param {String|Object} [options.json] The JSON data to display
+	* @param {String} [options.title='TERA'] The title of the confirmation box
+	*
+	* @returns {Promise} A promise which resolves with `Promise.resolve('OK')`
+	*/
+	uiJson(data: string | object | array, options?: any): Promise<'OK'> {
+		let settings = {
+			body: '',
+			isHtml: false,
+			title: 'TERA',
+			...(
+				typeof data == 'string' ? {data: JSON.parse(data), ...options}
+				: typeof data == 'object' && !data.body && !data.title ? {data, ...options}
+				: options
+			),
+		};
+
+		return this.requestFocus(()=>
+			app.service('$prompt').dialog({
+				title: settings.title,
+                closable: true,
+				component: 'UiJson',
+                componentProps: {
+                    body: settings.body,
+                    isHtml: settings.isHtml,
+                    data: settings.data,
+                },
+			})
+				.then(()=> 'OK' as 'OK') // Resolve with 'OK' if OK button clicked
+				.catch(()=> Promise.reject('CANCEL')) // Reject with 'CANCEL' if Cancel button clicked or closed
+		);
+	}
+
+
+	/**
 	* Trigger a fatal error, killing the outer TERA site
 	*
 	* @function uiPanic
