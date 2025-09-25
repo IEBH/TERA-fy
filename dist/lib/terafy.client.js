@@ -334,6 +334,7 @@ export default class TeraFy {
             // UI
             'uiAlert',
             'uiConfirm',
+            'uiJson',
             'uiPanic',
             'uiProgress',
             'uiPrompt',

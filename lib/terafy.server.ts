@@ -1966,7 +1966,7 @@ export default class TeraFyServer {
 	*
 	* @returns {Promise} A promise which resolves with `Promise.resolve('OK')`
 	*/
-	uiJson(data: string | object | array, options?: any): Promise<'OK'> {
+	uiJson(data: any, options?: any): Promise<'OK'> {
 		let settings = {
 			body: '',
 			isHtml: false,

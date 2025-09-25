@@ -1,5 +1,12 @@
 # Changelog
 
+# [2.3.0](https://github.com/IEBH/TERA-fy/compare/v2.2.14...v2.3.0) (2025-09-25)
+
+
+### feat
+
+* Added uiJson() ([623d38b](https://github.com/IEBH/TERA-fy/commit/623d38b3b48b5d3835af78d95725e4fb53d48de3))
+
 ## [2.2.14](https://github.com/IEBH/TERA-fy/compare/v2.2.13...v2.2.14) (2025-09-25)
 
 
