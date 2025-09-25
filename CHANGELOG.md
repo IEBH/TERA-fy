@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.14](https://github.com/IEBH/TERA-fy/compare/v2.2.13...v2.2.14) (2025-09-25)
+
+
+### fix
+
+* Rewrote how institutes sync ([551b6f6](https://github.com/IEBH/TERA-fy/commit/551b6f664a47c8fd7398a934d1c1691a346dc82e))
+
 ## [2.2.13](https://github.com/IEBH/TERA-fy/compare/v2.2.12...v2.2.13) (2025-09-16)
 
 
