@@ -1049,12 +1049,11 @@ export default class TeraFyServer {
 	* @param {Boolean} [options.allowCancel=true] Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed
 	* @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
 	* @param {Boolean} [options.showHiddenFiles=false] Whether hidden data.json files should be shown
-	* @param {FileFilters} [options.filter] Optional file filters
 	*
 	* @returns {Promise<ProjectFile>} The eventually selected file, if in save mode new files are created as stubs
 	*/
 	selectProjectFile(options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			title: 'Select a file',
 			hint: null,
 			save: false,
