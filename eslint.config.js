@@ -1,6 +1,7 @@
-import {defineConfig, globalIgnores} from "eslint/config";
+import { globalIgnores} from "eslint/config";
 import RulesMFDC, {JSCommon} from '@momsfriendlydevco/eslint-config';
 import tseslint from 'typescript-eslint';
+import globals from 'globals';
 
 export default tseslint.config(
 	globalIgnores([
@@ -24,6 +25,16 @@ export default tseslint.config(
 	// Include the base configuration from MFDC
 	...RulesMFDC,
 
+	// Add browser defs to typescript
+	{
+		files: ['lib/**/*.ts'], // Apply this only to files in the 'lib' directory
+		languageOptions: {
+			globals: {
+				...globals.browser, // Adds all browser globals like 'window', 'document', etc.
+			},
+		},
+	},
+
 	// Add TypeScript specific configurations
 	{
 		// Apply these settings ONLY to .ts files
@@ -43,13 +54,16 @@ export default tseslint.config(
 		rules: {
 			// Not needed with TS
 			'jsdoc/require-returns-type': 'off',
+			// This rule sometimes gives worse syntax
+			'unicorn/prefer-ternary': 'off',
 			// Loosen rules until proper TS annotation
-			'@typescript-eslint/no-explicit-any': 'warn',
-			'@typescript-eslint/no-unsafe-return': 'warn',
-			'@typescript-eslint/no-unsafe-call': 'warn',
-			'@typescript-eslint/no-unsafe-assignment': 'warn',
-			'@typescript-eslint/no-unsafe-argument': 'warn',
-			'@typescript-eslint/no-unsafe-member-access': 'warn',
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-unsafe-return': 'off',
+			'@typescript-eslint/no-unsafe-call': 'off',
+			'@typescript-eslint/no-unsafe-assignment': 'off',
+			'@typescript-eslint/no-unsafe-argument': 'off',
+			'@typescript-eslint/no-unsafe-member-access': 'off',
+			'@typescript-eslint/prefer-promise-reject-errors': 'off',
 			...JSCommon,
 		},
 	},

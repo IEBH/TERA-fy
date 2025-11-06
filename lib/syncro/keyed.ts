@@ -20,7 +20,7 @@ interface FlushOptions {
 /**
 * @class SyncroKeyed
 * TERA Isomorphic SyncroKeyed class
-* Collate a single (potencially very large) single Syncro object by spltting it acrtoss multiple Syncros
+* Collate a single (potentially very large) single Syncro object by splitting it across multiple Syncros
 * This makes the assumption that the Syncro content is a large object collection of objects - a keyed map collection
 * The original impetus is to allow TERA citation libraries to be held in a Syncro object and flushed back to Supabase when editing has completed
 */
@@ -66,7 +66,7 @@ export default class SyncroKeyed extends Syncro {
 
 		if (!/\*/.test(path)) throw new Error('SyncroKeyed paths must contain at least one asterisk as an object pagination indicator');
 
-		let {prefix, suffix} = /^(?<prefix>.+)\*(?<suffix>.*)$/.exec(path)!.groups!;
+		const {prefix, suffix} = /^(?<prefix>.+)\*(?<suffix>.*)$/.exec(path)!.groups!;
 		this.keyedPath.getKey = (path: string, index: number): string => `${prefix}${index}${suffix}`;
 	}
 
@@ -97,19 +97,19 @@ export default class SyncroKeyed extends Syncro {
 	*/
 	mount(): Promise<Syncro> {
 		// Cast the result to the expected interface
-		let {entity, id, relation, fsCollection, fsId} = Syncro.pathSplit(this.path, {allowAsterisk: true}) as PathSplitResult;
+		const {entity, id, relation, fsCollection, fsId} = Syncro.pathSplit(this.path, {allowAsterisk: true}) as PathSplitResult;
 
 		return Promise.resolve()
 			.then(()=> new Promise<void>(resolve => { // Mount all members by looking for similar keys
 				this.members = []; // Reset member list
 
-				let seekMember = async (index: number) => {
-					let memberId = fsId.replace('*', ''+index);
+				const seekMember = async (index: number) => {
+					const memberId = fsId.replace('*', ''+index);
 					this.debug('Seek keyedMember', fsCollection, '#', memberId);
 
-					let docRef = FirestoreDocRef(Syncro.firestore, fsCollection, memberId);
+					const docRef = FirestoreDocRef(Syncro.firestore, fsCollection, memberId);
 
-					let doc = await FirestoreGetDoc(docRef);
+					const doc = await FirestoreGetDoc(docRef);
 					if (doc.exists()) { // Found a matching entry
 						// Expand member lookup with the new member by its numeric index
 						await this.keyedMembersExpand(index);
@@ -132,11 +132,11 @@ export default class SyncroKeyed extends Syncro {
 				this.debug('Populate initial SyncroKeyed state');
 
 				// Extract base data + add document and return new hook
-				const entityKey = entity as keyof typeof SyncroEntities;
+				const entityKey = entity;
 				if (!SyncroEntities[entityKey]) throw new Error(`Unknown Sync entity "${entity}"`);
 
 				// Go fetch the initial state object
-				let state = await SyncroEntities[entityKey].initState({
+				const state = await SyncroEntities[entityKey].initState({
 					supabasey: Syncro.supabasey,
 					id, relation,
 				});
@@ -144,7 +144,7 @@ export default class SyncroKeyed extends Syncro {
 				await this.keyedAssign(state);
 			})
 			.then(()=> { // Create the reactive
-				let reactive = this.getReactive(this.proxy());
+				const reactive = this.getReactive(this.proxy());
 				// Assuming this.value should hold the reactive proxy
 				// If this.value is inherited and has a specific type, this might need adjustment
 				this.value = reactive.doc;
@@ -173,14 +173,14 @@ export default class SyncroKeyed extends Syncro {
 
 			// Scope through members until we get a hit on the key
 			get(target: SyncroKeyed, prop: string | symbol): any {
-				let targetMember = target.members.find(m => m.value && prop in m.value);
+				const targetMember = target.members.find(m => m.value && prop in m.value);
 				// Access value via targetMember.value if found
 				return targetMember ? targetMember.value[prop] : undefined;
 			},
 
 			// Set the member key if one already exists, otherwise overflow onto the next member
 			set(target: SyncroKeyed, prop: string | symbol, value: any): boolean {
-				let targetMember = target.members.find(m => m.value && prop in m.value);
+				const targetMember = target.members.find(m => m.value && prop in m.value);
 				if (targetMember && targetMember.value) {
 					targetMember.value[prop] = value;
 				} else {
@@ -192,7 +192,7 @@ export default class SyncroKeyed extends Syncro {
 
 			// Remove a key
 			deleteProperty(target: SyncroKeyed, prop: string | symbol): boolean {
-				let targetMember = target.members.find(m => m.value && prop in m.value);
+				const targetMember = target.members.find(m => m.value && prop in m.value);
 				if (targetMember && targetMember.value) {
 					delete targetMember.value[prop];
 					return true; // Indicate success
@@ -212,7 +212,7 @@ export default class SyncroKeyed extends Syncro {
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
 	async flush(options?: FlushOptions): Promise<void> { // Match base class signature
-		let settings: FlushOptions = {
+		const settings: FlushOptions = {
 			destroy: false,
 			...options,
 		};
@@ -240,7 +240,7 @@ export default class SyncroKeyed extends Syncro {
 	* @returns {Promise<*>} A promise which resolves when the operation has completed with the set value
 	*/
 	async keyedSet(key: string, value: any): Promise<any> {
-		let candidateMember = this.members.find(m => m.value && Object.keys(m.value).length < this.keyedConfig.maxKeys);
+		const candidateMember = this.members.find(m => m.value && Object.keys(m.value).length < this.keyedConfig.maxKeys);
 		if (candidateMember?.value) {
 			candidateMember.value[key] = value;
 			return value;
@@ -249,8 +249,7 @@ export default class SyncroKeyed extends Syncro {
 			await this.keyedMembersExpand(); // Call without index to append
 
 			// Get the newly added member
-			// @ts-ignore
-			let newMember = this.members.at(-1);
+			const newMember = this.members.at(-1);
 			if (!newMember || !newMember.value) {
 				throw new Error('Failed to expand members or new member has no value object');
 			}
@@ -268,7 +267,7 @@ export default class SyncroKeyed extends Syncro {
 
 	/**
 	* Assign an entire in-memory object to members
-	* This can be thought of as the optimized equivelent of Object.assign()
+	* This can be thought of as the optimized equivalent of Object.assign()
 	* Use this when merging large objects as it can make optimizations
 	*
 	* @param {Object} state The value to merge
@@ -276,10 +275,10 @@ export default class SyncroKeyed extends Syncro {
 	async keyedAssign(state: Record<string, any>): Promise<void> {
 		// Can we assume we have a blank state - this speeds up existing key checks significantly
 		// Ensure members[0] and its value exist
-		let isBlank = this.members.length === 1 && this.members[0]?.value && Object.keys(this.members[0].value).length === 0;
+		const isBlank = this.members.length === 1 && this.members[0]?.value && Object.keys(this.members[0].value).length === 0;
 
 		if (isBlank) {
-			let chunks = chunk(Object.entries(state), this.keyedConfig.maxKeys)
+			const chunks = chunk(Object.entries(state), this.keyedConfig.maxKeys)
 				.map(chunk => Object.fromEntries(chunk));
 
 			await Promise.all(
@@ -327,20 +326,20 @@ export default class SyncroKeyed extends Syncro {
             return; // Exit if member already exists
         }
 
-		let syncroPath = this.keyedPath.getKey(this.path, index);
+		const syncroPath = this.keyedPath.getKey(this.path, index);
 		// Pass empty options object {} or specify allowAsterisk: false if needed
-		let {fsCollection, fsId} = Syncro.pathSplit(syncroPath, {}) as PathSplitResult;
+		const {fsCollection, fsId} = Syncro.pathSplit(syncroPath, {}) as PathSplitResult;
 		this.debug('Expand SyncroKeyed size to index=', index);
 
 		// Create a new Syncro member, inheriteing some details from this parent item
-		let syncro = new Syncro(`${fsCollection}::${fsId}`, {
+		const syncro = new Syncro(`${fsCollection}::${fsId}`, {
 			debug: this.debug,
 			getReactive: this.getReactive,
 		});
 
 		// Wait for mount to complete
 		await syncro.mount({
-			initialState: {}, // Force intital state to empty object so we don't get stuck in a loop
+			initialState: {}, // Force initial state to empty object so we don't get stuck in a loop
 		});
 
 		// Insert at the correct index if specified, otherwise push

@@ -34,13 +34,13 @@ import {
 * @returns {*} The set value
 */
 export function set(target: any, path: string | (string | number)[], value: any, options?: any): any {
-	let settings = {
+	const settings = {
 		strategy: 'overwrite',
 		...options,
 	};
 
 	// Fetch the existing value if the strategy calls for it
-	let hasExistingValue = ['merge', 'defaults'].includes(settings.strategy)
+	const hasExistingValue = ['merge', 'defaults'].includes(settings.strategy)
 		? has(target, path)
 		: undefined;
 
@@ -119,7 +119,7 @@ export function merge(target: any, path: string | (string | number)[], value: an
 *
 * @returns {*} The resulting object with defaults applied
 */
-export function defaults(target: any, path: string | (string | number)[] | any, value?: any): any {
+export function defaults(target: any, path: string | (string | number)[], value?: any): any {
 	if (typeof path == 'string' || Array.isArray(path)) { // Called as (target, path, value)
 		if (!has(target, path)) { // Target path doesn't exist at all
 			return set(target, path, value);

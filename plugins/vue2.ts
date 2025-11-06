@@ -27,7 +27,7 @@ import TeraFyPluginFirebase from './firebase.js';
 export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 
 	/**
-	* Local Vue@2 library to use, set during constuctor
+	* Local Vue@2 library to use, set during constructor
 	*
 	* @type {Vue}
 	*/
@@ -68,7 +68,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
 	async init(options: any) {
-		let settings = {
+		const settings = {
 			app: null,
 			Vue: null,
 			globalName: '$tera',
@@ -86,17 +86,17 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 			this.Vue.prototype[settings.globalName] = this;
 
 		await super.init(settings); // Initalize parent class Firebase functionality
-		// @ts-ignore
+		// @ts-expect-error TODO: Track down why eslint throws error
 		this.project = await this.mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	// @ts-ignore
+	// @ts-expect-error TODO: Work out why TS doesn't like overrides
 	getReactive(value: any) {
-		let doc = this.Vue.observable(value);
+		const doc = this.Vue.observable(value);
 
-		let watcherPath = `_teraFy_${this.reactiveId++}`;
+		const watcherPath = `_teraFy_${this.reactiveId++}`;
 		this.app[watcherPath] = doc; // Attach onto app so we can use $watch later on
 
 		return {
@@ -110,6 +110,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 			getState: () => {
 				return cloneDeep(doc);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 			watch: (cb: Function) => {
 				this.app.$watch(watcherPath, cb, {deep: true});
 			},

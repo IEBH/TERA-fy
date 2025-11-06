@@ -11,7 +11,7 @@ export default class TeraFyPlugin {
 	/**
 	* Optional function to be included when the main TeraFyClient is initalized
 	*/
-	init() {}
+	init(): any {}
 
 
 	/**
@@ -20,6 +20,7 @@ export default class TeraFyPlugin {
 	* @param {TeraFy} terafy The TeraFy client this plugin is being initalized against
 	* @param {Object} [options] Additional options to mutate behaviour
 	*/
-	constructor(terafy: TeraFy, options: Object) { // eslint-disable-line no-unused-vars
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	constructor(terafy: TeraFy, options: object) { // eslint-disable-line no-unused-vars
 	}
 }

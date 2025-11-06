@@ -1,5 +1,5 @@
-// @ts-nocheck
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import {
 	isEmpty,
 	cloneDeep,
@@ -18,7 +18,7 @@ import {
 	Firestore,
 	Unsubscribe,
 } from 'firebase/firestore';
-// @ts-ignore
+// @ts-expect-error No declaration file for marshal
 import marshal from '@momsfriendlydevco/marshal';
 import {nanoid} from 'nanoid';
 import PromiseRetry from 'p-retry';
@@ -84,7 +84,7 @@ export default class Syncro {
 
 
 	/**
-	* OPTIONAL SyncroEntiries from './entiries.js' if its required
+	* OPTIONAL SyncroEntries from './entities.ts' if its required
 	* This only gets populated if `config.forceLocalInit` is truthy and we've mounted at least one Syncro
 	*
 	* @type {Record<string, any>}
@@ -129,7 +129,7 @@ export default class Syncro {
 	* Various Misc config for the Syncro instance
 	*
 	* @type {Object}
-	* @property {Number} heartbeatinterval Time in milliseconds between heartbeat beacons
+	* @property {Number} heartbeatInterval Time in milliseconds between heartbeat beacons
 	* @property {String} syncroRegistryUrl The prefix Sync worker URL, used to populate Syncros and determine their active status
 	* @property {Object} context Additional named parameters to pass to callbacks like initState
 	*/
@@ -142,7 +142,7 @@ export default class Syncro {
 
 	/**
 	* Whether the next heartbeat should be marked as 'dirty'
-	* This indicates that at least one change has occured since the last hearbeat and the server should perform a flush (but not a clean)
+	* This indicates that at least one change has occurred since the last heartbeat and the server should perform a flush (but not a clean)
 	* This flag is only transmitted once in the next heartbeat before being reset
 	*
 	* @see markDirty()
@@ -158,7 +158,7 @@ export default class Syncro {
 	*
 	* @param {*...} [msg] The message to output
 	*/
-	debug(...msg: any[]) {} // eslint-disable-line no-unused-vars
+	debug(...msg: any[]) {}
 
 
 	/**
@@ -213,14 +213,14 @@ export default class Syncro {
 	* Actions to preform when we are destroying this instance
 	* This is an array of function callbacks to execute in parallel when `destroy()` is called
 	*
-	* @type {Array<() => void>}
+	* @type {Array<function>}
 	*/
 	_destroyActions: Array<() => void> = [];
 
 
 	/**
 	* Function to return whatever the local framework uses as a reactive object
-	* This should respond with an object of mandatory functions to watch for changes and remerge them
+	* This should respond with an object of mandatory functions to watch for changes and re-merge them
 	*
 	* @param {Object} value Initial value of the reactive
 	*
@@ -232,7 +232,7 @@ export default class Syncro {
 	*/
 	getReactive(value: any): ReactiveWrapper {
 		console.warn('Syncro.getReactive has not been subclassed, assuming a POJO response');
-		let doc: Record<string, any> = {...value};
+		const doc: Record<string, any> = {...value};
 		return {
 			doc,
 			setState(state: any) {
@@ -243,7 +243,7 @@ export default class Syncro {
 			getState() {
 				return cloneDeep(doc);
 			},
-			watch(cb: (newState: any) => void) { // eslint-disable-line no-unused-vars
+			watch(cb: (newState: any) => void) {
 				// Stub
 			},
 		};
@@ -252,7 +252,7 @@ export default class Syncro {
 
 	/**
 	* Returns the split entity + ID relationship from a given session path
-	* This funciton checks for valid UUID format strings + that the entity is a known/supported entity (see `knownEntities`)
+	* This function checks for valid UUID format strings + that the entity is a known/supported entity (see `knownEntities`)
 	* NOTE: When used by itself (i.e. ignoring response) this function can also act as a guard that a path is valid
 	*
 	* INPUT: `widgets::UUID` -> `{entity:'widgets', id:UUID}`
@@ -265,12 +265,12 @@ export default class Syncro {
 	* @returns {PathSplitResult} An object composed of the session path components
 	*/
 	static pathSplit(path: string, options?: any): PathSplitResult {
-		let settings = {
+		const settings = {
 			allowAsterisk: false,
 			...options,
 		};
 
-		let pathMatcher = new RegExp(
+		const pathMatcher = new RegExp(
 			// Compose the patch matching expression - note double escapes for backslashes to avoid encoding as raw string values
 			'^'
 			+ '(?<entity>\\w+?)' // Any alpha-numeric sequence as the entity name (non-greedy capture)
@@ -284,7 +284,7 @@ export default class Syncro {
 			+ '$'
 		);
 
-		let extracted = { ...pathMatcher.exec(path)?.groups } as { entity?: string, id?: string, relation?: string };
+		const extracted = { ...pathMatcher.exec(path)?.groups } as { entity?: string, id?: string, relation?: string };
 
 		if (!extracted || !extracted.entity || !extracted.id) throw new Error(`Invalid session path syntax "${path}"`);
 		if (Syncro.SyncroEntities && !(extracted.entity in Syncro.SyncroEntities)) throw new Error(`Unsupported entity "${path}" -> Entity="${extracted.entity}"`);
@@ -306,7 +306,7 @@ export default class Syncro {
 	* This applies the following mutations to the incoming object:
 	*
 	* 1. Arrays are converted to Objects (Firestore cannot store nested arrays)
-	* 2. All non-POJO objects (e.g. Dates) to a symetric object
+	* 2. All non-POJO objects (e.g. Dates) to a symmetric object
 	*
 	* @param {Object} snapshot The current state to convert
 	* @returns {Object} A Firebase compatible object
@@ -382,24 +382,35 @@ export default class Syncro {
 	* @returns {Object} A JavaScript POJO representing the converted state
 	*/
 	static fromFirestoreFields(fields: any = {}): any {
-		let result: Record<string, any> = {};
-		for (let key in fields) {
-			let value = fields[key];
-			let isDocumentType = [
+		const result: Record<string, any> = {};
+		for (const key in fields) {
+			const value = fields[key];
+			const isDocumentType = [
 				'stringValue', 'booleanValue', 'doubleValue',
 				'integerValue', 'timestampValue', 'mapValue', 'arrayValue', 'nullValue', // Added nullValue
 			].find(t => t === Object.keys(value)[0]); // Check the first key of the value object
 
 			if (isDocumentType) {
-				if (isDocumentType === 'mapValue') {
+				switch (isDocumentType) {
+				case 'mapValue':
 					result[key] = Syncro.fromFirestoreFields(value.mapValue.fields || {});
-				} else if (isDocumentType === 'arrayValue') {
-					let list = value.arrayValue.values;
+
+				break;
+
+				case 'arrayValue': {
+					const list = value.arrayValue.values;
 					result[key] = !!list ? list.map((l: any) => Syncro.fromFirestoreFields(l)) : [];
-				} else if (isDocumentType === 'nullValue') {
+
+				break;
+				}
+				case 'nullValue':
 					result[key] = null;
-				} else {
+
+				break;
+
+				default:
 					result[key] = value[isDocumentType];
+
 				}
 			} else {
 				// This case might not be standard Firestore field structure, but handle recursively
@@ -417,8 +428,8 @@ export default class Syncro {
 	*
 	* @returns {Promise<Object|Null>} An eventual snapshot of the given path, if the entity doesn't exist null is returned
 	*/
-	static getSnapshot(path: string): Promise<any | null> {
-		let {fsCollection, fsId} = Syncro.pathSplit(path);
+	static getSnapshot(path: string): Promise<object | null> {
+		const {fsCollection, fsId} = Syncro.pathSplit(path);
 
 		return Promise.resolve()
 			.then(async ()=> FirestoreGetDoc( // Set up binding and wait for it to come ready
@@ -443,11 +454,11 @@ export default class Syncro {
 	* @returns {Promise<*>} The state object after it has been applied
 	*/
 	static setSnapshot(path: string, state: any, options?: { method?: 'merge' | 'set' }): Promise<any> {
-		let settings = {
+		const settings = {
 			method: 'merge',
 			...options,
 		};
-		let {fsCollection, fsId} = Syncro.pathSplit(path);
+		const {fsCollection, fsId} = Syncro.pathSplit(path);
 		const docRef = FirestoreDocRef(Syncro.firestore, fsCollection, fsId);
 		const firestoreData = Syncro.toFirestore(state);
 
@@ -467,20 +478,20 @@ export default class Syncro {
 	* Mount the remote Firestore document against this Syncro instance
 	*
 	* @param {Object} [options] Additional options to mutate behaviour
-	* @param {Object} [options.initalState] State to use if no state is already loaded, overrides the entities own `initState` function fetcher
+	* @param {Object} [options.initialState] State to use if no state is already loaded, overrides the entities own `initState` function fetcher
 	* @param {Number} [options.retries=3] Number of times to retry if a mounted Syncro fails its sanity checks
 	* @returns {Promise<Syncro>} A promise which resolves as this syncro instance when completed
 	*/
 	mount(options?: any): Promise<Syncro> {
-		let settings = {
+		const settings = {
 			initialState: null,
 			retries: 5,
 			retryMinTime: 250,
 			...options,
 		};
 
-		let {fsCollection, fsId, entity} = Syncro.pathSplit(this.path);
-		let reactive: ReactiveWrapper; // Eventual response from reactive() with the intitial value
+		const {fsCollection, fsId, entity} = Syncro.pathSplit(this.path);
+		let reactive: ReactiveWrapper; // Eventual response from reactive() with the initial value
 		let doc: any; // Eventual Firebase document
 
 		return PromiseRetry(
@@ -490,8 +501,8 @@ export default class Syncro {
 				// Set up binding and wait for it to come ready
 				this.docRef = FirestoreDocRef(Syncro.firestore, fsCollection, fsId);
 
-				// Initalize state
-				let initialState = await this.getFirestoreState();
+				// Initialize state
+				const initialState = await this.getFirestoreState();
 
 				// Construct a reactive component
 				reactive = this.getReactive(initialState);
@@ -502,7 +513,7 @@ export default class Syncro {
 
 				// Subscribe to remote updates
 				const unsubscribe: Unsubscribe = FirestoreOnSnapshot(this.docRef, snapshot => {
-					let snapshotData = Syncro.fromFirestore(snapshot.data());
+					const snapshotData = Syncro.fromFirestore(snapshot.data());
 					this.debug('Incoming snapshot', {snapshotData});
 					reactive.setState(snapshotData);
 				});
@@ -511,7 +522,7 @@ export default class Syncro {
 				// Optionally create the doc if it has no content
 				if (!isEmpty(doc)) { // Doc already has content - skip
 					// Do nothing
-				} else if (settings.initialState) { // Provided an intiailState - use that instead of the entities own method
+				} else if (settings.initialState) { // Provided an initialState - use that instead of the entities own method
 					this.debug('Populate initial Syncro state (from provided initialState)');
 					await this.setFirestoreState(settings.initialState, {method: 'set'});
 				} else {
@@ -580,7 +591,7 @@ export default class Syncro {
 		}
 		// }}}
 
-		let settings = {
+		const settings = {
 			delta: true,
 			flush: true,
 			forceFlush: false,
@@ -617,13 +628,14 @@ export default class Syncro {
 	* Schedule Syncro heartbeats
 	* This populates the `sync` presence meta-information
 	*
-	* @param {Boolean} [enable=true] Whether to enable heartbeating
+	* @param {Boolean} [enable=true] Whether to enable heartbeats
 	*
 	* @param {Object} [options] Additional options to mutate behaviour
 	* @param {Boolean} [options.immediate=false] Fire a heartbeat as soon as this function is called, this is only really useful on mount
+	* @returns Promise that resolves to void or void
 	*/
-	setHeartbeat(enable: boolean = true, options?: any): Promise<void> | void { // Return type adjusted
-		let settings = {
+	setHeartbeat(enable: boolean = true, options?: any): Promise<void> | void {
+		const settings = {
 			immediate: true,
 			...options,
 		};
@@ -648,7 +660,7 @@ export default class Syncro {
 
 
 	/**
-	* Perform one heartbeat pulse to the server to indicate presense within this Syncro
+	* Perform one heartbeat pulse to the server to indicate presence within this Syncro
 	* This function is automatically called by a timer if `setHeartbeat(true)` (the default behaviour)
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
@@ -686,10 +698,11 @@ export default class Syncro {
 	* @param {Object} [options] Additional options to mutate behaviour
 	* @param {'merge'|'set'} [options.method='merge'] How to apply the new state. 'merge' (merge in partial data to an existing Syncro), 'set' (overwrite the entire Syncro state)
 	*
+	* @param {number} retries How many tries to take before erroring
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
 	async setFirestoreState(state: any, options?: { method?: 'merge' | 'set' }, retries = 0): Promise<void> {
-		let settings = {
+		const settings = {
 			method: 'merge',
 			...options,
 		};
@@ -760,7 +773,7 @@ export default class Syncro {
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
 	flush(options?: any): Promise<void | null> {
-		let settings = {
+		const settings = {
 			destroy: false,
 			...options,
 		};
@@ -768,7 +781,7 @@ export default class Syncro {
 		return fetch(`${this.config.syncroRegistryUrl}/${this.path}/flush` + (settings.destroy ? '?destroy=1' : ''))
 			.then(response => response.ok
 				? null
-				: Promise.reject(response.statusText || 'An error occured')
+				: Promise.reject(response.statusText || 'An error occurred')
 			);
 	}
 
@@ -784,14 +797,14 @@ export default class Syncro {
 
 /**
 * Build a chaotic random tree structure based on dice rolls
-* This funciton is mainly used for sync testing
+* This function is mainly used for sync testing
 *
 * @param {Number} [depth=0] The current depth we are starting at, changes the nature of branches based on probability
 *
-* @returns {*} The current branch conotents
+* @returns {*} The current branch contents
 */
 export function randomBranch(depth: number = 0): any {
-	let dice = // Roll a dice to pick the content
+	const dice = // Roll a dice to pick the content
 		depth == 0 ? 10 // first roll is always '10'
 		: random(0, 11 - depth, false); // Subsequent rolls bias downwards based on depth (to avoid recursion)
 
@@ -826,10 +839,10 @@ const marshalBaseConfig = {
 		{ // Flatten arrays into something Firebase can handle
 			id: `~array`,
 			recursive: true,
-			test: v => Array.isArray(v),
-			serialize: v => ({_: '~array', ...v}),
-			deserialize: v => {
-				let arr = Array.from({length: Object.keys(v).length - 1});
+			test: (v: any) => Array.isArray(v),
+			serialize: (v: any) => ({_: '~array', ...v}),
+			deserialize: (v: any) => {
+				const arr = Array.from({length: Object.keys(v).length - 1});
 
 				Object.entries(v)
 					.filter(([k]) => k !== '_')
@@ -840,16 +853,16 @@ const marshalBaseConfig = {
 		},
 		{ // Strip Functions during {,de-}serialization
 			id: '~function',
-			test: v => typeof v == 'function',
-			serialize: (v, path) => {
+			test: (v: any) => typeof v == 'function',
+			serialize: (v: any, path: string[]) => {
 				console.warn('Marshal Warning: Stripping function from path', path.join('.'));
 				throw new Error('Function serializing is forbidden');
 			},
-			deserialize: (v, path) => {
+			deserialize: (v: any, path: string[]) => {
 				console.warn('Marshal Warning: Stripping function from path', path.join('.'));
 			},
 		},
 		...marshal.settings.modules // Use default Marshal modules excepting...
-			.filter(mod => mod.id != '~function') // Remove the Marshal function module as this upsets Cloudflare workers by using the `eval` built-in
+			.filter((mod: any) => mod.id != '~function') // Remove the Marshal function module as this upsets Cloudflare workers by using the `eval` built-in
 	],
 };

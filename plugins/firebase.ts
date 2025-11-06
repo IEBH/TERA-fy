@@ -1,5 +1,5 @@
-import {initializeApp as Firebase, FirebaseApp} from 'firebase/app';
-import {getFirestore as Firestore, Firestore as FirestoreInstance} from 'firebase/firestore';
+import {initializeApp as Firebase} from 'firebase/app';
+import {getFirestore as Firestore} from 'firebase/firestore';
 import Supabasey from '@iebh/supabasey';
 import Syncro from '../lib/syncro/syncro.js';
 import TeraFyPluginBase from './base.js';
@@ -23,24 +23,25 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	// Declare properties expected by the class methods or potentially inherited
 	getCredentials!: () => Promise<Record<string, any>>;
 	requireProject!: () => Promise<{ id: string }>;
+	// eslint-disable-next-line no-unused-vars
 	debug!: (...args: any[]) => void;
 
 
 	/**
 	* @interface
 	* The Syncro#reactive option to use when creating new Syncro instances
-	* This is expected to be overriden by other plugins
+	* This is expected to be overridden by other plugins
 	* If falsy the Syncro module will fall back to its internal (POJO only) getReactive() function
 	*
 	* @name getReactive
 	* @type {Function} A reactive function as defined in Syncro
 	*/
-	getReactive?: Function;
+	getReactive?: () => any;
 
 
 	/**
 	* Setup Firebase + Firestore + Supabase
-	* Default credentials (Firebase + Supabase) will be retrieved from `getCredentials()` unless overriden here
+	* Default credentials (Firebase + Supabase) will be retrieved from `getCredentials()` unless overridden here
 	*
 	* @param {Object} options Additional options to mutate behaviour (defaults to the main teraFy settings)
 	* @param {String} [options.firebaseApiKey] Firebase API key
@@ -53,7 +54,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
 	async init(options?: any): Promise<void> { // Add optional '?' and type 'any', keep async Promise<void>
-		let settings = {
+		const settings = {
 			firebaseApiKey: null,
 			firebaseAuthDomain: null,
 			firebaseProjectId: null,
@@ -64,7 +65,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 			...options,
 		};
 
-		let emptyValues = Object.keys(settings).filter(k => k === null);
+		const emptyValues = Object.keys(settings).filter(k => k === null);
 		if (emptyValues.length > 0)
 			throw new Error('Firebase plugin requires mandatory options: ' + emptyValues.join(', '));
 
@@ -88,7 +89,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	/**
 	* Mount the given namespace against `namespaces[name]`
 	*
-	* @param {'_PROJECT'|String} name The name/Syncro path of the namespace to mount (or '_PROJECT' for the project mountpoint)
+	* @param {'_PROJECT'|String} name The name/Syncro path of the namespace to mount (or '_PROJECT' for the project mount-point)
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
@@ -98,7 +99,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 		return Promise.resolve()
 			.then(()=> this.requireProject())
 			.then(project => {
-				let path = name == '_PROJECT'
+				const path = name == '_PROJECT'
 					? `projects::${project.id}`
 					: `project_namespaces::${project.id}::${name}`;
 
@@ -124,7 +125,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
 	_unmountNamespace(name: string): Promise<void | any[]> { // Add type 'string'
-		let syncro = this.syncros[name]; // Create local alias for Syncro before we detach it
+		const syncro = this.syncros[name]; // Create local alias for Syncro before we detach it
 
 		// Detach local state
 		delete this.namespaces[name];
@@ -132,7 +133,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 
 		// Check if syncro exists before calling destroy
 		if (syncro) {
-			return syncro.destroy(); // Trigger Syncro distruction
+			return syncro.destroy(); // Trigger Syncro destruction
 		} else {
 			return Promise.resolve(); // Or handle the case where syncro doesn't exist
 		}

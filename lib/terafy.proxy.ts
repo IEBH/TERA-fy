@@ -12,6 +12,7 @@ interface TeraProxyOptions {
     targetHost?: string;
     targetPort?: number;
     portConflict?: 'ignore' | 'throw';
+    // eslint-disable-next-line no-unused-vars
     onLog?: (level: 'INFO' | 'WARN', ...msg: any[]) => void;
 }
 
@@ -68,7 +69,7 @@ export class TeraProxy {
 				}
 				// Only return void if the port is available
 			})
-			.then(() => this.proxyServer = Proxy.createProxyServer({ // Create proxy pass-thru
+			.then(() => this.proxyServer = Proxy.createProxyServer({ // Create proxy pass-through
 				changeOrigin: true,
 				target: {
 					protocol: this.settings.targetProtocol + ':',
@@ -78,8 +79,8 @@ export class TeraProxy {
 			}))
 			.then(()=> new Promise<void>((resolve, reject) => {
 				// Wrap listener in a domain so we can correctly catch EADDRINUSE
-				let domain = createDomain();
-				domain.on('error', (err: NodeJS.ErrnoException) => { // Add type to err
+				const domain = createDomain();
+				domain.on('error', (err: Error & { code?: string }) => { // Add type to err
 					if (err.code == 'EADDRINUSE') {
 						reject('PORT-CONFLICT');
 					} else {
@@ -91,7 +92,7 @@ export class TeraProxy {
 					if (!this.proxyServer) return reject(new Error('Proxy server not initialized')); // Guard against undefined proxyServer
 					this.proxyServer.listen(this.settings.port, this.settings.host)
 					// Handle errors on the proxy server itself, although domain should catch listen errors
-					this.proxyServer.on('error', (err: NodeJS.ErrnoException) => {
+					this.proxyServer.on('error', (err: Error & { code?: string }) => {
 						if (err.code == 'EADDRINUSE') {
 							reject('PORT-CONFLICT');
 						} else {
@@ -129,7 +130,9 @@ export class TeraProxy {
 		if (options) Object.assign(this.settings, options);
 
 		// Auto start?
-		if (this.settings.autoStart) this.start(); // Use resolved settings.autoStart
+		if (this.settings.autoStart) this.start().catch(err => { // Use resolved settings.autoStart
+			this.settings.onLog('WARN', 'Proxy auto-start failed:', err);
+		});
 	}
 }
 

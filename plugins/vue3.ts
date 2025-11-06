@@ -46,15 +46,15 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 		await super.init(options); // Initalize parent class Firebase functionality
 
 		// Mount the project namespace
-		// @ts-ignore
+		// @ts-expect-error TODO: Track down why eslint throws error
 		this.project = await this.mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	// @ts-ignore
+	// @ts-expect-error TODO: Work out why TS doesn't like overrides
 	getReactive(value: any) {
-		let doc = vueReactive(value);
+		const doc = vueReactive(value);
 		return {
 			doc,
 			setState(state: any) {
@@ -78,7 +78,8 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 	* @returns {VuePlugin} A Vue@3 plugin spec
 	*/
 	vuePlugin() {
-		let $tera = this;
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		const $tera = this;
 
 		return {
 
@@ -91,7 +92,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 			* @param {String} [options.globalName='$tera'] Global property to allocate this service as
 			*/
 			install(app: App, options: Record<string, any>) {
-				let settings = {
+				const settings = {
 					globalName: '$tera',
 					...options,
 				};

@@ -1,11 +1,28 @@
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 // Global 'app' declaration
-declare var app: any;
+declare let app: any;
 
 // Global window augmentation
 declare global {
     interface Window {
+        // eslint-disable-next-line no-unused-vars
         panic(text: any): void;
     }
+}
+
+interface UiWindowPermissions {
+	popup?: boolean;
+	location?: boolean;
+	menubar?: boolean;
+	status?: boolean;
+	scrollbars?: boolean;
+}
+
+interface UiWindowOptions {
+	width?: number;
+	height?: number;
+	center?: boolean;
+	permissions?: UiWindowPermissions;
 }
 
 import {cloneDeep} from 'lodash-es';
@@ -13,7 +30,7 @@ import mixin from '#utils/mixin';
 import {nanoid} from 'nanoid';
 import pathTools from '#utils/pathTools';
 import promiseDefer from '#utils/pDefer';
-// @ts-ignore
+// @ts-expect-error TODO: Remove when reflib gets declaration file
 import Reflib from '@iebh/reflib';
 import {reactive} from 'vue';
 
@@ -23,7 +40,6 @@ import {reactive} from 'vue';
 * @class TeraFyServer
 */
 
-/* globals globalThis, app */
 export default class TeraFyServer {
 
 	/**
@@ -120,7 +136,7 @@ export default class TeraFyServer {
 			case TeraFyServer.SERVERMODE_TERA:
 			case TeraFyServer.SERVERMODE_FRAME: {
 				// Server is the top-level window so we need to send messages to an embedded iFrame
-				let iFrame = document.querySelector('iframe#external') as HTMLIFrameElement | null;
+				const iFrame = document.querySelector('iframe#external');
 				if (!iFrame) {
 					this.debug('INFO', 2, 'Cannot locate TERA-FY top-level->iFrame#external - maybe there is none');
 					return mixin(this, {
@@ -211,7 +227,7 @@ export default class TeraFyServer {
 	send(message: any): Promise<any> {
 		if (!this.messageEvent?.source) throw new Error('send() requires a messageEvent with a source');
 
-		let id = nanoid();
+		const id = nanoid();
 
 		this.acceptPostboxes[id] = {}; // Stub for the deferred promise
 		this.acceptPostboxes[id].promise = new Promise((resolve, reject) => {
@@ -289,7 +305,7 @@ export default class TeraFyServer {
 		// Ignore messages from the same origin (potential loops)
 		if (typeof window !== 'undefined' && rawMessage.origin === window.location.origin) return;
 
-		let message = rawMessage.data;
+		const message = rawMessage.data;
 		// Ensure message is an object and has TERA property
 		if (typeof message !== 'object' || message === null || !message.TERA) return;
 		this.debug('INFO', 3, 'Recieved message', message);
@@ -432,14 +448,14 @@ export default class TeraFyServer {
 	* @returns {Promise<User>} The current logged in user or null if none
 	*/
 	getUser(options?: any): Promise<any | null> {
-		let settings = {
+		const settings = {
 			forceRetry: false,
 			waitPromises: true,
 			...options,
 		};
 
-		let $auth = app.service('$auth');
-		let $subscriptions = app.service('$subscriptions');
+		const $auth = app.service('$auth');
+		const $subscriptions = app.service('$subscriptions');
 
 		return Promise.resolve()
 			.then(()=> settings.waitPromises && Promise.all([
@@ -584,7 +600,7 @@ export default class TeraFyServer {
 			try {
 				lsState = JSON.parse(lsState);
 
-				let $auth = app.service('$auth');
+				const $auth = app.service('$auth');
 				$auth.state = 'user';
 				$auth.ready = true;
 				$auth.isLoggedIn = true;
@@ -605,7 +621,7 @@ export default class TeraFyServer {
 
 		this.debug('INFO', 4, 'localStorage failed - using popup auth instead');
 
-		let focusContent = document.createElement('div');
+		const focusContent = document.createElement('div');
 		focusContent.innerHTML = '<div>Authenticate with <a href="https://tera-tools.com" target="_blank">TERA-tools.com</a></div>'
 			+ '<div class="mt-2"><a class="btn btn-light">Open Popup...</a></div>';
 
@@ -615,13 +631,13 @@ export default class TeraFyServer {
 		);
 
 		// Create a deferred promise which will (eventually) resolve when the downstream window signals its ready
-		let waitOnWindowAuth = promiseDefer();
+		const waitOnWindowAuth = promiseDefer();
 
 		// Create a listener for the message from the downstream window to resolve the promise
-		let listenMessages = ({data}: {data: any}) => {
+		const listenMessages = ({data}: {data: any}) => {
 			this.debug('INFO', 3, 'Recieved message from popup window', {data});
 			if (data.TERA && data.action == 'popupUserState' && data.user) { // Signal sent from landing page - we're logged in, yey!
-				let $auth = app.service('$auth');
+				const $auth = app.service('$auth');
 
 				// Accept user polyfill from opener
 				$auth.state = 'user';
@@ -686,7 +702,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Project|null>} The currently active project, if any
 	*/
 	getProject(): Promise<any | null> {
-		let $projects = app.service('$projects');
+		const $projects = app.service('$projects');
 
 		return $projects.promise()
 			.then(()=> $projects.active
@@ -707,7 +723,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Array<Project>>} Collection of projects the user has access to
 	*/
 	getProjects(): Promise<any[]> {
-		let $projects = app.service('$projects');
+		const $projects = app.service('$projects');
 
 		return $projects.promise()
 			.then(()=> $projects.list.map((project: any) => ({
@@ -744,7 +760,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Project>} The active project
 	*/
 	requireProject(options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			autoRequireUser: true,
 			autoSetActiveProject: true,
 			title: 'Select a project to work with',
@@ -760,7 +776,7 @@ export default class TeraFyServer {
 				if (active) return active; // Use active project
 
 				return new Promise((resolve, reject) => {
-					let askProject = (): Promise<any> => Promise.resolve()
+					const askProject = (): Promise<any> => Promise.resolve()
 						.then(()=> this.selectProject({
 							allowCancel: false,
 						}))
@@ -801,7 +817,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Project>} The active project
 	*/
 	selectProject(options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			title: 'Select a project to work with',
 			allowCancel: true,
 			setActive: false,
@@ -886,7 +902,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Object>} The current project state snapshot
 	*/
 	getProjectState(options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			autoRequire: true,
 			paths: null,
 			...options,
@@ -919,7 +935,7 @@ export default class TeraFyServer {
 	* @returns {Promise<*>} A promise which resolves to `value` when the operation has been dispatched to the server and saved
 	*/
 	setProjectState(path: string | string[], value: any, options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			strategy: 'set',
 			...options,
 		};
@@ -962,7 +978,7 @@ export default class TeraFyServer {
 		let settings = { ...options }; // Initialize settings from the third argument if present
 		if (!app.service('$projects').active) throw new Error('No active project');
 
-		let target = app.service('$projects').active;
+		const target = app.service('$projects').active;
 		let actualValue: any;
 
 		if (typeof path == 'string' || Array.isArray(path)) { // Called as (path, value, options?) Set sub-object
@@ -1113,7 +1129,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Array<ProjectFile>>} A collection of project files for the given project
 	*/
 	getProjectFiles(options?: any): Promise<any[]> {
-		let settings = {
+		const settings = {
 			autoRequire: true,
 			lazy: true,
 			meta: true,
@@ -1146,7 +1162,7 @@ export default class TeraFyServer {
 	* @returns {Promise<ProjectFile>} The eventual fetched ProjectFile (or requested subkey)
 	*/
 	getProjectFile(name: string, options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			subkey: null,
 			cache: true,
 			...(typeof options == 'string' ? {subkey: options} : options),
@@ -1189,7 +1205,7 @@ export default class TeraFyServer {
 				// Recursively search for the file to handle searching folders
 				return findFileRecursively(files, name);
 			})
-			.then((file: any) => file && settings.subkey ? (file as any)[settings.subkey] : file)
+			.then((file: any) => file && settings.subkey ? (file)[settings.subkey] : file)
 	}
 
 	/**
@@ -1203,7 +1219,7 @@ export default class TeraFyServer {
 	* @returns {*} The file contents in the requested format
 	*/
 	getProjectFileContents(id: string, options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			format: 'blob',
 			...options,
 		};
@@ -1396,7 +1412,7 @@ export default class TeraFyServer {
 
 		if (fileContents === undefined) throw new Error('setProjectFileContents requires contents to save.');
 
-		let settings = {
+		const settings = {
 			id: fileId,
 			autoRequire: true,
 			hint: null,
@@ -1473,7 +1489,7 @@ export default class TeraFyServer {
 
 		let cleanFolderPath = folderPath.trim();
 		if (cleanFolderPath.startsWith('/')) {
-			cleanFolderPath = cleanFolderPath.substring(1);
+			cleanFolderPath = cleanFolderPath.slice(1);
 		}
 		if (cleanFolderPath.endsWith('/')) {
 			cleanFolderPath = cleanFolderPath.slice(0, -1);
@@ -1535,7 +1551,7 @@ export default class TeraFyServer {
 
 		let cleanFolderPath = folderPath.trim();
 		if (cleanFolderPath.startsWith('/')) {
-			cleanFolderPath = cleanFolderPath.substring(1);
+			cleanFolderPath = cleanFolderPath.slice(1);
 		}
 		if (cleanFolderPath.endsWith('/')) {
 			cleanFolderPath = cleanFolderPath.slice(0, -1);
@@ -1602,7 +1618,7 @@ export default class TeraFyServer {
 	* @returns {Promise<Array<Ref>>} A collection of references from the selected file
 	*/
 	selectProjectLibrary(options?: any): Promise<any[]> {
-		let settings = {
+		const settings = {
 			title: 'Select a citation library',
 			hint: null,
 			allowUpload: true,
@@ -1612,7 +1628,7 @@ export default class TeraFyServer {
 			autoRequire: true,
 			filters: {
 				library: true,
-				...(options?.filters ?? {}), // Use filters from options if provided
+				...options?.filters, // Use filters from options if provided
 			},
 			...options,
 		};
@@ -1642,16 +1658,17 @@ export default class TeraFyServer {
 	* @returns {Promise<Array<Ref>>|Promise<*>} A collection of references (default bevahiour) or a whatever format was requested
 	*/
 	getProjectLibrary(id: string, options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			format: 'pojo',
 			autoRequire: true,
+			// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 			filter: (file: any) => true, // Default filter
-			// @ts-ignore
+			// @ts-expect-error TODO: Investigate why TS complains
 			find: (files: any[]) => files.at(0), // Default find
 			...options,
 		};
 
-		let filePath: string = app.service('$projects').decodeFilePath(id);
+		const filePath: string = app.service('$projects').decodeFilePath(id);
 
 		return Promise.resolve()
 			.then(()=> settings.autoRequire && this.requireProject())
@@ -1726,7 +1743,7 @@ export default class TeraFyServer {
 
 		if (libraryRefs === undefined) throw new Error('setProjectLibrary requires refs to save.');
 
-		let settings = {
+		const settings = {
 			id: fileId,
 			refs: libraryRefs,
 			format: 'auto',
@@ -1876,7 +1893,7 @@ export default class TeraFyServer {
 	* @returns {Promise} A promise which resolves when the alert has been dismissed
 	*/
 	uiAlert(text: string | any, options?: any): Promise<void> {
-		let settings = {
+		const settings = {
 			body: 'Alert!',
 			isHtml: false,
 			title: 'TERA',
@@ -1916,7 +1933,7 @@ export default class TeraFyServer {
 	* @returns {Promise} A promise which resolves with `Promise.resolve('OK')` or rejects with `Promise.reject('CANCEL')`
 	*/
 	uiConfirm(text: string | any, options?: any): Promise<'OK'> {
-		let settings = {
+		const settings = {
 			body: 'Confirm?',
 			isHtml: false,
 			title: 'TERA',
@@ -1945,7 +1962,7 @@ export default class TeraFyServer {
 					},
 				],
 			})
-				.then(()=> 'OK' as 'OK') // Resolve with 'OK' if OK button clicked
+				.then(()=> 'OK' as const) // Resolve with 'OK' if OK button clicked
 				.catch(()=> Promise.reject('CANCEL')) // Reject with 'CANCEL' if Cancel button clicked or closed
 		);
 	}
@@ -1966,7 +1983,7 @@ export default class TeraFyServer {
 	* @returns {Promise} A promise which resolves with `Promise.resolve('OK')`
 	*/
 	uiJson(data: any, options?: any): Promise<'OK'> {
-		let settings = {
+		const settings = {
 			body: '',
 			isHtml: false,
 			title: 'TERA',
@@ -1984,7 +2001,7 @@ export default class TeraFyServer {
                     data: data,
                 },
 			})
-				.then(()=> 'OK' as 'OK') // Resolve with 'OK' if OK button clicked
+				.then(()=> 'OK' as const) // Resolve with 'OK' if OK button clicked
 				.catch(()=> Promise.reject('CANCEL')) // Reject with 'CANCEL' if Cancel button clicked or closed
 		);
 	}
@@ -2023,7 +2040,7 @@ export default class TeraFyServer {
 	* @returns {Promise} A promise which resolves when the dialog has been updated
 	*/
 	uiProgress(options?: any): Promise<void> {
-		let currentOptions = options === false ? {close: true} : options || {};
+		const currentOptions = options === false ? {close: true} : options || {};
 
 		if (currentOptions.close) { // Asked to close the dialog
 			const closePromise = this._uiProgress.promise
@@ -2088,7 +2105,7 @@ export default class TeraFyServer {
 	* @returns {Promise<*>} Either the eventual user value or a throw with `Promise.reject('CANCEL')`
 	*/
 	uiPrompt(text: string | any, options?: any): Promise<any> {
-		let settings = {
+		const settings = {
 			body: '',
 			isHtml: false,
 			title: 'Input required',
@@ -2169,11 +2186,11 @@ export default class TeraFyServer {
 	*
 	* @returns {WindowProxy} The opened window object (if `noopener` is not set in permissions)
 	*/
-	uiWindow(url: string | URL, options?: any): WindowProxy | null {
+	uiWindow(url: string | URL, options?: UiWindowOptions): WindowProxy | null {
 		// Ensure this runs only in browser context
 		if (typeof window === 'undefined' || typeof screen === 'undefined') return null;
 
-		let settings = {
+		const settings = {
 			width: 500,
 			height: 600,
 			center: true,
@@ -2218,7 +2235,7 @@ export default class TeraFyServer {
 		// Ensure this runs only in browser context
 		if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-		let settings = {
+		const settings = {
 			logo: false,
 			...options,
 		};
@@ -2235,7 +2252,7 @@ export default class TeraFyServer {
 
 		let compiledContent: Element;
 		if (typeof content == 'string') {
-			let el = document.createElement('div')
+			const el = document.createElement('div')
 			el.innerHTML = content;
 			// If the string contained multiple top-level elements, wrap them
 			compiledContent = el.children.length === 1 ? el.firstElementChild! : el;
@@ -2247,7 +2264,7 @@ export default class TeraFyServer {
 		compiledContent.classList.add('tera-fy-uiSplat');
 
 		if (settings.logo) {
-			let logoEl = document.createElement('div');
+			const logoEl = document.createElement('div');
 			logoEl.innerHTML = `<img src="${typeof settings.logo == 'string' ? settings.logo : '/assets/logo/logo.svg'}" class="img-logo"/>`;
 			// Prepend logo within the content element
 			compiledContent.prepend(logoEl);
@@ -2259,14 +2276,14 @@ export default class TeraFyServer {
 
 	// Utility - debug() {{{
 
-	/* eslint-disable jsdoc/check-param-names */
 	/**
-	* Debugging output function
-	* This function will only act if `settings.devMode` is truthy
+	* Debugging output function.
+	* This function will only act if `settings.devMode` is truthy.
 	*
-	* @param {'INFO'|'LOG'|'WARN'|'ERROR'} [method='LOG'] Logging method to use
-	* @param {Number} [verboseLevel=1] The verbosity level to trigger at. If `settings.verbosity` is lower than this, the message is ignored
-	* @param {...*} [msg] Output to show
+	* @param {...any} inputArgs The arguments to process for debugging. The function signature is flexible: `debug([method], [verboseLevel], ...msg)`.
+	* - The first argument can optionally be a logging method string: 'INFO', 'LOG', 'WARN', or 'ERROR'. Defaults to 'LOG'.
+	* - The next argument can optionally be a numeric verbosity level. The message is ignored if `settings.verbosity` is lower than this level. Defaults to 1.
+	* - All subsequent arguments are passed to the console as the log message.
 	*/
 	debug(...inputArgs: any[]): void {
 		// Ensure console exists
@@ -2275,7 +2292,7 @@ export default class TeraFyServer {
 
 		let method: keyof Console = 'log'; // Default method
 		let verboseLevel = 1;
-		let msgArgs = [...inputArgs]; // Copy args to modify
+		const msgArgs = [...inputArgs]; // Copy args to modify
 
 		// Argument mangling for prefix method + verbosity level {{{
 		if (typeof msgArgs[0] == 'string' && ['INFO', 'LOG', 'WARN', 'ERROR'].includes(msgArgs[0].toUpperCase())) {
