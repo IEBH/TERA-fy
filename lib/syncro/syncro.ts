@@ -134,7 +134,7 @@ export default class Syncro {
 	* @property {Object} context Additional named parameters to pass to callbacks like initState
 	*/
 	config = {
-		heartbeatInterval: 50_000 as number, //~= 50s
+		heartbeatInterval: 120_000 as number, //~= 120s / 2m
 		syncroRegistryUrl: 'https://tera-tools.com/api/sync' as string,
 		context: {} as Record<string, any>,
 	};
