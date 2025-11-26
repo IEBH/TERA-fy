@@ -1,4 +1,4 @@
-import { globalIgnores} from "eslint/config";
+import {globalIgnores} from 'eslint/config';
 import RulesMFDC, {JSCommon} from '@momsfriendlydevco/eslint-config';
 import tseslint from 'typescript-eslint';
 import globals from 'globals';
