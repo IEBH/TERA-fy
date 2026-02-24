@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { filesize } from 'filesize';
 import { pick, omit } from 'lodash-es';
 ;
@@ -52,7 +53,7 @@ export default class ProjectFile {
         if (this.isFolder) {
             // Process all files in the folder
             this.files = this.files?.map(file => {
-                let path = file.path.split(/\//).slice(3).join('/');
+                const path = file.path.split(/\//).slice(3).join('/');
                 let url = this.url + '/' + file.name; // Add file name to url
                 // Parse url to show library instead of download if reflib file
                 if (file.meta.reflib) {
@@ -81,7 +82,7 @@ export default class ProjectFile {
     /**
     * Fetch the raw file contents as a Blob
     *
-    * @param {Object} [options] Additioanl options to mutate behaviour
+    * @param {Object} [options] Additional options to mutate behaviour
     *
     * @returns {Promise<Blob>} The eventual raw file contents as a Blob
     *
@@ -159,7 +160,7 @@ export default class ProjectFile {
     *       as it's not included in the serialized output.
     *
     * @param {Object} data An input object created via `ProjectFiles.serialize()` (MUST include a 'tera' property added manually)
-    * @returns {ProjectFile} A ProjectFile instance setup against the deserializzed data
+    * @returns {ProjectFile} A ProjectFile instance setup against the deserialized data
     */
     static deserialize(data) {
         // TODO: Check the below

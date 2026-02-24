@@ -1,6 +1,6 @@
 {
   "name": "@iebh/tera-fy",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "TERA website worker",
   "scripts": {
     "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.ts --outfile=dist/terafy.js --minify --serve --servedir=.",

@@ -1,1 +1,1 @@
-{"version":3,"file":"base.js","sourceRoot":"","sources":["../../plugins/base.ts"],"names":[],"mappings":"AAEA;;;;;EAKE;AACF,MAAM,CAAC,OAAO,OAAO,YAAY;IAEhC;;MAEE;IACF,IAAI,KAAI,CAAC;IAGT;;;;;MAKE;IACF,YAAY,MAAc,EAAE,OAAe;IAC3C,CAAC;CACD"}
+{"version":3,"file":"base.js","sourceRoot":"","sources":["../../plugins/base.ts"],"names":[],"mappings":"AAEA;;;;;EAKE;AACF,MAAM,CAAC,OAAO,OAAO,YAAY;IAEhC;;MAEE;IACF,IAAI,KAAS,CAAC;IAGd;;;;;MAKE;IACF,6DAA6D;IAC7D,YAAY,MAAc,EAAE,OAAe;IAC3C,CAAC;CACD"}

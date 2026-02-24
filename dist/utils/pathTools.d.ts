@@ -59,7 +59,7 @@ export declare function merge(target: any, path: string | (string | number)[], v
 *
 * @returns {*} The resulting object with defaults applied
 */
-export declare function defaults(target: any, path: string | (string | number)[] | any, value?: any): any;
+export declare function defaults(target: any, path: string | (string | number)[], value?: any): any;
 declare const _default: {
     set: typeof set;
     get: typeof get;

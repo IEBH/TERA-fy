@@ -47,7 +47,7 @@ export default class Syncro {
     */
     static session: string | undefined;
     /**
-    * OPTIONAL SyncroEntiries from './entiries.js' if its required
+    * OPTIONAL SyncroEntries from './entities.ts' if its required
     * This only gets populated if `config.forceLocalInit` is truthy and we've mounted at least one Syncro
     *
     * @type {Record<string, any>}
@@ -82,7 +82,7 @@ export default class Syncro {
     * Various Misc config for the Syncro instance
     *
     * @type {Object}
-    * @property {Number} heartbeatinterval Time in milliseconds between heartbeat beacons
+    * @property {Number} heartbeatInterval Time in milliseconds between heartbeat beacons
     * @property {String} syncroRegistryUrl The prefix Sync worker URL, used to populate Syncros and determine their active status
     * @property {Object} context Additional named parameters to pass to callbacks like initState
     */
@@ -93,7 +93,7 @@ export default class Syncro {
     };
     /**
     * Whether the next heartbeat should be marked as 'dirty'
-    * This indicates that at least one change has occured since the last hearbeat and the server should perform a flush (but not a clean)
+    * This indicates that at least one change has occurred since the last heartbeat and the server should perform a flush (but not a clean)
     * This flag is only transmitted once in the next heartbeat before being reset
     *
     * @see markDirty()
@@ -134,12 +134,12 @@ export default class Syncro {
     * Actions to preform when we are destroying this instance
     * This is an array of function callbacks to execute in parallel when `destroy()` is called
     *
-    * @type {Array<() => void>}
+    * @type {Array<function>}
     */
     _destroyActions: Array<() => void>;
     /**
     * Function to return whatever the local framework uses as a reactive object
-    * This should respond with an object of mandatory functions to watch for changes and remerge them
+    * This should respond with an object of mandatory functions to watch for changes and re-merge them
     *
     * @param {Object} value Initial value of the reactive
     *
@@ -152,7 +152,7 @@ export default class Syncro {
     getReactive(value: any): ReactiveWrapper;
     /**
     * Returns the split entity + ID relationship from a given session path
-    * This funciton checks for valid UUID format strings + that the entity is a known/supported entity (see `knownEntities`)
+    * This function checks for valid UUID format strings + that the entity is a known/supported entity (see `knownEntities`)
     * NOTE: When used by itself (i.e. ignoring response) this function can also act as a guard that a path is valid
     *
     * INPUT: `widgets::UUID` -> `{entity:'widgets', id:UUID}`
@@ -170,7 +170,7 @@ export default class Syncro {
     * This applies the following mutations to the incoming object:
     *
     * 1. Arrays are converted to Objects (Firestore cannot store nested arrays)
-    * 2. All non-POJO objects (e.g. Dates) to a symetric object
+    * 2. All non-POJO objects (e.g. Dates) to a symmetric object
     *
     * @param {Object} snapshot The current state to convert
     * @returns {Object} A Firebase compatible object
@@ -211,7 +211,7 @@ export default class Syncro {
     *
     * @returns {Promise<Object|Null>} An eventual snapshot of the given path, if the entity doesn't exist null is returned
     */
-    static getSnapshot(path: string): Promise<any | null>;
+    static getSnapshot(path: string): Promise<object | null>;
     /**
     * Perform a one-off set/merge operation against
     *
@@ -230,7 +230,7 @@ export default class Syncro {
     * Mount the remote Firestore document against this Syncro instance
     *
     * @param {Object} [options] Additional options to mutate behaviour
-    * @param {Object} [options.initalState] State to use if no state is already loaded, overrides the entities own `initState` function fetcher
+    * @param {Object} [options.initialState] State to use if no state is already loaded, overrides the entities own `initState` function fetcher
     * @param {Number} [options.retries=3] Number of times to retry if a mounted Syncro fails its sanity checks
     * @returns {Promise<Syncro>} A promise which resolves as this syncro instance when completed
     */
@@ -260,14 +260,15 @@ export default class Syncro {
     * Schedule Syncro heartbeats
     * This populates the `sync` presence meta-information
     *
-    * @param {Boolean} [enable=true] Whether to enable heartbeating
+    * @param {Boolean} [enable=true] Whether to enable heartbeats
     *
     * @param {Object} [options] Additional options to mutate behaviour
     * @param {Boolean} [options.immediate=false] Fire a heartbeat as soon as this function is called, this is only really useful on mount
+    * @returns Promise that resolves to void or void
     */
     setHeartbeat(enable?: boolean, options?: any): Promise<void> | void;
     /**
-    * Perform one heartbeat pulse to the server to indicate presense within this Syncro
+    * Perform one heartbeat pulse to the server to indicate presence within this Syncro
     * This function is automatically called by a timer if `setHeartbeat(true)` (the default behaviour)
     *
     * @returns {Promise} A promise which resolves when the operation has completed
@@ -280,6 +281,7 @@ export default class Syncro {
     * @param {Object} [options] Additional options to mutate behaviour
     * @param {'merge'|'set'} [options.method='merge'] How to apply the new state. 'merge' (merge in partial data to an existing Syncro), 'set' (overwrite the entire Syncro state)
     *
+    * @param {number} retries How many tries to take before erroring
     * @returns {Promise} A promise which resolves when the operation has completed
     */
     setFirestoreState(state: any, options?: {
@@ -318,11 +320,11 @@ export default class Syncro {
 }
 /**
 * Build a chaotic random tree structure based on dice rolls
-* This funciton is mainly used for sync testing
+* This function is mainly used for sync testing
 *
 * @param {Number} [depth=0] The current depth we are starting at, changes the nature of branches based on probability
 *
-* @returns {*} The current branch conotents
+* @returns {*} The current branch contents
 */
 export declare function randomBranch(depth?: number): any;
 export {};

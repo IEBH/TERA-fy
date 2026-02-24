@@ -1,4 +1,5 @@
-// @ts-ignore
+/* eslint-disable no-unused-vars */
+// @ts-expect-error TODO: Remove when reflib gets declaration file
 import Reflib from '@iebh/reflib';
 import { v4 as uuid4 } from 'uuid';
 import { nanoid } from 'nanoid';
@@ -15,7 +16,7 @@ const syncroConfig = {
     institutes: {
         singular: 'institute',
         async initState({ supabasey, id }) {
-            let institute = await supabasey((supabase) => supabase
+            const institute = await supabasey((supabase) => supabase
                 .from('institutes')
                 .select('data')
                 .eq('id', id)
@@ -24,7 +25,7 @@ const syncroConfig = {
                 return institute.data; // institute is valid and already exists
         },
         flushState({ supabasey, state, id }) {
-            // @ts-ignore
+            // @ts-expect-error Typescript struggles to resolve supabasey import correctly
             return supabasey.rpc('syncro_merge_data', {
                 table_name: 'institutes',
                 entity_id: id,
@@ -35,14 +36,14 @@ const syncroConfig = {
     projects: {
         singular: 'project',
         async initState({ supabasey, id }) {
-            let projectData = await supabasey((supabase) => supabase
+            const projectData = await supabasey((supabase) => supabase
                 .from('projects')
                 .select('data')
                 .eq('id', id)
                 .maybeSingle());
             if (!projectData)
                 throw new Error(`Syncro project "${id}" not found`);
-            let data = projectData.data;
+            const data = projectData.data;
             // MIGRATION - Move data.temp{} into Supabase files + add pointer to filename {{{
             if (data.temp // Project contains temp subkey
                 && Object.values(data.temp).some((t) => typeof t == 'object') // Some of the temp keys are objects
@@ -95,7 +96,7 @@ const syncroConfig = {
         async initState({ supabasey, id, relation }) {
             if (!relation || !/_\*$/.test(relation))
                 throw new Error('Project library relation missing, path should resemble "project_library::${PROJECT}::${LIBRARY_FILE_ID}_*"');
-            let fileId = relation.replace(/_\*$/, '');
+            const fileId = relation.replace(/_\*$/, '');
             const files = await supabasey((supabase) => supabase
                 .storage
                 .from('projects')
@@ -127,7 +128,7 @@ const syncroConfig = {
         async initState({ supabasey, id, relation }) {
             if (!relation)
                 throw new Error('Project namespace relation missing, path should resemble "project_namespaces::${PROJECT}::${RELATION}"');
-            let rows = await supabasey((supabase) => supabase
+            const rows = await supabasey((supabase) => supabase
                 .from('project_namespaces')
                 .select('data')
                 .eq('project', id)
@@ -166,7 +167,7 @@ const syncroConfig = {
     test: {
         singular: 'test',
         async initState({ supabasey, id }) {
-            let rows = await supabasey((supabase) => supabase
+            const rows = await supabasey((supabase) => supabase
                 .from('test')
                 .select('data')
                 .eq('id', id)
@@ -186,7 +187,7 @@ const syncroConfig = {
     users: {
         singular: 'user',
         async initState({ supabasey, id }) {
-            let user = await supabasey((supabase) => supabase
+            const user = await supabasey((supabase) => supabase
                 .from('users')
                 .select('data')
                 .eq('id', id)
@@ -194,7 +195,7 @@ const syncroConfig = {
             if (user)
                 return user.data; // User is valid and already exists
             // User row doesn't already exist - need to create stub
-            let newUser = await supabasey((supabase) => supabase
+            const newUser = await supabasey((supabase) => supabase
                 .from('users')
                 .insert({
                 id,

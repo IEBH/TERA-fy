@@ -24,7 +24,7 @@ import TeraFyPluginFirebase from './firebase.js';
 */
 export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
     /**
-    * Local Vue@2 library to use, set during constuctor
+    * Local Vue@2 library to use, set during constructor
     *
     * @type {Vue}
     */

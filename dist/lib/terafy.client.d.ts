@@ -10,7 +10,7 @@ export default class TeraFy {
     *
     * @type {Object}
     * @property {String} session Unique session signature for this instance of TeraFy, used to sign server messages, if falsy `getEntropicString(16)` is used to populate
-    * @property {Boolean} devMode Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerent of weird iframe origins
+    * @property {Boolean} devMode Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerant of weird iframe origins
     * @property {Number} verbosity Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
     * @property {'detect'|'parent'|'child'|'popup'} mode How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to `modeFallback` if communication fails
     * @property {String} modeFallback Method to use when all method detection fails
@@ -19,7 +19,7 @@ export default class TeraFy {
     * @property {String} siteUrl The TERA URL to connect to
     * @property {String} restrictOrigin URL to restrict communications to
     * @property {Array<String>} List of sandbox allowables for the embedded if in embed mode
-    * @property {Number} handshakeInterval Interval in milliseconds when sanning for a handshake
+    * @property {Number} handshakeInterval Interval in milliseconds when scanning for a handshake
     * @property {Number} handshakeTimeout Interval in milliseconds for when to give up trying to handshake
     * @property {Array<String|Array<String>>} [debugPaths] List of paths (in either dotted or array notation) to enter debugging mode if a change is detected in dev mode e.g. `{debugPaths: ['foo.bar.baz']}`. This really slows down state writes so should only be used for debugging
     */
@@ -74,7 +74,7 @@ export default class TeraFy {
     plugins: any[];
     /**
     * Active namespaces we are subscribed to
-    * Each key is the namespace name with the value as the local reactive \ observer \ object equivelent
+    * Each key is the namespace name with the value as the local reactive \ observer \ object equivalent
     * The key string is always of the form `${ENTITY}::${ID}` e.g. `projects:1234`
     *
     * @type {Object<Object>}
@@ -131,7 +131,7 @@ export default class TeraFy {
     mountNamespace(name: any): Promise<any>;
     /**
     * @interface
-    * Actual namespace mounting function designed to be overriden by plugins
+    * Actual namespace mounting function designed to be overridden by plugins
     *
     * @param {String} name The alias of the namespace, this should be alphanumeric + hyphens + underscores
     *
@@ -151,7 +151,7 @@ export default class TeraFy {
     unmountNamespace(name: any): void | Promise<void>;
     /**
     * @interface
-    * Actual namespace unmounting function designed to be overriden by plugins
+    * Actual namespace unmounting function designed to be overridden by plugins
     *
     * @param {String} name The name of the namespace to unmount
     *
@@ -166,11 +166,11 @@ export default class TeraFy {
     constructor(options?: any);
     private initPromise;
     /**
-    * Initalize the TERA client singleton
-    * This function can only be called once and will return the existing init() worker Promise if its called againt
+    * Initialize the TERA client singleton
+    * This function can only be called once and will return the existing init() worker Promise if its called against
     *
     * @param {Object} [options] Additional options to merge into `settings` via `set`
-    * @returns {Promise<TeraFy>} An eventual promise which will resovle with this terafy instance
+    * @returns {Promise<TeraFy>} An eventual promise which will resolve with this terafy instance
     */
     init(options?: any): Promise<TeraFy>;
     /**
@@ -181,16 +181,16 @@ export default class TeraFy {
     */
     detectMode(): Promise<'parent' | 'child' | 'popup'>;
     /**
-    * Find an existing active TERA server OR initalize one
+    * Find an existing active TERA server OR initialize one
     *
-    * @returns {Promise} A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+    * @returns {Promise} A promise which will resolve when the loading has completed and we have found a parent TERA instance or initialized a child
     */
     injectComms(): Promise<void>;
     /**
     * Keep trying to handshake until the target responds
     *
     * @param {Object} [options] Additional options to mutate behaviour
-    * @property {Number} [handshakeInterval] Interval in milliseconds when sanning for a handshake, defaults to global setting
+    * @property {Number} [handshakeInterval] Interval in milliseconds when scanning for a handshake, defaults to global setting
     * @property {Number} [handshakeTimeout] Interval in milliseconds for when to give up trying to handshake, defaults to global setting
     *
     * @returns {Promise} A promise which will either resolve when the handshake is successful OR fail with 'TIMEOUT'
@@ -199,7 +199,7 @@ export default class TeraFy {
     /**
     * Inject a local stylesheet to handle TERA server functionality
     *
-    * @returns {Promise} A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+    * @returns {Promise} A promise which will resolve when the loading has completed and we have found a parent TERA instance or initialized a child
     */
     injectStylesheet(): Promise<void>;
     /**
@@ -245,7 +245,7 @@ export default class TeraFy {
     * Include a TeraFy client plugin
     *
     * @param {Function|Object|String} source Either the JS module class, singleton object or URL to fetch it from. Eventually constructed as invoked as `(teraClient:TeraFy, options:Object)`
-    * @param {Object} [options] Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
+    * @param {Object} [options] Additional options to mutate behaviour during construction (pass options to init() to initialize later options)
     *
     * @returns {TeraFy} This chainable terafy instance
     */
@@ -253,8 +253,8 @@ export default class TeraFy {
     /**
     * Internal function used by use() to merge an external declared singleton against this object
     *
-    * @param {Object} target Initalied class instance to extend
-    * @param {Object} source Initalized source object to extend from
+    * @param {Object} target Installed class instance to extend
+    * @param {Object} source Initialized source object to extend from
     */
     mixin(target: any, source: any): void;
     /**
@@ -279,7 +279,7 @@ export default class TeraFy {
     /**
     * Generate random entropic character string in Base64
     *
-    * @param {Number} [maxLength=32] Maximum lengh of the genrated string
+    * @param {Number} [maxLength=32] Maximum length of the generated string
     * @returns {String}
     */
     getEntropicString(maxLength?: number): string;
@@ -291,7 +291,7 @@ export default class TeraFy {
     * @property {Date} date Server date
     */
     /**
-    * RPC callback to set the server verbostiy level
+    * RPC callback to set the server verbosity level
     *
     * @function setServerVerbosity
     * @param {Number} verbosity The desired server verbosity level
@@ -309,7 +309,7 @@ export default class TeraFy {
     * Fetch the current session user
     *
     * @function getUser
-    * @param {Boolean} [options.forceRetry=false] Forcabily try to refresh the user state
+    * @param {Boolean} [options.forceRetry=false] Forcibly try to refresh the user state
     * @param {Boolean} [options.waitPromises=true] Wait for $auth + $subscriptions to resolve before fetching the user (mainly internal use)
     * @returns {Promise<User>} The current logged in user or null if none
     */
@@ -327,7 +327,7 @@ export default class TeraFy {
     * @function requireUser
     *
     * @param {Object} [options] Additional options to mutate behaviour
-    * @param {Boolean} [options.forceRetry=false] Forcabily try to refresh the user state
+    * @param {Boolean} [options.forceRetry=false] Forcibly try to refresh the user state
     *
     * @returns {Promise<User>} The current logged in user or null if none
     */
@@ -364,7 +364,7 @@ export default class TeraFy {
     */
     /**
     * Ask the user to select a project from those available - if one isn't already active
-    * Note that this function will percist in asking the uesr even if they try to cancel
+    * Note that this function will persist in asking the user even if they try to cancel
     *
     * @function requireProject
     * @param {Object} [options] Additional options to mutate behaviour
@@ -388,7 +388,7 @@ export default class TeraFy {
     */
     /**
     * Get a one-off snapshot of a namespace without mounting it
-    * This can be used for simpler apps which don't have their own reactive / observer equivelent
+    * This can be used for simpler apps which don't have their own reactive / observer equivalent
     *
     * @function getNamespace
     * @param {String} name The alias of the namespace, this should be alphanumeric + hyphens + underscores
@@ -397,7 +397,7 @@ export default class TeraFy {
     */
     /**
     * Set (or merge by default) a one-off snapshot over an existing namespace
-    * This can be used for simpler apps which don't have their own reactive / observer equivelent and just want to quickly set something
+    * This can be used for simpler apps which don't have their own reactive / observer equivalent and just want to quickly set something
     *
     * @function setNamespace
     * @param {String} name The name of the namespace
@@ -480,10 +480,9 @@ export default class TeraFy {
     * @param {Boolean} [options.allowUpload=true] Allow uploading new files
     * @param {Boolean} [options.allowRefresh=true] Allow the user to manually refresh the file list
     * @param {Boolean} [options.allowDownloadZip=true] Allow the user to download a Zip of all files
-    * @param {Boolean} [options.allowCancel=true] Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed
+    * @param {Boolean} [options.allowCancel=true] Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if actioned
     * @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
     * @param {Boolean} [options.showHiddenFiles=false] Whether hidden data.json files should be shown
-    * @param {FileFilters} [options.filter] Optional file filters
     *
     * @returns {Promise<ProjectFile>} The eventually selected file, if in save mode new files are created as stubs
     */
@@ -505,7 +504,7 @@ export default class TeraFy {
     *
     * @function getProjectFileContents
     * @param {String} [id] File ID to retrieve the contents of
-    * @param {Object} [options] Additioanl options to mutate behaviour
+    * @param {Object} [options] Additional options to mutate behaviour
     * @param {'blob'|'json'} [options.format='blob'] The format to retrieve the file in
     *
     * @returns {*} The file contents in the requested format

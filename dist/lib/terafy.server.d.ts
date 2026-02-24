@@ -3,6 +3,19 @@ declare global {
         panic(text: any): void;
     }
 }
+interface UiWindowPermissions {
+    popup?: boolean;
+    location?: boolean;
+    menubar?: boolean;
+    status?: boolean;
+    scrollbars?: boolean;
+}
+interface UiWindowOptions {
+    width?: number;
+    height?: number;
+    center?: boolean;
+    permissions?: UiWindowPermissions;
+}
 /**
 * Server-side functions available to the Tera-Fy client library
 *
@@ -360,7 +373,6 @@ export default class TeraFyServer {
     * @param {Boolean} [options.allowCancel=true] Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed
     * @param {Boolean} [options.autoRequire=true] Run `requireProject()` automatically before continuing
     * @param {Boolean} [options.showHiddenFiles=false] Whether hidden data.json files should be shown
-    * @param {FileFilters} [options.filter] Optional file filters
     *
     * @returns {Promise<ProjectFile>} The eventually selected file, if in save mode new files are created as stubs
     */
@@ -660,7 +672,7 @@ export default class TeraFyServer {
     *
     * @returns {WindowProxy} The opened window object (if `noopener` is not set in permissions)
     */
-    uiWindow(url: string | URL, options?: any): WindowProxy | null;
+    uiWindow(url: string | URL, options?: UiWindowOptions): WindowProxy | null;
     /**
     * Display HTML content full-screen within TERA
     * This function is ideally called within a requestFocus() wrapper
@@ -672,12 +684,14 @@ export default class TeraFyServer {
     */
     uiSplat(content: Element | string | false, options?: any): void;
     /**
-    * Debugging output function
-    * This function will only act if `settings.devMode` is truthy
+    * Debugging output function.
+    * This function will only act if `settings.devMode` is truthy.
     *
-    * @param {'INFO'|'LOG'|'WARN'|'ERROR'} [method='LOG'] Logging method to use
-    * @param {Number} [verboseLevel=1] The verbosity level to trigger at. If `settings.verbosity` is lower than this, the message is ignored
-    * @param {...*} [msg] Output to show
+    * @param {...any} inputArgs The arguments to process for debugging. The function signature is flexible: `debug([method], [verboseLevel], ...msg)`.
+    * - The first argument can optionally be a logging method string: 'INFO', 'LOG', 'WARN', or 'ERROR'. Defaults to 'LOG'.
+    * - The next argument can optionally be a numeric verbosity level. The message is ignored if `settings.verbosity` is lower than this level. Defaults to 1.
+    * - All subsequent arguments are passed to the console as the log message.
     */
     debug(...inputArgs: any[]): void;
 }
+export {};

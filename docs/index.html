@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>@iebh/tera-fy 2.3.0 | Documentation</title>
+  <title>@iebh/tera-fy 2.3.1 | Documentation</title>
   <meta name='description' content='TERA website worker'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>@iebh/tera-fy</h3>
-          <div class='mb1'><code>2.3.0</code></div>
+          <div class='mb1'><code>2.3.1</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -725,9 +725,9 @@
               
                 
                 <li><a
-                  href='#actual-namespace-mounting-function-designed-to-be-overriden-by-plugins'
+                  href='#actual-namespace-mounting-function-designed-to-be-overridden-by-plugins'
                   class="">
-                  Actual namespace mounting function designed to be overriden by plugins
+                  Actual namespace mounting function designed to be overridden by plugins
                   
                 </a>
                 
@@ -735,9 +735,9 @@
               
                 
                 <li><a
-                  href='#actual-namespace-unmounting-function-designed-to-be-overriden-by-plugins'
+                  href='#actual-namespace-unmounting-function-designed-to-be-overridden-by-plugins'
                   class="">
-                  Actual namespace unmounting function designed to be overriden by plugins
+                  Actual namespace unmounting function designed to be overridden by plugins
                   
                 </a>
                 
@@ -854,7 +854,7 @@
       
         <div class='space-bottom0'>
           <span class='code bold'>devMode</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)</code>
-          : Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerent of weird iframe origins
+          : Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerant of weird iframe origins
 
           
         </div>
@@ -922,7 +922,7 @@
       
         <div class='space-bottom0'>
           <span class='code bold'>handshakeInterval</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</code>
-          : Interval in milliseconds when sanning for a handshake
+          : Interval in milliseconds when scanning for a handshake
 
           
         </div>
@@ -1233,7 +1233,7 @@ This array is forms the reference of <code>TeraFy.METHOD()</code> objects to pro
   
 
   <p>Active namespaces we are subscribed to
-Each key is the namespace name with the value as the local reactive \ observer \ object equivelent
+Each key is the namespace name with the value as the local reactive \ observer \ object equivalent
 The key string is always of the form <code>${ENTITY}::${ID}</code> e.g. <code>projects:1234</code></p>
 
     <div class='pre p1 fill-light mt0'>namespaces</div>
@@ -1623,8 +1623,8 @@ This function does not return or wait for a reply - use <code>send()</code> for 
 
   
 
-  <p>Initalize the TERA client singleton
-This function can only be called once and will return the existing init() worker Promise if its called againt</p>
+  <p>Initialize the TERA client singleton
+This function can only be called once and will return the existing init() worker Promise if its called against</p>
 
     <div class='pre p1 fill-light mt0'>init(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#terafy">TeraFy</a>></div>
   
@@ -1662,7 +1662,7 @@ This function can only be called once and will return the existing init() worker
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#terafy">TeraFy</a>></code>:
-        An eventual promise which will resovle with this terafy instance
+        An eventual promise which will resolve with this terafy instance
 
       
     
@@ -1756,7 +1756,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
 
   
 
-  <p>Find an existing active TERA server OR initalize one</p>
+  <p>Find an existing active TERA server OR initialize one</p>
 
     <div class='pre p1 fill-light mt0'>injectComms(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
   
@@ -1777,7 +1777,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+        A promise which will resolve when the loading has completed and we have found a parent TERA instance or initialized a child
 
       
     
@@ -1848,7 +1848,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
       
         <div class='space-bottom0'>
           <span class='code bold'>handshakeInterval</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>?)</code>
-          : Interval in milliseconds when sanning for a handshake, defaults to global setting
+          : Interval in milliseconds when scanning for a handshake, defaults to global setting
 
           
         </div>
@@ -1924,7 +1924,7 @@ Try to communicate with a parent frame, if none assume we need to fallback to ch
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+        A promise which will resolve when the loading has completed and we have found a parent TERA instance or initialized a child
 
       
     
@@ -2343,7 +2343,7 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
-	    Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
+	    Additional options to mutate behaviour during construction (pass options to init() to initialize later options)
 
           </div>
           
@@ -2414,7 +2414,7 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    Initalied class instance to extend
+	    Installed class instance to extend
 
           </div>
           
@@ -2423,7 +2423,7 @@ This function also routes 'special' keys like <code>devMode</code> to their inte
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>source</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    Initalized source object to extend from
+	    Initialized source object to extend from
 
           </div>
           
@@ -2628,7 +2628,7 @@ This is usually because the server component wants to perform some user activity
           <div>
             <span class='code bold'>maxLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>
             = <code>32</code>)</code>
-	    Maximum lengh of the genrated string
+	    Maximum length of the generated string
 
           </div>
           
@@ -3014,7 +3014,7 @@ as it's not included in the serialized output.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#projectfile">ProjectFile</a></code>:
-        A ProjectFile instance setup against the deserializzed data
+        A ProjectFile instance setup against the deserialized data
 
       
     
@@ -3466,7 +3466,7 @@ This is used to direct to the edit/view/download UI when the files project is ac
       
         <div class='space-bottom0'>
           <span class='code bold'>basename</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-          : The filename + extention (i.e. everything without directory name)
+          : The filename + extension (i.e. everything without directory name)
 
           
         </div>
@@ -4195,7 +4195,7 @@ This is used to direct to the edit/view/download UI when the files project is ac
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
-	    Additioanl options to mutate behaviour
+	    Additional options to mutate behaviour
 
           </div>
           
@@ -4761,7 +4761,7 @@ By default this computes a Structured Clone which can be stringified</p>
 
   
 
-  <p>RPC callback to set the server verbostiy level</p>
+  <p>RPC callback to set the server verbosity level</p>
 
     <div class='pre p1 fill-light mt0'>setServerVerbosity(verbosity: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>)</div>
   
@@ -4980,7 +4980,7 @@ This is an pre-requisite step for requireProject()</p>
   
     (default <code>false</code>)
   </td>
-  <td class='break-word'><span>Forcabily try to refresh the user state
+  <td class='break-word'><span>Forcibly try to refresh the user state
 </span></td>
 </tr>
 
@@ -5263,7 +5263,7 @@ This is an pre-requisite step for requireProject()</p>
   
 
   <p>Ask the user to select a project from those available - if one isn't already active
-Note that this function will percist in asking the uesr even if they try to cancel</p>
+Note that this function will persist in asking the user even if they try to cancel</p>
 
     <div class='pre p1 fill-light mt0'>requireProject(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="#project">Project</a>></div>
   
@@ -5777,7 +5777,7 @@ This function will remove the namespace from <code>namespaces</code>, cleaning u
   
 
   <p>Get a one-off snapshot of a namespace without mounting it
-This can be used for simpler apps which don't have their own reactive / observer equivelent</p>
+This can be used for simpler apps which don't have their own reactive / observer equivalent</p>
 
     <div class='pre p1 fill-light mt0'>getNamespace(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
@@ -5849,7 +5849,7 @@ This can be used for simpler apps which don't have their own reactive / observer
   
 
   <p>Set (or merge by default) a one-off snapshot over an existing namespace
-This can be used for simpler apps which don't have their own reactive / observer equivelent and just want to quickly set something</p>
+This can be used for simpler apps which don't have their own reactive / observer equivalent and just want to quickly set something</p>
 
     <div class='pre p1 fill-light mt0'>setNamespace(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, state: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
@@ -6956,7 +6956,7 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
-	    Additioanl options to mutate behaviour
+	    Additional options to mutate behaviour
 
           </div>
           
@@ -7282,7 +7282,7 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
   </td>
   <td class='break-word'><span>Allow cancelling the operation. Will throw 
 <code>'CANCEL'</code>
- as the promise rejection if acationed
+ as the promise rejection if actioned
 </span></td>
 </tr>
 
@@ -7307,15 +7307,6 @@ or null if the file could not be located post-move (e.g., if its ID changed unex
     (default <code>false</code>)
   </td>
   <td class='break-word'><span>Whether hidden data.json files should be shown
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.filter</span> <code class='quiet'><a href="#filefilters">FileFilters</a>?</code>
-  </td>
-  <td class='break-word'><span>Optional file filters
 </span></td>
 </tr>
 
@@ -7935,7 +7926,7 @@ This involves listing all files under the given folder path (prefix) and removin
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;Ref>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;any>)</code>:
-        A collection of references (default bevahiour) or a whatever format was requested
+        A collection of references (default behaviour) or a whatever format was requested
 
       
     
@@ -8022,7 +8013,7 @@ This involves listing all files under the given folder path (prefix) and removin
                 <tr>
   <td class='break-word'><span class='code bold'>options.hint</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>>)?</code>
   </td>
-  <td class='break-word'><span>Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'dedisputed'
+  <td class='break-word'><span>Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'demisted'
 </span></td>
 </tr>
 
@@ -8068,7 +8059,7 @@ This involves listing all files under the given folder path (prefix) and removin
   </td>
   <td class='break-word'><span>Allow cancelling the operation. Will throw 
 <code>'CANCEL'</code>
- as the promise rejection if acationed
+ as the promise rejection if actioned
 </span></td>
 </tr>
 
@@ -8559,7 +8550,7 @@ This is usually called by a tool nested within the tera-tools.com embed</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>options</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>))</code>
-	    Context information about the page, if this is a string, its assumed to popupate 
+	    Context information about the page, if this is a string, its assumed to populate 
 <code>url</code>
 
           </div>
@@ -9680,8 +9671,8 @@ This function is ideally called within a requestFocus() wrapper</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='actual-namespace-mounting-function-designed-to-be-overriden-by-plugins'>
-      Actual namespace mounting function designed to be overriden by plugins
+    <h3 class='fl m0' id='actual-namespace-mounting-function-designed-to-be-overridden-by-plugins'>
+      Actual namespace mounting function designed to be overridden by plugins
     </h3>
     
     
@@ -9689,7 +9680,7 @@ This function is ideally called within a requestFocus() wrapper</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>Actual namespace mounting function designed to be overriden by plugins</div>
+    <div class='pre p1 fill-light mt0'>Actual namespace mounting function designed to be overridden by plugins</div>
   
   
 
@@ -9751,8 +9742,8 @@ This function is ideally called within a requestFocus() wrapper</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='actual-namespace-unmounting-function-designed-to-be-overriden-by-plugins'>
-      Actual namespace unmounting function designed to be overriden by plugins
+    <h3 class='fl m0' id='actual-namespace-unmounting-function-designed-to-be-overridden-by-plugins'>
+      Actual namespace unmounting function designed to be overridden by plugins
     </h3>
     
     
@@ -9760,7 +9751,7 @@ This function is ideally called within a requestFocus() wrapper</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>Actual namespace unmounting function designed to be overriden by plugins</div>
+    <div class='pre p1 fill-light mt0'>Actual namespace unmounting function designed to be overridden by plugins</div>
   
   
 

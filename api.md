@@ -81,11 +81,11 @@
         *   [Parameters][77]
 *   [mountNamespace][78]
     *   [Parameters][79]
-*   [Actual namespace mounting function designed to be overriden by plugins][80]
+*   [Actual namespace mounting function designed to be overridden by plugins][80]
     *   [Parameters][81]
 *   [unmountNamespace][82]
     *   [Parameters][83]
-*   [Actual namespace unmounting function designed to be overriden by plugins][84]
+*   [Actual namespace unmounting function designed to be overridden by plugins][84]
     *   [Parameters][85]
 *   [handshake][86]
     *   [Properties][87]
@@ -228,7 +228,7 @@ Type: [Object][169]
 
 #### Properties
 
-*   `basename` **[String][168]** The filename + extention (i.e. everything without directory name)
+*   `basename` **[String][168]** The filename + extension (i.e. everything without directory name)
 *   `filename` **[String][168]** The file portion of the name (basename without the extension)
 *   `ext` **[String][168]** The extension portion of the name (always lower case)
 *   `dirName` **[String][168]** The directory path portion of the name
@@ -313,7 +313,7 @@ Fetch the raw file contents as a Blob
 
 #### Parameters
 
-*   `options` **[Object][169]?** Additioanl options to mutate behaviour
+*   `options` **[Object][169]?** Additional options to mutate behaviour
 
 Returns **[Promise][174]<[Blob][175]>** The eventual raw file contents as a Blob
 
@@ -368,7 +368,7 @@ as it's not included in the serialized output.
 
 *   `data` **[Object][169]** An input object created via `ProjectFiles.serialize()` (MUST include a 'tera' property added manually)
 
-Returns **[ProjectFile][1]** A ProjectFile instance setup against the deserializzed data
+Returns **[ProjectFile][1]** A ProjectFile instance setup against the deserialized data
 
 ## TeraFy
 
@@ -383,7 +383,7 @@ Type: [Object][169]
 #### Properties
 
 *   `session` **[String][168]** Unique session signature for this instance of TeraFy, used to sign server messages, if falsy `getEntropicString(16)` is used to populate
-*   `devMode` **[Boolean][172]** Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerent of weird iframe origins
+*   `devMode` **[Boolean][172]** Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerant of weird iframe origins
 *   `verbosity` **[Number][171]** Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
 *   `mode` **(`"detect"` | `"parent"` | `"child"` | `"popup"`)** How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to `modeFallback` if communication fails
 *   `modeFallback` **[String][168]** Method to use when all method detection fails
@@ -392,7 +392,7 @@ Type: [Object][169]
 *   `siteUrl` **[String][168]** The TERA URL to connect to
 *   `restrictOrigin` **[String][168]** URL to restrict communications to
 *   `List` **[Array][173]<[String][168]>** of sandbox allowables for the embedded if in embed mode
-*   `handshakeInterval` **[Number][171]** Interval in milliseconds when sanning for a handshake
+*   `handshakeInterval` **[Number][171]** Interval in milliseconds when scanning for a handshake
 *   `handshakeTimeout` **[Number][171]** Interval in milliseconds for when to give up trying to handshake
 *   `debugPaths` **[Array][173]<([String][168] | [Array][173]<[String][168]>)>?** List of paths (in either dotted or array notation) to enter debugging mode if a change is detected in dev mode e.g. `{debugPaths: ['foo.bar.baz']}`. This really slows down state writes so should only be used for debugging
 
@@ -431,7 +431,7 @@ Type: [Array][173]\<TeraFyPlugin>
 ### namespaces
 
 Active namespaces we are subscribed to
-Each key is the namespace name with the value as the local reactive \ observer \ object equivelent
+Each key is the namespace name with the value as the local reactive \ observer \ object equivalent
 The key string is always of the form `${ENTITY}::${ID}` e.g. `projects:1234`
 
 Type: [Object][169]<[Object][169]>
@@ -482,14 +482,14 @@ Listening postboxes, these correspond to outgoing message IDs that expect a resp
 
 ### init
 
-Initalize the TERA client singleton
-This function can only be called once and will return the existing init() worker Promise if its called againt
+Initialize the TERA client singleton
+This function can only be called once and will return the existing init() worker Promise if its called against
 
 #### Parameters
 
 *   `options` **[Object][169]?** Additional options to merge into `settings` via `set`
 
-Returns **[Promise][174]<[TeraFy][33]>** An eventual promise which will resovle with this terafy instance
+Returns **[Promise][174]<[TeraFy][33]>** An eventual promise which will resolve with this terafy instance
 
 ### detectMode
 
@@ -500,9 +500,9 @@ Returns **[Promise][174]<[String][168]>** A promise which will resolve with the 
 
 ### injectComms
 
-Find an existing active TERA server OR initalize one
+Find an existing active TERA server OR initialize one
 
-Returns **[Promise][174]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+Returns **[Promise][174]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initialized a child
 
 ### handshakeLoop
 
@@ -514,7 +514,7 @@ Keep trying to handshake until the target responds
 
 #### Properties
 
-*   `handshakeInterval` **[Number][171]?** Interval in milliseconds when sanning for a handshake, defaults to global setting
+*   `handshakeInterval` **[Number][171]?** Interval in milliseconds when scanning for a handshake, defaults to global setting
 *   `handshakeTimeout` **[Number][171]?** Interval in milliseconds for when to give up trying to handshake, defaults to global setting
 
 Returns **[Promise][174]** A promise which will either resolve when the handshake is successful OR fail with 'TIMEOUT'
@@ -523,7 +523,7 @@ Returns **[Promise][174]** A promise which will either resolve when the handshak
 
 Inject a local stylesheet to handle TERA server functionality
 
-Returns **[Promise][174]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initiallized a child
+Returns **[Promise][174]** A promise which will resolve when the loading has completed and we have found a parent TERA instance or initialized a child
 
 ### injectMethods
 
@@ -576,7 +576,7 @@ Include a TeraFy client plugin
 #### Parameters
 
 *   `source` **([Function][178] | [Object][169] | [String][168])** Either the JS module class, singleton object or URL to fetch it from. Eventually constructed as invoked as `(teraClient:TeraFy, options:Object)`
-*   `options` **[Object][169]?** Additional options to mutate behaviour during construction (pass options to init() to intialize later options)
+*   `options` **[Object][169]?** Additional options to mutate behaviour during construction (pass options to init() to initialize later options)
 
 Returns **[TeraFy][33]** This chainable terafy instance
 
@@ -586,8 +586,8 @@ Internal function used by use() to merge an external declared singleton against 
 
 #### Parameters
 
-*   `target` **[Object][169]** Initalied class instance to extend
-*   `source` **[Object][169]** Initalized source object to extend from
+*   `target` **[Object][169]** Installed class instance to extend
+*   `source` **[Object][169]** Initialized source object to extend from
 
 ### toggleDevMode
 
@@ -618,7 +618,7 @@ Generate random entropic character string in Base64
 
 #### Parameters
 
-*   `maxLength` **[Number][171]** Maximum lengh of the genrated string (optional, default `32`)
+*   `maxLength` **[Number][171]** Maximum length of the generated string (optional, default `32`)
 
 Returns **[String][168]**&#x20;
 
@@ -645,7 +645,7 @@ This generally creates whatever framework flavoured reactive/observer/object is 
 
 Returns **[Promise][174]\<Reactive>** A promise which resolves to the reactive object
 
-## Actual namespace mounting function designed to be overriden by plugins
+## Actual namespace mounting function designed to be overridden by plugins
 
 ### Parameters
 
@@ -664,7 +664,7 @@ This function will remove the namespace from `namespaces`, cleaning up any memor
 
 Returns **[Promise][174]** A promise which resolves when the operation has completed
 
-## Actual namespace unmounting function designed to be overriden by plugins
+## Actual namespace unmounting function designed to be overridden by plugins
 
 ### Parameters
 
@@ -684,7 +684,7 @@ Returns **[Promise][174]<[Object][169]>** Basic promise result
 
 ## setServerVerbosity
 
-RPC callback to set the server verbostiy level
+RPC callback to set the server verbosity level
 
 ### Parameters
 
@@ -723,7 +723,7 @@ This is an pre-requisite step for requireProject()
 
 *   `options` **[Object][169]?** Additional options to mutate behaviour
 
-    *   `options.forceRetry` **[Boolean][172]** Forcabily try to refresh the user state (optional, default `false`)
+    *   `options.forceRetry` **[Boolean][172]** Forcibly try to refresh the user state (optional, default `false`)
 
 Returns **[Promise][174]<[User][90]>** The current logged in user or null if none
 
@@ -754,7 +754,7 @@ Set the currently active project within TERA
 ## requireProject
 
 Ask the user to select a project from those available - if one isn't already active
-Note that this function will percist in asking the uesr even if they try to cancel
+Note that this function will persist in asking the user even if they try to cancel
 
 ### Parameters
 
@@ -784,7 +784,7 @@ Returns **[Promise][174]<[Project][96]>** The active project
 ## getNamespace
 
 Get a one-off snapshot of a namespace without mounting it
-This can be used for simpler apps which don't have their own reactive / observer equivelent
+This can be used for simpler apps which don't have their own reactive / observer equivalent
 
 ### Parameters
 
@@ -795,7 +795,7 @@ Returns **[Promise][174]<[Object][169]>** A promise which resolves to the namesp
 ## setNamespace
 
 Set (or merge by default) a one-off snapshot over an existing namespace
-This can be used for simpler apps which don't have their own reactive / observer equivelent and just want to quickly set something
+This can be used for simpler apps which don't have their own reactive / observer equivalent and just want to quickly set something
 
 ### Parameters
 
@@ -896,10 +896,9 @@ Prompt the user to select a library to operate on
     *   `options.allowUpload` **[Boolean][172]** Allow uploading new files (optional, default `true`)
     *   `options.allowRefresh` **[Boolean][172]** Allow the user to manually refresh the file list (optional, default `true`)
     *   `options.allowDownloadZip` **[Boolean][172]** Allow the user to download a Zip of all files (optional, default `true`)
-    *   `options.allowCancel` **[Boolean][172]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
+    *   `options.allowCancel` **[Boolean][172]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if actioned (optional, default `true`)
     *   `options.autoRequire` **[Boolean][172]** Run `requireProject()` automatically before continuing (optional, default `true`)
     *   `options.showHiddenFiles` **[Boolean][172]** Whether hidden data.json files should be shown (optional, default `false`)
-    *   `options.filter` **[FileFilters][118]?** Optional file filters
 
 Returns **[Promise][174]<[ProjectFile][1]>** The eventually selected file, if in save mode new files are created as stubs
 
@@ -924,7 +923,7 @@ Fetch the raw contents of a file by its ID
 ### Parameters
 
 *   `id` **[String][168]?** File ID to retrieve the contents of
-*   `options` **[Object][169]?** Additioanl options to mutate behaviour
+*   `options` **[Object][169]?** Additional options to mutate behaviour
 
     *   `options.format` **(`"blob"` | `"json"`)** The format to retrieve the file in (optional, default `'blob'`)
 
@@ -1050,11 +1049,11 @@ Prompt the user to select a library to operate on and return a array of referenc
 *   `options` **[Object][169]?** Additional options to mutate behaviour
 
     *   `options.title` **[String][168]** The title of the dialog to display (optional, default `"Select a citation library"`)
-    *   `options.hint` **([String][168] | [Array][173]<[String][168]>)?** Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'dedisputed'
+    *   `options.hint` **([String][168] | [Array][173]<[String][168]>)?** Hints to identify the library to select in array order of preference. Generally corresponds to the previous stage - e.g. 'deduped', 'review1', 'review2', 'demisted'
     *   `options.allowUpload` **[Boolean][172]** Allow uploading new files (optional, default `true`)
     *   `options.allowRefresh` **[Boolean][172]** Allow the user to manually refresh the file list (optional, default `true`)
     *   `options.allowDownloadZip` **[Boolean][172]** Allow the user to download a Zip of all files (optional, default `true`)
-    *   `options.allowCancel` **[Boolean][172]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if acationed (optional, default `true`)
+    *   `options.allowCancel` **[Boolean][172]** Allow cancelling the operation. Will throw `'CANCEL'` as the promise rejection if actioned (optional, default `true`)
     *   `options.autoRequire` **[Boolean][172]** Run `requireProject()` automatically before continuing (optional, default `true`)
     *   `options.filters` **[FileFilters][118]?** Optional file filters, defaults to citation library selection only
 *   `options` **...any?** Additional options - see `getProjectLibrary()`
@@ -1075,7 +1074,7 @@ Fetch + convert a project file into a library of citations
     *   `options.filter` **[Function][178]?** Optional async file filter, called each time as `(File:ProjectFile)`
     *   `options.find` **[Function][178]?** Optional async final stage file filter to reduce all candidates down to one subject file
 
-Returns **([Promise][174]<[Array][173]\<Ref>> | [Promise][174]\<any>)** A collection of references (default bevahiour) or a whatever format was requested
+Returns **([Promise][174]<[Array][173]\<Ref>> | [Promise][174]\<any>)** A collection of references (default behaviour) or a whatever format was requested
 
 ## setProjectLibrary
 
@@ -1118,7 +1117,7 @@ This is usually called by a tool nested within the tera-tools.com embed
 
 ### Parameters
 
-*   `options` **([Object][169] | [String][168])** Context information about the page, if this is a string, its assumed to popupate `url`
+*   `options` **([Object][169] | [String][168])** Context information about the page, if this is a string, its assumed to populate `url`
 
     *   `options.path` **[String][168]?** The URL path segment to restore on next refresh
     *   `options.title` **[String][168]?** The page title associated with the path
@@ -1412,7 +1411,7 @@ This function is ideally called within a requestFocus() wrapper
 
 [79]: #parameters-19
 
-[80]: #actual-namespace-mounting-function-designed-to-be-overriden-by-plugins
+[80]: #actual-namespace-mounting-function-designed-to-be-overridden-by-plugins
 
 [81]: #parameters-20
 
@@ -1420,7 +1419,7 @@ This function is ideally called within a requestFocus() wrapper
 
 [83]: #parameters-21
 
-[84]: #actual-namespace-unmounting-function-designed-to-be-overriden-by-plugins
+[84]: #actual-namespace-unmounting-function-designed-to-be-overridden-by-plugins
 
 [85]: #parameters-22
 
