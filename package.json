@@ -113,12 +113,12 @@
     "mitt": "^3.0.1",
     "nanoid": "^5.1.2",
     "p-retry": "^6.2.1",
-    "release-it": "^18.1.2",
+    "release-it": "^19.2.4",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^2.3.1",
-    "@release-it/conventional-changelog": "^10.0.0",
+    "@release-it/conventional-changelog": "^10.0.5",
     "@types/detect-port": "^2.0.0",
     "@types/http-proxy": "^1.17.16",
     "@types/lodash-es": "^4.17.12",
