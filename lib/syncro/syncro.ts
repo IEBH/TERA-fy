@@ -495,14 +495,38 @@ export default class Syncro {
 		let doc: any; // Eventual Firebase document
 
 		return PromiseRetry(
-			async (): Promise<Syncro> => { // Added async here for await
-				await this.setHeartbeat(false); // Disable any existing heartbeat - this only really applies if we're changing path for some reason
+			async (): Promise<Syncro> => {
+				await this.setHeartbeat(false); // Disable any existing heartbeat
 
 				// Set up binding and wait for it to come ready
 				this.docRef = FirestoreDocRef(Syncro.firestore, fsCollection, fsId);
 
 				// Initialize state
-				const initialState = await this.getFirestoreState();
+				let initialState = await this.getFirestoreState();
+
+				// If we have a project that has `users` (written by the invite system)
+				// but lacks core data like `name` 9implying a full sync hasn't happened),
+				// we assume the document is corrupted/partial.
+				if (
+					this.path.startsWith('projects::') &&
+					initialState &&
+					!isEmpty(initialState) &&
+					initialState.users &&
+					(!initialState.type && !initialState.name && !initialState.created)
+				) {
+					this.debugError('Zombie state detected (Partial document). Forcing repair...');
+
+					// Force the backend to wipe and re-sync this entity
+					const repairRes = await fetch(`${this.config.syncroRegistryUrl}/${this.path}?drop=1&force=1`);
+
+					if (repairRes.ok) {
+						this.debug('Repair signal sent successfully. Reloading local state...');
+						// Fetch the newly corrected state from Firestore
+						initialState = await this.getFirestoreState();
+					} else {
+						console.error('[Syncro] Self-healing failed', repairRes.statusText);
+					}
+				}
 
 				// Construct a reactive component
 				reactive = this.getReactive(initialState);
@@ -517,21 +541,21 @@ export default class Syncro {
 					this.debug('Incoming snapshot', {snapshotData});
 					reactive.setState(snapshotData);
 				});
-				this._destroyActions.push(unsubscribe); // Add the unsubscribe handle to the list of destroyAction promises we call on `destroy()`
+				this._destroyActions.push(unsubscribe);
 
 				// Optionally create the doc if it has no content
 				if (!isEmpty(doc)) { // Doc already has content - skip
 					// Do nothing
-				} else if (settings.initialState) { // Provided an initialState - use that instead of the entities own method
+				} else if (settings.initialState) { // Provided an initialState
 					this.debug('Populate initial Syncro state (from provided initialState)');
 					await this.setFirestoreState(settings.initialState, {method: 'set'});
 				} else {
+					// Doc is empty (or was missing).
 					this.debug(`Populate initial Syncro state (from "${entity}" Syncro worker)`);
 					const response = await fetch(`${this.config.syncroRegistryUrl}/${this.path}`);
 					if (!response.ok) {
 						throw new Error(`Failed to check Syncro "${fsCollection}::${fsId}" status - ${response.statusText}`);
 					}
-					// Assuming the fetch populates the syncro state server-side, no local state set needed here
 				}
 
 				// Setup local state watcher
@@ -554,7 +578,7 @@ export default class Syncro {
 				factor: 3,
 				onFailedAttempt: async (e: any) => {
 					this.debugError(`[Attempt ${e.attemptNumber}/${e.attemptNumber + e.retriesLeft - 1}] to mount syncro`, e);
-					await this.destroy(); // Ensure cleanup on failed attempt before retry
+					await this.destroy();
 				},
 			},
 		);
