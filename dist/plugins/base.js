@@ -15,6 +15,7 @@ export default class TeraFyPlugin {
     * @param {TeraFy} terafy The TeraFy client this plugin is being initalized against
     * @param {Object} [options] Additional options to mutate behaviour
     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(terafy, options) {
     }
 }

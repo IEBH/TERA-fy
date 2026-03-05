@@ -5,7 +5,7 @@ interface FlushOptions {
 /**
 * @class SyncroKeyed
 * TERA Isomorphic SyncroKeyed class
-* Collate a single (potencially very large) single Syncro object by spltting it acrtoss multiple Syncros
+* Collate a single (potentially very large) single Syncro object by splitting it across multiple Syncros
 * This makes the assumption that the Syncro content is a large object collection of objects - a keyed map collection
 * The original impetus is to allow TERA citation libraries to be held in a Syncro object and flushed back to Supabase when editing has completed
 */
@@ -78,7 +78,7 @@ export default class SyncroKeyed extends Syncro {
     keyedSet(key: string, value: any): Promise<any>;
     /**
     * Assign an entire in-memory object to members
-    * This can be thought of as the optimized equivelent of Object.assign()
+    * This can be thought of as the optimized equivalent of Object.assign()
     * Use this when merging large objects as it can make optimizations
     *
     * @param {Object} state The value to merge

@@ -11,10 +11,10 @@ interface DeferredMethod {
 export default class TeraFy {
     settings: Record<string, any>;
     /**
-    * Download the remote TERA-fy client, initalize it and mix it in with this class instance
+    * Download the remote TERA-fy client, initialize it and mix it in with this class instance
     *
     * @param {Object} [options] Additional options to merge into `settings` via `set`
-    * @returns {Promise<TeraFy>} An eventual promise which will resovle with this terafy instance
+    * @returns {Promise<TeraFy>} An eventual promise which will resolve with this terafy instance
     */
     init(options?: any): Promise<this>;
     /**

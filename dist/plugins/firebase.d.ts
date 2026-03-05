@@ -21,16 +21,16 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
     /**
     * @interface
     * The Syncro#reactive option to use when creating new Syncro instances
-    * This is expected to be overriden by other plugins
+    * This is expected to be overridden by other plugins
     * If falsy the Syncro module will fall back to its internal (POJO only) getReactive() function
     *
     * @name getReactive
     * @type {Function} A reactive function as defined in Syncro
     */
-    getReactive?: Function;
+    getReactive?: () => any;
     /**
     * Setup Firebase + Firestore + Supabase
-    * Default credentials (Firebase + Supabase) will be retrieved from `getCredentials()` unless overriden here
+    * Default credentials (Firebase + Supabase) will be retrieved from `getCredentials()` unless overridden here
     *
     * @param {Object} options Additional options to mutate behaviour (defaults to the main teraFy settings)
     * @param {String} [options.firebaseApiKey] Firebase API key
@@ -46,7 +46,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
     /**
     * Mount the given namespace against `namespaces[name]`
     *
-    * @param {'_PROJECT'|String} name The name/Syncro path of the namespace to mount (or '_PROJECT' for the project mountpoint)
+    * @param {'_PROJECT'|String} name The name/Syncro path of the namespace to mount (or '_PROJECT' for the project mount-point)
     *
     * @returns {Promise} A promise which resolves when the operation has completed
     */

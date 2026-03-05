@@ -5,8 +5,12 @@
 */
 interface Defer {
     promise: Promise<unknown>;
-    resolve: (value?: unknown | PromiseLike<unknown>) => void;
+    resolve: (value?: unknown) => void;
     reject: (reason?: any) => void;
 }
+/**
+ * Default export
+ * @returns Deferred promise
+ */
 export default function (): Defer;
 export {};

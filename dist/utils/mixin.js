@@ -9,7 +9,7 @@
 * @returns {Object} A shallow copy of the input instance extended with the assignments
 */
 export default function mixin(instance, assignments) {
-    let output = Object.assign(Object.create(Object.getPrototypeOf(instance)), instance, assignments);
+    const output = Object.assign(Object.create(Object.getPrototypeOf(instance)), instance, assignments);
     return output;
 }
 //# sourceMappingURL=mixin.js.map

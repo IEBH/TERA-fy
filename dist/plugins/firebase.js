@@ -21,7 +21,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
     }
     /**
     * Setup Firebase + Firestore + Supabase
-    * Default credentials (Firebase + Supabase) will be retrieved from `getCredentials()` unless overriden here
+    * Default credentials (Firebase + Supabase) will be retrieved from `getCredentials()` unless overridden here
     *
     * @param {Object} options Additional options to mutate behaviour (defaults to the main teraFy settings)
     * @param {String} [options.firebaseApiKey] Firebase API key
@@ -34,7 +34,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
     * @returns {Promise} A Promise which will resolve when the init process has completed
     */
     async init(options) {
-        let settings = {
+        const settings = {
             firebaseApiKey: null,
             firebaseAuthDomain: null,
             firebaseProjectId: null,
@@ -44,7 +44,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
             ...await this.getCredentials(),
             ...options,
         };
-        let emptyValues = Object.keys(settings).filter(k => k === null);
+        const emptyValues = Object.keys(settings).filter(k => k === null);
         if (emptyValues.length > 0)
             throw new Error('Firebase plugin requires mandatory options: ' + emptyValues.join(', '));
         Syncro.firebase = Firebase({
@@ -64,7 +64,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
     /**
     * Mount the given namespace against `namespaces[name]`
     *
-    * @param {'_PROJECT'|String} name The name/Syncro path of the namespace to mount (or '_PROJECT' for the project mountpoint)
+    * @param {'_PROJECT'|String} name The name/Syncro path of the namespace to mount (or '_PROJECT' for the project mount-point)
     *
     * @returns {Promise} A promise which resolves when the operation has completed
     */
@@ -73,7 +73,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
         return Promise.resolve()
             .then(() => this.requireProject())
             .then(project => {
-            let path = name == '_PROJECT'
+            const path = name == '_PROJECT'
                 ? `projects::${project.id}`
                 : `project_namespaces::${project.id}::${name}`;
             syncro = this.syncros[name] = new Syncro(path, {
@@ -95,13 +95,13 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
     * @returns {Promise} A promise which resolves when the operation has completed
     */
     _unmountNamespace(name) {
-        let syncro = this.syncros[name]; // Create local alias for Syncro before we detach it
+        const syncro = this.syncros[name]; // Create local alias for Syncro before we detach it
         // Detach local state
         delete this.namespaces[name];
         delete this.syncros[name];
         // Check if syncro exists before calling destroy
         if (syncro) {
-            return syncro.destroy(); // Trigger Syncro distruction
+            return syncro.destroy(); // Trigger Syncro destruction
         }
         else {
             return Promise.resolve(); // Or handle the case where syncro doesn't exist

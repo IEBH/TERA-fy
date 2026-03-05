@@ -7,23 +7,23 @@ import { merge } from 'lodash-es';
 */
 export default class TeraFy {
     /**
-    * Download the remote TERA-fy client, initalize it and mix it in with this class instance
+    * Download the remote TERA-fy client, initialize it and mix it in with this class instance
     *
     * @param {Object} [options] Additional options to merge into `settings` via `set`
-    * @returns {Promise<TeraFy>} An eventual promise which will resovle with this terafy instance
+    * @returns {Promise<TeraFy>} An eventual promise which will resolve with this terafy instance
     */
     init(options) {
         // FIXME: Note this needs to point at the live site
-        let getUrl = (client) => `https://dev.tera-tools.com/api/tera-fy/${client}.js`;
+        const getUrl = (client) => `https://dev.tera-tools.com/api/tera-fy/${client}.js`;
         return Promise.resolve()
             .then(() => this.settings.clientType == 'esm' ?
             this.bootstrapperImport(getUrl(this.settings.client))
                 .then(exported => typeof exported == 'function' ? exported : Promise.reject("Tera-fy import didn't return a class"))
             : Promise.reject(`Unsupported TERA-fy clientType "${this.settings.clientType}"`))
             .then((TeraClient) => {
-            let tc = new TeraClient();
+            const tc = new TeraClient();
             if (!tc.mixin)
-                throw new Error('TERA-fy client doesnt expose a mixin() method');
+                throw new Error("TERA-fy client doesn't expose a mixin() method");
             tc.mixin(this, tc);
             // Merge settings object
             merge(this.settings, tc.settings, options || {}); // Use options passed to init here
@@ -31,11 +31,11 @@ export default class TeraFy {
             .then(() => {
             console.log('IAM', this);
             if (!this.init || typeof this.init != 'function')
-                throw new Error('Newly mixed-in TERA-fy client doesnt expose a init() method');
+                throw new Error("Newly mixed-in TERA-fy client doesn't expose a init() method");
             if (!this.detectMode || typeof this.detectMode != 'function')
-                throw new Error('Newly mixed-in TERA-fy client doesnt expose a detectMode() method');
+                throw new Error("Newly mixed-in TERA-fy client doesn't expose a detectMode() method");
         })
-            // Run all deferred methods as an sequencial promise chain
+            // Run all deferred methods as an sequential promise chain
             .then(() => this.bootstrapperDeferredMethods.reduce((chain, dm) => {
             return chain.then(() => {
                 if (dm.method == 'use' && typeof dm.args[0] == 'string') { // Wrap `use(pluginClient:String,options:Object)` method to fetch plugin from remote
@@ -50,7 +50,7 @@ export default class TeraFy {
                     return Promise.resolve(this[dm.method].apply(this, dm.args));
                 }
             });
-        }, Promise.resolve(undefined))) // Initialize reduce chain correctly
+        }, Promise.resolve())) // Initialize reduce chain correctly
             .then(() => { delete this.bootstrapperDeferredMethods; }) // Use type assertion for delete
             .then(() => console.log('TYBS', 'Init'))
             // Call the *actual* init method mixed in from the client
@@ -76,11 +76,11 @@ export default class TeraFy {
 				window['installMod${moduleId}'](mod);
 			`;
             // Create cleanup function
-            let cleanup = () => {
+            const cleanup = () => {
                 // console.warn('CLEANUP', moduleId); // Keep console.warn commented out unless needed
                 delete window[`installMod${moduleId}`]; // Use type assertion for delete
                 if (script.parentNode) { // Check if script is still in DOM
-                    script.parentNode.removeChild(script);
+                    script.remove();
                 }
             };
             // Create stub function to accept payload + quit
@@ -89,13 +89,12 @@ export default class TeraFy {
                 resolve(payload);
                 cleanup();
             };
-            // FIXME: Not sure if this is actually detecting errors? addEventListener instead maybe?
-            script.onerror = (event, source, lineno, colno, error) => {
-                reject(new Error(`Failed to load module from ${url} - ${error ? error.toString() : event}`));
+            script.addEventListener('error', (event) => {
+                reject(new Error(`Failed to load module script from ${url}. Event type: ${event.type}`));
                 cleanup();
-            };
+            });
             // Append stub script element and quit
-            document.head.appendChild(script);
+            document.head.append(script);
         });
     }
     /**

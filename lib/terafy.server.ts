@@ -136,7 +136,7 @@ export default class TeraFyServer {
 			case TeraFyServer.SERVERMODE_TERA:
 			case TeraFyServer.SERVERMODE_FRAME: {
 				// Server is the top-level window so we need to send messages to an embedded iFrame
-				const iFrame = document.querySelector('iframe#external');
+				const iFrame = document.querySelector<HTMLIFrameElement>('iframe#external');
 				if (!iFrame) {
 					this.debug('INFO', 2, 'Cannot locate TERA-FY top-level->iFrame#external - maybe there is none');
 					return mixin(this, {
@@ -1663,8 +1663,7 @@ export default class TeraFyServer {
 			autoRequire: true,
 			// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 			filter: (file: any) => true, // Default filter
-			// @ts-expect-error TODO: Investigate why TS complains
-			find: (files: any[]) => files.at(0), // Default find
+			find: (files: any[]) => files[0], // Default find
 			...options,
 		};
 

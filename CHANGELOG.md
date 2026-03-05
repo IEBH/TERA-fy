@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.3.2](https://github.com/IEBH/TERA-fy/compare/v2.3.1...v2.3.2) (2026-02-24)
+
+
+### chore
+
+* Regen package-lock ([e0bbf05](https://github.com/IEBH/TERA-fy/commit/e0bbf056b31e2f59aa63e612f452adedf7d3e848))
+* Version bump release-it ([bd52942](https://github.com/IEBH/TERA-fy/commit/bd52942ccd00822d65fdc3c1a31700a95dda0ae4))
+
+### fix
+
+* Build errors ([5678d93](https://github.com/IEBH/TERA-fy/commit/5678d9364869e9e46a22f67260fa31128cbdc20e))
+* Invited user fails to initialise project ([845a994](https://github.com/IEBH/TERA-fy/commit/845a994646810ba88b5f6eb7b06aa86a20e42b76))
+* Most eslint errors + typos ([c478060](https://github.com/IEBH/TERA-fy/commit/c4780603ff4adf0dc7b32ae04f0c75dc41cd6eb8))
+* Select project file settings documentation ([ebe4e7f](https://github.com/IEBH/TERA-fy/commit/ebe4e7fa26b95d581e1c7bc1e736c0e1687334de))
+
 ## [2.3.1](https://github.com/IEBH/TERA-fy/compare/v2.3.0...v2.3.1) (2025-09-25)
 
 

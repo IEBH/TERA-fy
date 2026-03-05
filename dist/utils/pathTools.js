@@ -24,12 +24,12 @@ import { defaultsDeep as _defaults, get as _get, has as _has, merge as _merge, s
 * @returns {*} The set value
 */
 export function set(target, path, value, options) {
-    let settings = {
+    const settings = {
         strategy: 'overwrite',
         ...options,
     };
     // Fetch the existing value if the strategy calls for it
-    let hasExistingValue = ['merge', 'defaults'].includes(settings.strategy)
+    const hasExistingValue = ['merge', 'defaults'].includes(settings.strategy)
         ? has(target, path)
         : undefined;
     switch (settings.strategy) {

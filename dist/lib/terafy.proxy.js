@@ -28,7 +28,7 @@ export class TeraProxy {
         }))
             .then(() => new Promise((resolve, reject) => {
             // Wrap listener in a domain so we can correctly catch EADDRINUSE
-            let domain = createDomain();
+            const domain = createDomain();
             domain.on('error', (err) => {
                 if (err.code == 'EADDRINUSE') {
                     reject('PORT-CONFLICT');
@@ -108,7 +108,9 @@ export class TeraProxy {
             Object.assign(this.settings, options);
         // Auto start?
         if (this.settings.autoStart)
-            this.start(); // Use resolved settings.autoStart
+            this.start().catch(err => {
+                this.settings.onLog('WARN', 'Proxy auto-start failed:', err);
+            });
     }
 }
 /**
