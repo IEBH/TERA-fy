@@ -104,38 +104,38 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@iebh/supabasey": "^1.1.4",
+    "@iebh/supabasey": "^1.1.7",
     "@momsfriendlydevco/marshal": "^2.2.0",
     "detect-port": "^2.1.0",
-    "filesize": "^10.1.6",
+    "filesize": "^11.0.13",
     "http-proxy": "^1.18.1",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "mitt": "^3.0.1",
-    "nanoid": "^5.1.2",
-    "p-retry": "^6.2.1",
+    "nanoid": "^5.1.6",
+    "p-retry": "^7.1.1",
     "release-it": "^19.2.4",
-    "uuid": "^11.1.0"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@momsfriendlydevco/eslint-config": "^2.3.1",
     "@release-it/conventional-changelog": "^10.0.5",
     "@types/detect-port": "^2.0.0",
-    "@types/http-proxy": "^1.17.16",
+    "@types/http-proxy": "^1.17.17",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^24.3.0",
-    "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.41.0",
-    "@typescript-eslint/parser": "^8.41.0",
-    "concurrently": "^9.1.2",
-    "conventional-changelog-eslint": "^6.0.0",
+    "@types/node": "^25.4.0",
+    "@types/uuid": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "concurrently": "^9.2.1",
+    "conventional-changelog-eslint": "^6.1.0",
     "documentation": "^14.0.3",
-    "esbuild": "^0.25.0",
-    "eslint": "^9.34.0",
+    "esbuild": "^0.27.3",
+    "eslint": "^10.0.3",
     "eslint-plugin": "^1.0.1",
-    "globals": "^16.5.0",
-    "nodemon": "^3.1.9",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.41.0"
+    "globals": "^17.4.0",
+    "nodemon": "^3.1.14",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0"
   },
   "peerDependencies": {
     "@iebh/reflib": "^2.5.4",
@@ -145,7 +145,7 @@
   },
   "optionalDependencies": {
     "just-diff-apply": "^5.5.0",
-    "vue": "^3.5.13"
+    "vue": "^3.5.30"
   },
   "release-it": {
     "git": {
