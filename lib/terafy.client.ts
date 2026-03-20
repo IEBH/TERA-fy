@@ -68,7 +68,8 @@ export default class TeraFy {
 	* Event emitter subscription endpoint
 	* @type {Mitt}
 	*/
-	// @ts-expect-error Because mitt is exported as cjs typescript has trouble resolving default export
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore - Because mitt is exported as cjs typescript has trouble resolving default export
 	events = Mitt();
 
 
