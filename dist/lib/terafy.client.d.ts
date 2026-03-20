@@ -204,8 +204,10 @@ export default class TeraFy {
     injectStylesheet(): Promise<void>;
     /**
     * Inject all server methods defined in `methods` as local functions wrapped in the `rpc` function
+    *
+    * @returns {Promise} A promise which resolves when the operation has completed
     */
-    injectMethods(): void;
+    injectMethods(): Promise<void>;
     /**
     * Debugging output function
     * This function will only act if `settings.devMode` is truthy

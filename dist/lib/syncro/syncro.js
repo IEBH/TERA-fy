@@ -54,7 +54,7 @@ export default class Syncro {
         * @property {Object} context Additional named parameters to pass to callbacks like initState
         */
         this.config = {
-            heartbeatInterval: 50000, //~= 50s
+            heartbeatInterval: 120000, //~= 120s / 2m
             syncroRegistryUrl: 'https://tera-tools.com/api/sync',
             context: {},
         };

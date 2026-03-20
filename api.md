@@ -529,6 +529,8 @@ Returns **[Promise][174]** A promise which will resolve when the loading has com
 
 Inject all server methods defined in `methods` as local functions wrapped in the `rpc` function
 
+Returns **[Promise][174]** A promise which resolves when the operation has completed
+
 ### debug
 
 Debugging output function

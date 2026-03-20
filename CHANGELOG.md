@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.3.4](https://github.com/IEBH/TERA-fy/compare/v2.3.2...v2.3.4) (2026-03-20)
+
+
+### devops
+
+* Removed some expired ESlint rules ([f4b8c3a](https://github.com/IEBH/TERA-fy/commit/f4b8c3a58b2abda9a1fb5468395dfd86fcf3d7c4))
+
+### fix
+
+* Add ts-expect-error ([86103ee](https://github.com/IEBH/TERA-fy/commit/86103eebe2fc9d41d08ed9e36ef5c9f64264a1fe))
+* Imports correctly resolve to dist directory ([4fbe658](https://github.com/IEBH/TERA-fy/commit/4fbe65888d82f4704a21ab3de905896f13db9d2c))
+
+### refactor
+
+* Minor fixes ([49dbfef](https://github.com/IEBH/TERA-fy/commit/49dbfefb25267ec4b88e3ceddece154f1d858153))
+* Tweak heartbeat frequency 50s -> 2m ([9ac791f](https://github.com/IEBH/TERA-fy/commit/9ac791f48d0dee7d61bc2a7a942277cebe8fc9c8))
+* Various fixups to keep ESlint / TypeScript happy ([f396cbe](https://github.com/IEBH/TERA-fy/commit/f396cbea4c899df1ac021b66c36da81d8dfb521c))
+
+### task
+
+* NPM update ([8e18f81](https://github.com/IEBH/TERA-fy/commit/8e18f81e4db3fcce2691d4a57ef4de9666b592dc))
+
 ## [2.3.2](https://github.com/IEBH/TERA-fy/compare/v2.3.1...v2.3.2) (2026-02-24)
 
 

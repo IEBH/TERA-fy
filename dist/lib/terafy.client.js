@@ -660,9 +660,12 @@ export default class TeraFy {
     }
     /**
     * Inject all server methods defined in `methods` as local functions wrapped in the `rpc` function
+    *
+    * @returns {Promise} A promise which resolves when the operation has completed
     */
     injectMethods() {
         this.methods.forEach(method => this[method] = this.rpc.bind(this, method));
+        return Promise.resolve();
     }
     // }}}
     // Utility - debug(), set(), setIfDev(), use(), mixin(), toggleDevMode(), toggleFocus(), getEntropicString() {{{

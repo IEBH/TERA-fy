@@ -394,6 +394,7 @@ class TeraFyServer {
     * @returns {Promise<User>} A promise which will resolve if the there is a user and they are logged in
     */
     requireUser() {
+        /* eslint-disable @typescript-eslint/only-throw-error */
         let user; // Last getUser() response
         return Promise.resolve() // NOTE: This promise is upside down, it only continues down the chain if the user is NOT valid, otherwise it throws to exit
             .then(() => this.getUser())
@@ -425,6 +426,7 @@ class TeraFyServer {
                         // Go back to start of auth checking loop and repull the user data
                         throw 'REDO';
                     }
+                    break;
                 default:
                 // Pass - Implied - Cannot authenticate via other method so just fall through to scalding the user
             }
@@ -520,7 +522,7 @@ class TeraFyServer {
                 $auth.user = data.user;
                 this.debug('INFO', 3, 'Received user auth from popup window', { '$auth.user': $auth.user });
                 // Store local copy of user image - this only applies to dev mode (localhost connecting to embed) so we can ignore the security implications here
-                Promise.resolve()
+                Promise.resolve() // eslint-disable-line @typescript-eslint/no-floating-promises
                     .then(() => this.getUser({
                     forceRetry: false, // Avoid loops
                     waitPromises: false, // We have a partially resolved state so we don't care about outer promises resolving
@@ -646,6 +648,7 @@ class TeraFyServer {
                         reject(e);
                     }
                 });
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 askProject(); // Kick off intial project loop
             })
                 .then(async (project) => {
@@ -1207,7 +1210,8 @@ class TeraFyServer {
         };
         return Promise.resolve()
             .then(() => {
-            settings.autoRequire && this.requireProject();
+            if (settings.autoRequire)
+                return this.requireProject();
         })
             .then(() => {
             if (settings.id) {
