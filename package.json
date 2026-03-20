@@ -19,8 +19,8 @@
   },
   "type": "module",
   "imports": {
-    "#terafy": "./lib/terafy.client.ts",
-    "#utils/*": "./utils/*.ts"
+    "#terafy": "./dist/lib/terafy.client.js",
+    "#utils/*": "./dist/utils/*.js"
   },
   "exports": {
     ".": {
