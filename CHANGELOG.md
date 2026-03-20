@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.5](https://github.com/IEBH/TERA-fy/compare/v2.3.4...v2.3.5) (2026-03-20)
+
+
+### fix
+
+* Use ts-ignore instead of ts-expect-error ([1029668](https://github.com/IEBH/TERA-fy/commit/1029668991a3d2bc66c939cadcdbf06ab82d6580))
+
 ## [2.3.4](https://github.com/IEBH/TERA-fy/compare/v2.3.2...v2.3.4) (2026-03-20)
 
 
