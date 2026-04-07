@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.6](https://github.com/IEBH/TERA-fy/compare/v2.3.5...v2.3.6) (2026-04-07)
+
+
+### task
+
+* Bump upstream NPMs ([e95cd16](https://github.com/IEBH/TERA-fy/commit/e95cd163646aafb175960dbe2d20440dfafe5883))
+
 ## [2.3.5](https://github.com/IEBH/TERA-fy/compare/v2.3.4...v2.3.5) (2026-03-20)
 
 
