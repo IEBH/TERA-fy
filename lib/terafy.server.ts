@@ -1146,7 +1146,8 @@ export default class TeraFyServer {
 			.then(()=> app.service('$projects').promise())
 			.then(()=> settings.autoRequire && this.requireProject())
 			.then(()=>
-				app.service('$projects').activeFiles.length == 0 // If we have no files in the cache
+				!app.service('$projects').activeFiles // List of project files not ready yet
+				|| app.service('$projects').activeFiles.length == 0 // OR if we have no files in the cache
 				|| !settings.lazy // OR lazy/cache use is disabled
 				? app.service('$projects').refreshFiles({ // Go refresh files first
 					lazy: false,
