@@ -341,14 +341,14 @@ class TeraFyServer {
     * @property {String} id Unique identifier of the user
     * @property {String} email The email address of the current user
     * @property {String} name The provided full name of the user
-    * @property {Boolean} isSubscribed Whether the active user has a TERA subscription
+    * @property {Boolean} isMember Whether the active user has a TERA Membership
     */
     /**
     * Fetch the current session user
     *
     * @param {Object} [options] Additional options to mutate behaviour
     * @param {Boolean} [options.forceRetry=false] Forcabily try to refresh the user state
-    * @param {Boolean} [options.waitPromises=true] Wait for $auth + $subscriptions to resolve before fetching the user (mainly internal use)
+    * @param {Boolean} [options.waitPromises=true] Wait for $auth + $membership to resolve before fetching the user (mainly internal use)
     *
     * @returns {Promise<User>} The current logged in user or null if none
     */
@@ -359,11 +359,11 @@ class TeraFyServer {
             ...options,
         };
         const $auth = app.service('$auth');
-        const $subscriptions = app.service('$subscriptions');
+        const $membership = app.service('$membership');
         return Promise.resolve()
             .then(() => settings.waitPromises && Promise.all([
             $auth.promise(),
-            $subscriptions.promise(),
+            $membership.promise(),
         ]))
             .then(() => {
             if (!$auth.isLoggedIn && settings.forceRetry)
@@ -377,7 +377,7 @@ class TeraFyServer {
                     $auth.user.given_name,
                     $auth.user.family_name,
                 ].filter(Boolean).join(' '),
-                isSubscribed: $subscriptions.isSubscribed,
+                isMember: $membership.isMember,
                 credits: $auth.active?.credits ?? 0,
             }
             : null)
@@ -949,7 +949,8 @@ class TeraFyServer {
         return Promise.resolve()
             .then(() => app.service('$projects').promise())
             .then(() => settings.autoRequire && this.requireProject())
-            .then(() => app.service('$projects').activeFiles.length == 0 // If we have no files in the cache
+            .then(() => !app.service('$projects').activeFiles // List of project files not ready yet
+            || app.service('$projects').activeFiles.length == 0 // OR if we have no files in the cache
             || !settings.lazy // OR lazy/cache use is disabled
             ? app.service('$projects').refreshFiles({
                 lazy: false,
