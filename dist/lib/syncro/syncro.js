@@ -5,6 +5,7 @@ import { doc as FirestoreDocRef, getDoc as FirestoreGetDoc, onSnapshot as Firest
 // @ts-expect-error No declaration file for marshal
 import marshal from '@momsfriendlydevco/marshal';
 import { nanoid } from 'nanoid';
+import PromiseThrottle from 'p-throttle';
 import PromiseRetry from 'p-retry';
 import { FirebaseError } from 'firebase/app';
 /**
@@ -14,6 +15,85 @@ import { FirebaseError } from 'firebase/app';
 * This class tries to be as independent as possible to help with adapting it to various front-end TERA-fy plugin frameworks
 */
 export default class Syncro {
+    /**
+    * Firebase instance in use
+    *
+    * @type {FirebaseApp}
+    */
+    static firebase;
+    /**
+    * Firestore instance in use
+    *
+    * @type {Firestore}
+    */
+    static firestore;
+    /**
+    * Supabasey instance in use
+    *
+    * @type {Supabasey}
+    */
+    static supabasey;
+    /**
+    * The current user session, should be unique for the user + browser tab
+    * Used by the heartbeat system
+    *
+    * @type {String}
+    */
+    static session;
+    /**
+    * OPTIONAL SyncroEntries from './entities.ts' if its required
+    * This only gets populated if `config.forceLocalInit` is truthy and we've mounted at least one Syncro
+    *
+    * @type {Record<string, any>}
+    */
+    static SyncroEntities;
+    /**
+    * This instances fully formed string path
+    *
+    * @type {String}
+    */
+    path;
+    /**
+    * The Firestore docHandle when calling various Firestore functions
+    *
+    * @type {DocumentReference | undefined}
+    */
+    docRef;
+    /**
+    * The reactive object managed by this Syncro instance
+    * The nature of this varies by framework and what `getReactive()` provides
+    *
+    * @type {any}
+    */
+    value;
+    /**
+    * Default throttle to apply for writes
+    *
+    * @type {Number} Throttle time in milliseconds
+    */
+    throttle = 250;
+    /**
+    * Various Misc config for the Syncro instance
+    *
+    * @type {Object}
+    * @property {Number} heartbeatInterval Time in milliseconds between heartbeat beacons
+    * @property {String} syncroRegistryUrl The prefix Sync worker URL, used to populate Syncros and determine their active status
+    * @property {Object} context Additional named parameters to pass to callbacks like initState
+    */
+    config = {
+        heartbeatInterval: 120_000, //~= 120s / 2m
+        syncroRegistryUrl: 'https://tera-tools.com/api/sync',
+        context: {},
+    };
+    /**
+    * Whether the next heartbeat should be marked as 'dirty'
+    * This indicates that at least one change has occurred since the last heartbeat and the server should perform a flush (but not a clean)
+    * This flag is only transmitted once in the next heartbeat before being reset
+    *
+    * @see markDirty()
+    * @type {Boolean}
+    */
+    isDirty = false;
     /**
     * @interface
     * Debugging printer for this instance
@@ -30,7 +110,7 @@ export default class Syncro {
     * @param {*...} [msg] The message to output
     */
     debugError(...msg) {
-        console.log(`[Syncro ${this.path}]`, ...msg);
+        console.warn(`[Syncro ${this.path}]`, ...msg);
     }
     /**
     * Instance constructor
@@ -39,41 +119,6 @@ export default class Syncro {
     * @param {Object} [options] Additional instance setters (mutates instance directly), note that the `config` subkey is merged with the existing config rather than assigned
     */
     constructor(path, options) {
-        /**
-        * Default throttle to apply for writes
-        *
-        * @type {Number} Throttle time in milliseconds
-        */
-        this.throttle = 250;
-        /**
-        * Various Misc config for the Syncro instance
-        *
-        * @type {Object}
-        * @property {Number} heartbeatInterval Time in milliseconds between heartbeat beacons
-        * @property {String} syncroRegistryUrl The prefix Sync worker URL, used to populate Syncros and determine their active status
-        * @property {Object} context Additional named parameters to pass to callbacks like initState
-        */
-        this.config = {
-            heartbeatInterval: 120000, //~= 120s / 2m
-            syncroRegistryUrl: 'https://tera-tools.com/api/sync',
-            context: {},
-        };
-        /**
-        * Whether the next heartbeat should be marked as 'dirty'
-        * This indicates that at least one change has occurred since the last heartbeat and the server should perform a flush (but not a clean)
-        * This flag is only transmitted once in the next heartbeat before being reset
-        *
-        * @see markDirty()
-        * @type {Boolean}
-        */
-        this.isDirty = false;
-        /**
-        * Actions to preform when we are destroying this instance
-        * This is an array of function callbacks to execute in parallel when `destroy()` is called
-        *
-        * @type {Array<function>}
-        */
-        this._destroyActions = [];
         this.path = path;
         Object.assign(this, {
             ...options,
@@ -93,10 +138,18 @@ export default class Syncro {
     */
     destroy() {
         this.debug('Destroy!');
-        return Promise.all(this._destroyActions
-            .map(fn => fn()))
+        return Promise.resolve()
+            .then(() => Promise.all(this._destroyActions // eslint-disable @typescript-eslint/await-thenable
+            .map(fn => fn())))
             .then(() => this._destroyActions = []); // Reset list of actions to perform when terminating
     }
+    /**
+    * Actions to preform when we are destroying this instance
+    * This is an array of function callbacks to execute in parallel when `destroy()` is called
+    *
+    * @type {Array<Function<Promise>>}
+    */
+    _destroyActions = [];
     /**
     * Function to return whatever the local framework uses as a reactive object
     * This should respond with an object of mandatory functions to watch for changes and re-merge them
@@ -376,6 +429,22 @@ export default class Syncro {
             reactive = this.getReactive(initialState);
             if (!reactive.doc || !reactive.setState || !reactive.getState || !reactive.watch)
                 throw new Error('Syncro.getReactive() requires a returned `doc`, `setState()`, `getState()` + `watch()`');
+            // Accept throttling for reactiveWrapper if present
+            if (reactive.throttle) { // Wanting to throttle - handed either truthy or an object of throttle settings
+                let throttleSettings = {
+                    limit: 2,
+                    interval: 100, // i.e. 2 calls within 100ms, otherwise throttle
+                    strict: false,
+                    ...(typeof reactive.throttle == 'object' && reactive.throttle), // Import throttle settings if any
+                };
+                // Wrap original reactive.setState() in a throttle function
+                let originalSetState = reactive.setState;
+                reactive.setState = PromiseThrottle({
+                    limit: throttleSettings.limit,
+                    interval: throttleSettings.interval,
+                    onDelay: () => this.debug('Throttling excessive Syncro.setState() writes'),
+                })(originalSetState);
+            }
             this.value = doc = reactive.doc;
             this.debug('Initial state', { doc });
             // Subscribe to remote updates
@@ -405,7 +474,7 @@ export default class Syncro {
             reactive.watch(throttle((newState) => {
                 this.debug('Local change', { newState });
                 this.markDirty();
-                this.setFirestoreState(newState, { method: 'merge' });
+                this.setFirestoreState(newState, { method: 'merge' }); // eslint-disable-line @typescript-eslint/no-floating-promises
             }, this.throttle));
             await this.setHeartbeat(true, {
                 immediate: true,
@@ -486,7 +555,7 @@ export default class Syncro {
     *
     * @param {Object} [options] Additional options to mutate behaviour
     * @param {Boolean} [options.immediate=false] Fire a heartbeat as soon as this function is called, this is only really useful on mount
-    * @returns Promise that resolves to void or void
+    * @returns {Promise|Void} A promise that resolves when completed (if `{immediate:true}`) or void
     */
     setHeartbeat(enable = true, options) {
         const settings = {
@@ -501,7 +570,7 @@ export default class Syncro {
                 await this.heartbeat();
                 // If we're enabled - schedule the next heartbeat timer
                 if (enable)
-                    this.setHeartbeat(true); // Reschedule
+                    this.setHeartbeat(true); // eslint-disable-line @typescript-eslint/no-floating-promises
             };
             this._heartbeatTimer = setTimeout(heartbeatAction, this.config.heartbeatInterval);
             if (settings.immediate)
@@ -624,6 +693,12 @@ export default class Syncro {
             ? null
             : Promise.reject(response.statusText || 'An error occurred'));
     }
+    /**
+    * Timer handle for heartbeats
+    *
+    * @type {any}
+    */
+    _heartbeatTimer; // Using any for simplicity with NodeJS.Timeout / number
 }
 /**
 * Build a chaotic random tree structure based on dice rolls
@@ -639,8 +714,8 @@ export function randomBranch(depth = 0) {
         : random(0, 11 - depth, false); // Subsequent rolls bias downwards based on depth (to avoid recursion)
     return (dice == 0 ? false
         : dice == 1 ? true
-            : dice == 2 ? random(1, 10000)
-                : dice == 3 ? (new Date(random(1000000000000, 1777777777777))).toISOString()
+            : dice == 2 ? random(1, 10_000)
+                : dice == 3 ? (new Date(random(1_000_000_000_000, 1_777_777_777_777))).toISOString()
                     : dice == 5 ? Array.from({ length: random(1, 10) }, () => random(1, 10)) // Added return type hint
                         : dice == 6 ? null
                             : dice < 8 ? Array.from({ length: random(1, 10) }, () => randomBranch(depth + 1)) // Added return type hint

@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.3.8](https://github.com/IEBH/TERA-fy/compare/v2.3.7...v2.3.8) (2026-04-30)
+
+
+### feat
+
+* Throttling for excessive state writes ([2fd9c47](https://github.com/IEBH/TERA-fy/commit/2fd9c4731615f9bbec85f2a2910ac3bb3397a5a5))
+
+### fix
+
+* Bumped TSC to ES2022 spec so that Error with {cause:Error} are supported when compiling ([336e153](https://github.com/IEBH/TERA-fy/commit/336e15384d896653ae063f7e52cea43e55dbdee0))
+* Misc fixes to keep TS happy ([073b35f](https://github.com/IEBH/TERA-fy/commit/073b35f2cad11e30e22de0ed2c3dda2331f9d12c))
+* Not correctly watching .ts files with nodemon ([731b0c5](https://github.com/IEBH/TERA-fy/commit/731b0c5ca983452928ca17361f4c0572c4aa1042))
+
+### refactor
+
+* Various fixes to keep Eslint happy ([8e18f40](https://github.com/IEBH/TERA-fy/commit/8e18f401aec76b7e6b4ab6c1105b08571d19388d))
+
+### task
+
+* Bump NPMs ([f92fcd5](https://github.com/IEBH/TERA-fy/commit/f92fcd5f133cb8bb06f35c6a038d07b2b72863fd))
+
 ## [2.3.6](https://github.com/IEBH/TERA-fy/compare/v2.3.5...v2.3.6) (2026-04-07)
 
 

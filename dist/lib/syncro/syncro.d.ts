@@ -1,11 +1,17 @@
 import { DocumentReference, Firestore } from 'firebase/firestore';
 import { FirebaseApp } from 'firebase/app';
 import { BoundSupabaseyFunction } from '@iebh/supabasey';
+interface ThrottleOptions<T = any> {
+    limit: number;
+    interval: number;
+    strict: boolean;
+}
 interface ReactiveWrapper<T = any> {
     doc: T;
     setState: (newState: T) => void;
     getState: () => T;
     watch: (cb: (newState: T) => void) => void;
+    throttle?: ThrottleOptions | true;
 }
 interface PathSplitResult {
     fsCollection: string;
@@ -134,7 +140,7 @@ export default class Syncro {
     * Actions to preform when we are destroying this instance
     * This is an array of function callbacks to execute in parallel when `destroy()` is called
     *
-    * @type {Array<function>}
+    * @type {Array<Function<Promise>>}
     */
     _destroyActions: Array<() => void>;
     /**
@@ -264,7 +270,7 @@ export default class Syncro {
     *
     * @param {Object} [options] Additional options to mutate behaviour
     * @param {Boolean} [options.immediate=false] Fire a heartbeat as soon as this function is called, this is only really useful on mount
-    * @returns Promise that resolves to void or void
+    * @returns {Promise|Void} A promise that resolves when completed (if `{immediate:true}`) or void
     */
     setHeartbeat(enable?: boolean, options?: any): Promise<void> | void;
     /**

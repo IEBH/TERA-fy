@@ -26,20 +26,16 @@ import { reactive as vueReactive, watch as vueWatch } from 'vue';
 * this.$tera.active
 */
 export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
-    constructor() {
-        super(...arguments);
-        /**
-        * The bound, reactive state of the active TERA project
-        *
-        * @type {Object}
-        */
-        this.project = null;
-    }
+    /**
+    * The bound, reactive state of the active TERA project
+    *
+    * @type {Object}
+    */
+    project = null;
     /**
     * Init the project including create a reactive mount for the active project
     *
-    * @param {Object} options Additional options to mutate behaviour
-    * @param {*} [options...] see TeraFyPluginFirebase
+    * @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
     */
     async init(options) {
         await super.init(options); // Initalize parent class Firebase functionality

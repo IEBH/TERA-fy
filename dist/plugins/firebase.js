@@ -9,16 +9,28 @@ import TeraFyPluginBase from './base.js';
 * @class TeraFyPluginFirebase
 */
 export default class TeraFyPluginFirebase extends TeraFyPluginBase {
-    constructor() {
-        super(...arguments);
-        /**
-        * Lookup object of mounted Syncro objects by path
-        *
-        * @type {Object<Syncro>}
-        */
-        this.syncros = {};
-        this.namespaces = {}; // Declare namespaces property
-    }
+    /**
+    * Lookup object of mounted Syncro objects by path
+    *
+    * @type {Object<Syncro>}
+    */
+    syncros = {};
+    namespaces = {}; // Declare namespaces property
+    // Declare properties expected by the class methods or potentially inherited
+    getCredentials;
+    requireProject;
+    // eslint-disable-next-line no-unused-vars
+    debug;
+    /**
+    * @interface
+    * The Syncro#reactive option to use when creating new Syncro instances
+    * This is expected to be overridden by other plugins
+    * If falsy the Syncro module will fall back to its internal (POJO only) getReactive() function
+    *
+    * @name getReactive
+    * @type {Function} A reactive function as defined in Syncro
+    */
+    getReactive;
     /**
     * Setup Firebase + Firestore + Supabase
     * Default credentials (Firebase + Supabase) will be retrieved from `getCredentials()` unless overridden here

@@ -6,6 +6,10 @@ import { merge } from 'lodash-es';
 * @class TeraFy
 */
 export default class TeraFy {
+    settings = {
+        client: 'tera-fy', // Client name within https://tera-tools.com/api/tera-fy/<NAME>.js to load
+        clientType: 'esm',
+    };
     /**
     * Download the remote TERA-fy client, initialize it and mix it in with this class instance
     *
@@ -58,6 +62,13 @@ export default class TeraFy {
             .then(() => this); // Ensure the promise chain resolves with `this`
     }
     /**
+    * Methods to call post-init when the main TeraFyClient has loaded
+    * These are setup during construction
+    *
+    * @type {Array<Object>}
+    */
+    bootstrapperDeferredMethods = [];
+    /**
     * Go fetch a remote URL, inject it as a <script> element and resolve to the exported default
     * This is a fix for the fact that regular import() can't accept URLs
     *
@@ -103,17 +114,6 @@ export default class TeraFy {
     * @param {String} [options] Optional settings to merge
     */
     constructor(options) {
-        this.settings = {
-            client: 'tera-fy', // Client name within https://tera-tools.com/api/tera-fy/<NAME>.js to load
-            clientType: 'esm',
-        };
-        /**
-        * Methods to call post-init when the main TeraFyClient has loaded
-        * These are setup during construction
-        *
-        * @type {Array<Object>}
-        */
-        this.bootstrapperDeferredMethods = [];
         // Merge options if provided
         if (options)
             merge(this.settings, options);

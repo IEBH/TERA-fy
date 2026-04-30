@@ -8,18 +8,130 @@ import { pick, omit } from 'lodash-es';
 */
 export default class ProjectFile {
     /**
+    * Parent TeraClient instance used by all helper functions
+    * @type {TeraClient}
+    * @private
+    */
+    _tera;
+    /**
+    * The TERA compatible unique ID of the file
+    * NOTE: This is computed each time from the Base64 of the file path
+    * @type {String}
+    */
+    id;
+    /**
+    * The raw Supabase UUID of the file
+    * @type {String}
+    */
+    sbId;
+    /**
+    * Relative name path (can contain prefix directories) for the human readable file name
+    * @type {String}
+    */
+    name;
+    /**
+    * CSS class to use as the file icon
+    * @type {String}
+    */
+    icon;
+    /**
+    * Full path to the file
+    * This is also used as the unique identifier within the project
+    * @type {String}
+    */
+    path;
+    /**
+    * Fully qualified URL to view / access / download the file from TERA
+    * This will usually open an edit UI within the TERA site
+    * @type {String}
+    */
+    url;
+    /**
+    * Rewrite of the URL where the absolute URL has been removed in place of a relative path, assuming the owner project is active
+    * This is used to direct to the edit/view/download UI when the files project is active and is usually used in place of URL for TERA related operations
+    * @type {String}
+    */
+    teraUrl;
+    /**
+    * An object representing meta file parts of a file name
+    * @type {Object}
+    * @property {String} basename The filename + extension (i.e. everything without directory name)
+    * @property {String} filename The file portion of the name (basename without the extension)
+    * @property {String} ext The extension portion of the name (always lower case)
+    * @property {String} dirName The directory path portion of the name
+    */
+    // Using 'any' for simplicity, define an interface for better type safety if desired
+    parsedName;
+    /**
+    * A date representing when the file was created
+    * @type {Date}
+    */
+    // Using Date | undefined because constructor checks if it exists
+    created;
+    /**
+    * A human readable, formatted version of "created"
+    * @type {String}
+    */
+    createdFormatted;
+    /**
+    * A date representing when the file was created
+    * @type {Date}
+    */
+    // Using Date | undefined because constructor checks if it exists
+    modified;
+    /**
+    * A human readable, formatted version of "modified"
+    * @type {String}
+    */
+    modifiedFormatted;
+    /**
+    * A date representing when the file was last accessed
+    * @type {Date}
+    */
+    // Using Date | undefined because constructor checks if it exists
+    accessed;
+    /**
+    * A human readable, formatted version of "accessed"
+    * @type {String}
+    */
+    accessedFormatted;
+    /**
+    * Size, in bytes, of the file
+    * @type {Number}
+    */
+    // Using number | undefined because constructor uses `|| 0`
+    size;
+    /**
+    * A human readable, formatted version of the file size
+    * @type {String}
+    */
+    sizeFormatted;
+    /**
+    * The associated mime type for the file
+    * @type {String}
+    */
+    mime;
+    /**
+    * Additional meta information for the file
+    * @type {Object}
+    */
+    // Using Record<string, any> for a generic object, adjust if meta has a known structure
+    meta = {};
+    /**
+     * Whether this is a folder or not
+     */
+    isFolder;
+    /**
+     * If it is a folder, it will have an array of files in the folder
+     */
+    files;
+    /**
     * ProjectFile constructor
     * Takes the input basic file type from Supabase and adds additional formatted fields
     * @param {SupabaseFile} baseFile The basic Supabase file to extend
     * @param {TeraFyClient} baseFile.tera The associated TeraFyClient instance to use for some file methods
     */
     constructor(baseFile) {
-        /**
-        * Additional meta information for the file
-        * @type {Object}
-        */
-        // Using Record<string, any> for a generic object, adjust if meta has a known structure
-        this.meta = {};
         // Note: baseFile.tera is assumed to exist based on the check below and the SupabaseFile type definition above
         if (!baseFile.tera)
             throw new Error('Basic file requires a `tera` key to access the Tera instance');
