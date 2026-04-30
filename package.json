@@ -117,7 +117,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@momsfriendlydevco/eslint-config": "^2.4.1",
+    "@momsfriendlydevco/eslint-config": "^2.4.2",
     "@release-it/conventional-changelog": "^10.0.5",
     "@types/detect-port": "^2.0.0",
     "@types/http-proxy": "^1.17.17",
