@@ -619,7 +619,7 @@ export default class TeraFyServer {
 				await app.service('$projects').refresh();
 				return;
 			} catch (e: any) {
-				throw new Error(`Failed to decode local dev state - ${e.toString()}`);
+				throw new Error(`Failed to decode local dev state - ${e.toString()}`, {cause: e});
 			}
 		}
 
@@ -1000,7 +1000,6 @@ export default class TeraFyServer {
 				.then(()=> pathTools.get(target, path));
 		} else { // Called as (value, options?) - Populate entire project layout
 			actualValue = path; // The first argument is the value
-			settings = { ...value }; // The second argument holds the options
 			pathTools.defaults(target, actualValue);
 			this.debug('INFO', 1, 'setProjectStateDefaults', {
 				defaults: actualValue,
@@ -1360,7 +1359,7 @@ export default class TeraFyServer {
 		} catch (error: any) {
 			this.debug('ERROR', 1, `Error during project file move from "${sourceStoragePath}" to "${targetStoragePath}":`, error);
 			// Re-throw a more specific error or the original error for the caller to handle.
-			throw new Error(`Failed to move project file "${sourceId}" to "${newName}": ${error.message || String(error)}`);
+			throw new Error(`Failed to move project file "${sourceId}" to "${newName}": ${error.message || String(error)}`, {cause: error});
 		}
 	}
 
@@ -1397,7 +1396,7 @@ export default class TeraFyServer {
 	*/
 	setProjectFileContents(id: string | any | null, contents: any, options?: any): Promise<null> {
 		// Argument Mangling Logic (Simplified)
-		let fileId: string | null = null;
+		let fileId: string | null = null; // eslint-disable-line no-useless-assignment
 		let fileContents: any;
 		let mergedOptions: any;
 
@@ -1527,7 +1526,7 @@ export default class TeraFyServer {
 			this.debug('INFO', 2, `Project folder "${cleanFolderPath}" ensured/created via placeholder at "${relativePlaceholderPath}".`);
 		} catch (error: any) {
 			this.debug('ERROR', 1, `Failed to create/ensure project folder "${cleanFolderPath}" via placeholder "${relativePlaceholderPath}"`, error);
-			throw new Error(`Failed to create project folder "${cleanFolderPath}": ${error.message || String(error)}`);
+			throw new Error(`Failed to create project folder "${cleanFolderPath}": ${error.message || String(error)}`, {cause: error});
 		}
 	}
 
@@ -1602,7 +1601,7 @@ export default class TeraFyServer {
 			this.debug('INFO', 2, `Project folder "${cleanFolderPath}" (prefix "${pathPrefix}") and its ${filesToDelete.length} contents deleted.`);
 		} catch (error: any) {
 			this.debug('ERROR', 1, `Failed to delete contents of project folder "${cleanFolderPath}" (prefix "${pathPrefix}")`, error);
-			throw new Error(`Failed to delete project folder "${cleanFolderPath}": ${error.message || String(error)}`);
+			throw new Error(`Failed to delete project folder "${cleanFolderPath}": ${error.message || String(error)}`, {cause: error});
 		}
 		return null;
 	}
@@ -1728,7 +1727,7 @@ export default class TeraFyServer {
 	*/
 	setProjectLibrary(id: string | any | null, refs?: any, options?: any): Promise<null> {
 		// Argument Mangling Logic (Simplified)
-		let fileId: string | null = null;
+		let fileId: string | null = null; // eslint-disable-line no-useless-assignment
 		let libraryRefs: any;
 		let mergedOptions: any;
 

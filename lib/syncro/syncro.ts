@@ -202,9 +202,10 @@ export default class Syncro {
 	*/
 	destroy(): Promise<any[]> {
 		this.debug('Destroy!');
-		return Promise.all(this._destroyActions
-			.map(fn => fn())
-		)
+		return Promise.resolve()
+			.then(()=> Promise.all(this._destroyActions // eslint-disable @typescript-eslint/await-thenable
+				.map(fn => fn())
+			))
 			.then(()=> this._destroyActions = []) // Reset list of actions to perform when terminating
 	}
 
@@ -213,7 +214,7 @@ export default class Syncro {
 	* Actions to preform when we are destroying this instance
 	* This is an array of function callbacks to execute in parallel when `destroy()` is called
 	*
-	* @type {Array<function>}
+	* @type {Array<Function<Promise>>}
 	*/
 	_destroyActions: Array<() => void> = [];
 
@@ -561,7 +562,7 @@ export default class Syncro {
 				// Setup local state watcher
 				reactive.watch(throttle((newState: any) => {
 					this.debug('Local change', {newState});
-					this.markDirty();
+					this.markDirty(); // eslint-disable-line @typescript-eslint/no-floating-promises
 					this.setFirestoreState(newState, {method: 'merge'});
 				}, this.throttle));
 
@@ -656,7 +657,7 @@ export default class Syncro {
 	*
 	* @param {Object} [options] Additional options to mutate behaviour
 	* @param {Boolean} [options.immediate=false] Fire a heartbeat as soon as this function is called, this is only really useful on mount
-	* @returns Promise that resolves to void or void
+	* @returns {Promise|Void} A promise that resolves when completed (if `{immediate:true}`) or void
 	*/
 	setHeartbeat(enable: boolean = true, options?: any): Promise<void> | void {
 		const settings = {
@@ -673,7 +674,7 @@ export default class Syncro {
 				await this.heartbeat();
 
 				// If we're enabled - schedule the next heartbeat timer
-				if (enable) this.setHeartbeat(true); // Reschedule
+				if (enable) this.setHeartbeat(true); // eslint-disable-line @typescript-eslint/no-floating-promises
 			};
 
 			this._heartbeatTimer = setTimeout(heartbeatAction, this.config.heartbeatInterval);
