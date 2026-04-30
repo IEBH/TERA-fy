@@ -169,7 +169,7 @@ export default class Syncro {
 	* @param {*...} [msg] The message to output
 	*/
 	debugError(...msg: any[]) {
-		console.log(`[Syncro ${this.path}]`, ...msg);
+		console.warn(`[Syncro ${this.path}]`, ...msg);
 	}
 
 
@@ -562,8 +562,8 @@ export default class Syncro {
 				// Setup local state watcher
 				reactive.watch(throttle((newState: any) => {
 					this.debug('Local change', {newState});
-					this.markDirty(); // eslint-disable-line @typescript-eslint/no-floating-promises
-					this.setFirestoreState(newState, {method: 'merge'});
+					this.markDirty();
+					this.setFirestoreState(newState, {method: 'merge'}); // eslint-disable-line @typescript-eslint/no-floating-promises
 				}, this.throttle));
 
 				await this.setHeartbeat(true, {
