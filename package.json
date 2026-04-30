@@ -15,7 +15,7 @@
     "build:docs:markdown": "documentation build lib/terafy.client.ts lib/projectFile.ts --format md --markdown-toc --output api.md",
     "lint": "eslint",
     "release": "release-it",
-    "watch": "nodemon --watch lib --watch plugins --exec \"npm run build\""
+    "watch": "nodemon --watch lib --watch plugins --ext ts --exec \"npm run build\""
   },
   "type": "module",
   "imports": {
