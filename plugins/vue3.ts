@@ -102,5 +102,4 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 
 		};
 	}
-
 }
