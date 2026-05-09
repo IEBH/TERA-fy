@@ -5,6 +5,14 @@ import {v4 as uuid4} from 'uuid';
 import {nanoid} from 'nanoid';
 import {BoundSupabaseyFunction} from '@iebh/supabasey';
 
+
+// Minimal interface for a postgres-npm Sql instance (db is injected by the Cloudflare Worker runtime)
+interface PostgresSql {
+	(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
+	json(value: any): any;
+}
+
+
 // DATABASE TABLE TYPE DEFINITIONS {{{
 interface ProjectRow {
 	data: {
@@ -36,20 +44,22 @@ interface NamespaceRow {
 		[key: string]: any;
 		// TODO: add other properties in namespace data
 	};
-	// TODO: Define other namespace in user table
+	// TODO: Define other columns in namespace table
 }
 // }}}
 
-// Interface for each syncroconfic
+
+// Interface for each syncro entity config
 interface SyncroEntityConfig {
 	singular: string;
 	initState: (args: {
-			db: BountHyperdriveInstance;
+			db: PostgresSql;
+			supabasey: BoundSupabaseyFunction;
 			id: string; // Primary ID for the entity
 			relation?: string; // Optional relation identifier (for namespaces, libraries)
 	}) => Promise<any>;
 	flushState: (args: {
-			db: BountHyperdriveInstance;
+			db?: PostgresSql;
 			supabasey: BoundSupabaseyFunction;
 			state: any; // The state object to flush
 			id?: string; // Primary ID (used in some lookups like namespaces)
@@ -58,7 +68,9 @@ interface SyncroEntityConfig {
 	}) => Promise<any>; // Return type signifies completion/result of flush
 }
 
+
 type SyncroConfig = Record<string, SyncroEntityConfig>;
+
 
 /**
 * Entities we support Syncro paths for, each should correspond directly with a Firebase/Firestore collection name
@@ -66,13 +78,13 @@ type SyncroConfig = Record<string, SyncroEntityConfig>;
 * @type {Object} An object lookup of entities
 *
 * @property {String} singular The singular noun for the item
-* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({db:BoundHyperdriveInstance, entity:String, id:String, relation?:string})` and expected to return the initial data object state
+* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({db:PostgresSql, supabasey:BoundSupabaseyFunction, id:String, relation?:string})` and expected to return the initial data object state
 * @property {Function} flushState Function called to flush state from Firebase to Supabase. Called the same as `initState` + `{state:Object}`
 */
 const syncroConfig: SyncroConfig = {
 	institutes: { // {{{
 		singular: 'institute',
-		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
+		async initState({db, id}: {db: PostgresSql, id: string}) {
 			let institute = await db`
 				SELECT data
 				FROM institutes
@@ -87,16 +99,16 @@ const syncroConfig: SyncroConfig = {
 		},
 		flushState({supabasey, state, id}) {
 			// FIXME: Better to reuse `env.db` instead of supabasey here in future
-			return supabasey.rpc('syncro_merge_data', {
+			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'institutes',
 				entity_id: id,
 				new_data: state,
-			});
+			}));
 		},
 	}, // }}}
 	projects: { // {{{
 		singular: 'project',
-		async initState({db, supabasey, id}: {db: BoundHyperdriveInstance, supabasey: BoundSupabaseyFunction, id: string}) {
+		async initState({db, supabasey, id}: {db: PostgresSql, supabasey: BoundSupabaseyFunction, id: string}) {
 			let projects = await db`
 				SELECT data
 				FROM projects
@@ -118,7 +130,7 @@ const syncroConfig: SyncroConfig = {
 				await Promise.all(
 					Object.entries(data.temp)
 						.filter(([, branch]) => typeof branch == 'object')
-						.map(([toolKey, ]) => {
+						.map(([toolKey]) => {
 							console.log(`[MIGRATION] Converting data.temp[${toolKey}]...`);
 
 							const toolName = toolKey.split('-')[0];
@@ -167,16 +179,16 @@ const syncroConfig: SyncroConfig = {
 		},
 		flushState({supabasey, state, fsId}) {
 			// FIXME: Better to reuse `env.db` instead of supabasey here in future
-			return supabasey.rpc('syncro_merge_data', {
+			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'projects',
 				entity_id: fsId,
 				new_data: state,
-			});
+			}));
 		},
 	}, // }}}
 	project_libraries: { // {{{
 		singular: 'project library',
-		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
+		async initState({id, relation, supabasey}: {db: PostgresSql, id: string, relation?: string, supabasey: BoundSupabaseyFunction}) {
 			if (!relation || !/_\*$/.test(relation)) throw new Error('Project library relation missing, path should resemble "project_library::${PROJECT}::${LIBRARY_FILE_ID}_*"');
 
 			const fileId = relation.replace(/_\*$/, '');
@@ -225,7 +237,7 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	test: { // {{{
 		singular: 'test',
-		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
+		async initState({db, id}: {db: PostgresSql, id: string}) {
 			let rows = await db`
 				SELECT data
 				FROM test
@@ -240,7 +252,7 @@ const syncroConfig: SyncroConfig = {
 		},
 		flushState({supabasey, state, fsId}) {
 			// FIXME: Better to reuse `env.db` instead of supabasey here in future
-			return supabasey(supabase => supabase.rpc('syncro_merge_data', {
+			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'test',
 				entity_id: fsId,
 				new_data: state,
@@ -249,7 +261,7 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	users: { // {{{
 		singular: 'user',
-		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
+		async initState({db, id}: {db: PostgresSql, id: string}) {
 			let user = await db`
 				SELECT data
 				FROM users
@@ -263,8 +275,8 @@ const syncroConfig: SyncroConfig = {
 			let newUser = await db`
 				INSERT INTO users
 				(
-					id
-						data
+					id,
+					data
 				)
 				VALUES (
 					${id},
@@ -274,13 +286,13 @@ const syncroConfig: SyncroConfig = {
 					})}::JSONB
 				)
 			`;
-			if (!newUser) throw new Error(`Failed to create new user "${id}"`);
-			return newUser.data; // Return back the data that eventually got created - allowing for database triggers, default field values etc.
+			if (!newUser?.length) throw new Error(`Failed to create new user "${id}"`);
+			return newUser[0].data; // Return back the data that eventually got created - allowing for database triggers, default field values etc.
 
 		},
 		flushState({supabasey, state, fsId}) {
 			// FIXME: Better to reuse `env.db` instead of supabasey here in future
-			return supabasey(supabase => supabase.rpc('syncro_merge_data', {
+			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'users',
 				entity_id: fsId,
 				new_data: state,
