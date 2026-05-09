@@ -34,6 +34,12 @@ export default class Syncro {
     */
     static supabasey;
     /**
+    * Postgres SQL instance in use (injected by the Cloudflare Worker runtime via Hyperdrive)
+    *
+    * @type {PostgresSql}
+    */
+    static db;
+    /**
     * The current user session, should be unique for the user + browser tab
     * Used by the heartbeat system
     *

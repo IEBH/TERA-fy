@@ -98,6 +98,7 @@ export default class SyncroKeyed extends Syncro {
                 throw new Error(`Unknown Sync entity "${entity}"`);
             // Go fetch the initial state object
             const state = await SyncroEntities[entityKey].initState({
+                HYPERDRIVE: Syncro.db,
                 supabasey: Syncro.supabasey,
                 id, relation,
             });

@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.3.9](https://github.com/IEBH/TERA-fy/compare/v2.3.8...v2.3.9) (2026-05-09)
+
+
+### fix
+
+* First draft at migrating away from Supabase(y) for row updates in the Syncro ([b1b65cb](https://github.com/IEBH/TERA-fy/commit/b1b65cb55ee08f3d87467061a8e26376251fab08))
+* Tidup and fixes ([cd23fd8](https://github.com/IEBH/TERA-fy/commit/cd23fd81cd99f47fe15bdcc5ed06a9083fae243a))
+* TS interface definition errors ([a8310de](https://github.com/IEBH/TERA-fy/commit/a8310de1d24f110761908aea80c943d8403bf16b))
+* Wrong object binding in (probably unused) keyed utils ([77fba38](https://github.com/IEBH/TERA-fy/commit/77fba38137b19f524a25fbb1cb1ae8e5480e7b2f))
+
+### refactor
+
+* Change hyperdrive binding from db -> HYPERDRIVE so its consistant with other uses ([852d6c6](https://github.com/IEBH/TERA-fy/commit/852d6c6f4be9020b66075678a9477544b276eff2))
+
 ## [2.3.8](https://github.com/IEBH/TERA-fy/compare/v2.3.7...v2.3.8) (2026-04-30)
 
 
