@@ -25,6 +25,7 @@ import PromiseThrottle from 'p-throttle';
 import PromiseRetry from 'p-retry';
 import {FirebaseApp, FirebaseError} from 'firebase/app';
 import { BoundSupabaseyFunction } from '@iebh/supabasey';
+import type { PostgresSql } from './entities.js';
 
 interface ThrottleOptions<T = any> {
 	limit: number,
@@ -79,6 +80,14 @@ export default class Syncro {
 	* @type {Supabasey}
 	*/
 	static supabasey: BoundSupabaseyFunction;
+
+
+	/**
+	* Postgres SQL instance in use (injected by the Cloudflare Worker runtime via Hyperdrive)
+	*
+	* @type {PostgresSql}
+	*/
+	static db: PostgresSql;
 
 
 	/**

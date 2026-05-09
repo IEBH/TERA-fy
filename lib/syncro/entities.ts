@@ -7,7 +7,7 @@ import {BoundSupabaseyFunction} from '@iebh/supabasey';
 
 
 // Minimal interface for a postgres-npm Sql instance (db is injected by the Cloudflare Worker runtime)
-interface PostgresSql {
+export interface PostgresSql {
 	(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 	json(value: any): any;
 }
