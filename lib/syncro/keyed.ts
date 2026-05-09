@@ -137,7 +137,7 @@ export default class SyncroKeyed extends Syncro {
 
 				// Go fetch the initial state object
 				const state = await SyncroEntities[entityKey].initState({
-					db: Syncro.db,
+					HYPERDRIVE: Syncro.db,
 					supabasey: Syncro.supabasey,
 					id, relation,
 				});
