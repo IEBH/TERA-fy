@@ -1,21 +1,21 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable jsdoc/reject-function-type, no-unused-vars */
 // @ts-expect-error TODO: Remove when reflib gets declaration file
 import Reflib from '@iebh/reflib';
 import {v4 as uuid4} from 'uuid';
 import {nanoid} from 'nanoid';
-import { BoundSupabaseyFunction } from '@iebh/supabasey';
+import {BoundSupabaseyFunction} from '@iebh/supabasey';
 
 // DATABASE TABLE TYPE DEFINITIONS {{{
 interface ProjectRow {
-  data: {
-		temp?: { [key: string]: any };
+	data: {
+		id: string;
 		// TODO: add other properties in project data
 	};
 	// TODO: Define other columns in project table
 }
 
 interface InstituteRow {
-  data: any;
+	data: any;
 }
 
 interface UserRow {
@@ -44,12 +44,12 @@ interface NamespaceRow {
 interface SyncroEntityConfig {
 	singular: string;
 	initState: (args: {
-			supabasey: BoundSupabaseyFunction;
+			db: BountHyperdriveInstance;
 			id: string; // Primary ID for the entity
 			relation?: string; // Optional relation identifier (for namespaces, libraries)
 	}) => Promise<any>;
-
 	flushState: (args: {
+			db: BountHyperdriveInstance;
 			supabasey: BoundSupabaseyFunction;
 			state: any; // The state object to flush
 			id?: string; // Primary ID (used in some lookups like namespaces)
@@ -66,23 +66,27 @@ type SyncroConfig = Record<string, SyncroEntityConfig>;
 * @type {Object} An object lookup of entities
 *
 * @property {String} singular The singular noun for the item
-* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({supabase:BoundSupabaseyFunction, db:BoundHyperdriveInstance, entity:String, id:String, relation?:string})` and expected to return the initial data object state
+* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({db:BoundHyperdriveInstance, entity:String, id:String, relation?:string})` and expected to return the initial data object state
 * @property {Function} flushState Function called to flush state from Firebase to Supabase. Called the same as `initState` + `{state:Object}`
 */
 const syncroConfig: SyncroConfig = {
 	institutes: { // {{{
 		singular: 'institute',
-		async initState({supabasey, id}: {supabasey: BoundSupabaseyFunction, id: string}) {
-			const institute = await supabasey((supabase) => supabase
-				.from('institutes')
-				.select('data')
-				.eq('id', id)
-				.maybeSingle<InstituteRow>()
-			);
-			if (institute) return institute.data; // institute is valid and already exists
+		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
+			let institute = await db`
+				SELECT data
+				FROM institutes
+				WHERE id = ${id}
+				LIMIT 1
+			`;
+			if (institute.length > 0) {
+				return institute[0].data; // institute is valid and already exists
+			} else {
+				throw new Error(`Syncro institute "${id}" not found`);
+			}
 		},
 		flushState({supabasey, state, id}) {
-			// @ts-expect-error Typescript struggles to resolve supabasey import correctly
+			// FIXME: Better to reuse `env.db` instead of supabasey here in future
 			return supabasey.rpc('syncro_merge_data', {
 				table_name: 'institutes',
 				entity_id: id,
@@ -92,15 +96,16 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	projects: { // {{{
 		singular: 'project',
-		async initState({supabasey, id}) {
-			const projectData = await supabasey((supabase) => supabase
-				.from('projects')
-				.select('data')
-				.eq('id', id)
-				.maybeSingle<ProjectRow>()
-			);
-			if (!projectData) throw new Error(`Syncro project "${id}" not found`);
-			const data = projectData.data;
+		async initState({db, supabasey, id}: {db: BoundHyperdriveInstance, supabasey: BoundSupabaseyFunction, id: string}) {
+			let projects = await db`
+				SELECT data
+				FROM projects
+				WHERE id = ${id}
+				LIMIT 1
+			`;
+			if (projects.length == 0) throw new Error(`Syncro project "${id}" not found`);
+
+			const data = projects[0].data;
 
 			// MIGRATION - Move data.temp{} into Supabase files + add pointer to filename {{{
 			if (
@@ -161,17 +166,17 @@ const syncroConfig: SyncroConfig = {
 			return data;
 		},
 		flushState({supabasey, state, fsId}) {
-			// Import Supabasey because 'supabasey' lowercase is just a function
-			return supabasey(supabase => supabase.rpc('syncro_merge_data', {
+			// FIXME: Better to reuse `env.db` instead of supabasey here in future
+			return supabasey.rpc('syncro_merge_data', {
 				table_name: 'projects',
 				entity_id: fsId,
 				new_data: state,
-			}));
+			});
 		},
 	}, // }}}
 	project_libraries: { // {{{
 		singular: 'project library',
-		async initState({supabasey, id, relation}) {
+		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
 			if (!relation || !/_\*$/.test(relation)) throw new Error('Project library relation missing, path should resemble "project_library::${PROJECT}::${LIBRARY_FILE_ID}_*"');
 
 			const fileId = relation.replace(/_\*$/, '');
@@ -209,62 +214,32 @@ const syncroConfig: SyncroConfig = {
 			throw new Error('Flushing project_libraries::* namespace is not yet supported');
 		},
 	}, // }}}
-	project_namespaces: { // {{{
+	project_namespaces: { // NOT YET SUPPORTED {{{
 		singular: 'project namespace',
-		async initState({supabasey, id, relation}) {
-			if (!relation) throw new Error('Project namespace relation missing, path should resemble "project_namespaces::${PROJECT}::${RELATION}"');
-			const rows = await supabasey((supabase) => supabase
-				.from('project_namespaces')
-				.select('data')
-				.eq('project', id)
-				.eq('name', relation)
-				.limit(1)
-			);
-
-			if (rows && rows.length == 1) {
-				return rows[0].data;
-			} else {
-				const newItem = await supabasey((supabase) => supabase
-					.from('project_namespaces') // Doesn't exist - create it
-					.insert<NamespaceRow>({
-						project: id,
-						name: relation,
-						data: {},
-					})
-					.select('data')
-					.single<NamespaceRow>() // Assuming insert returns the single inserted row
-				);
-
-				if (!newItem) throw new Error('Failed to create project namespace');
-				return newItem.data;
-			}
+		async initState() {
+			throw new Error('Updating project_namespaces is not yet supported');
 		},
-		flushState({supabasey, state, id, relation}) {
-			return supabasey((supabase) => supabase
-				.from('project_namespaces')
-				.update({
-					edited_at: new Date().toISOString(),
-					data: state,
-				})
-				.eq('project', id)
-				.eq('name', relation)
-			);
+		async flushState() {
+			throw new Error('Updating project_namespaces is not yet supported');
 		},
 	}, // }}}
 	test: { // {{{
 		singular: 'test',
-		async initState({supabasey, id}: {supabasey: BoundSupabaseyFunction, id: string}) {
-			const rows = await supabasey((supabase) => supabase
-				.from('test')
-				.select('data')
-				.eq('id', id)
-				.limit(1)
-			);
-
-			if (!rows || rows.length !== 1) return Promise.reject(`Syncro test item "${id}" not found`);
-			return rows[0].data;
+		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
+			let rows = await db`
+				SELECT data
+				FROM test
+				WHERE id = ${id}
+				LIMIT 1
+			`;
+			if (rows.length > 0) {
+				return rows[0].data; // User is valid and already exists
+			} else {
+				throw new Error(`Syncro test "${id}" not found`);
+			}
 		},
 		flushState({supabasey, state, fsId}) {
+			// FIXME: Better to reuse `env.db` instead of supabasey here in future
 			return supabasey(supabase => supabase.rpc('syncro_merge_data', {
 				table_name: 'test',
 				entity_id: fsId,
@@ -274,33 +249,37 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	users: { // {{{
 		singular: 'user',
-		async initState({supabasey, id}: {supabasey: BoundSupabaseyFunction, id: string}) {
-			const user = await supabasey((supabase) => supabase
-				.from('users')
-				.select('data')
-				.eq('id', id)
-				.maybeSingle<UserRow>()
-			);
-			if (user) return user.data; // User is valid and already exists
+		async initState({db, id}: {db: BoundHyperdriveInstance, id: string}) {
+			let user = await db`
+				SELECT data
+				FROM users
+				WHERE id = ${id}
+				LIMIT 1
+			`;
+			if (user.length > 0) return user[0].data; // User is valid and already exists
 
-			// User row doesn't already exist - need to create stub
-			const newUser = await supabasey((supabase) => supabase
-				.from('users')
-				.insert<UserRow>({
-					id,
-					data: {
+			// User row doesn't already exist - this shouldn't happen if the user has correctly gone through the onboarding process
+			// but... *shrugs*, who knows
+			let newUser = await db`
+				INSERT INTO users
+				(
+					id
+						data
+				)
+				VALUES (
+					${id},
+					${db.json({
 						id,
 						credits: 1000,
-					},
-				})
-				.select('data')
-				.single<UserRow>() // Assuming insert returns the single inserted row
-			);
-			if (!newUser) throw new Error('Failed to create user');
+					})}::JSONB
+				)
+			`;
+			if (!newUser) throw new Error(`Failed to create new user "${id}"`);
 			return newUser.data; // Return back the data that eventually got created - allowing for database triggers, default field values etc.
 
 		},
 		flushState({supabasey, state, fsId}) {
+			// FIXME: Better to reuse `env.db` instead of supabasey here in future
 			return supabasey(supabase => supabase.rpc('syncro_merge_data', {
 				table_name: 'users',
 				entity_id: fsId,
