@@ -6,7 +6,7 @@ import {nanoid} from 'nanoid';
 import {BoundSupabaseyFunction} from '@iebh/supabasey';
 
 
-// Minimal interface for a postgres-npm Sql instance (db is injected by the Cloudflare Worker runtime)
+// Minimal interface for a postgres-npm Sql instance (HYPERDRIVE is injected by the Cloudflare Worker runtime)
 export interface PostgresSql {
 	(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 	json(value: any): any;
@@ -53,13 +53,13 @@ interface NamespaceRow {
 interface SyncroEntityConfig {
 	singular: string;
 	initState: (args: {
-			db: PostgresSql;
+			HYPERDRIVE: PostgresSql;
 			supabasey: BoundSupabaseyFunction;
 			id: string; // Primary ID for the entity
 			relation?: string; // Optional relation identifier (for namespaces, libraries)
 	}) => Promise<any>;
 	flushState: (args: {
-			db?: PostgresSql;
+			HYPERDRIVE?: PostgresSql;
 			supabasey: BoundSupabaseyFunction;
 			state: any; // The state object to flush
 			id?: string; // Primary ID (used in some lookups like namespaces)
@@ -78,14 +78,14 @@ type SyncroConfig = Record<string, SyncroEntityConfig>;
 * @type {Object} An object lookup of entities
 *
 * @property {String} singular The singular noun for the item
-* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({db:PostgresSql, supabasey:BoundSupabaseyFunction, id:String, relation?:string})` and expected to return the initial data object state
+* @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({HYPERDRIVE:PostgresSql, supabasey:BoundSupabaseyFunction, id:String, relation?:string})` and expected to return the initial data object state
 * @property {Function} flushState Function called to flush state from Firebase to Supabase. Called the same as `initState` + `{state:Object}`
 */
 const syncroConfig: SyncroConfig = {
 	institutes: { // {{{
 		singular: 'institute',
-		async initState({db, id}: {db: PostgresSql, id: string}) {
-			let institute = await db`
+		async initState({HYPERDRIVE, id}: {HYPERDRIVE: PostgresSql, id: string}) {
+			let institute = await HYPERDRIVE`
 				SELECT data
 				FROM institutes
 				WHERE id = ${id}
@@ -98,7 +98,7 @@ const syncroConfig: SyncroConfig = {
 			}
 		},
 		flushState({supabasey, state, id}) {
-			// FIXME: Better to reuse `env.db` instead of supabasey here in future
+			// FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
 			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'institutes',
 				entity_id: id,
@@ -108,8 +108,8 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	projects: { // {{{
 		singular: 'project',
-		async initState({db, supabasey, id}: {db: PostgresSql, supabasey: BoundSupabaseyFunction, id: string}) {
-			let projects = await db`
+		async initState({HYPERDRIVE, supabasey, id}: {HYPERDRIVE: PostgresSql, supabasey: BoundSupabaseyFunction, id: string}) {
+			let projects = await HYPERDRIVE`
 				SELECT data
 				FROM projects
 				WHERE id = ${id}
@@ -178,7 +178,7 @@ const syncroConfig: SyncroConfig = {
 			return data;
 		},
 		flushState({supabasey, state, fsId}) {
-			// FIXME: Better to reuse `env.db` instead of supabasey here in future
+			// FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
 			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'projects',
 				entity_id: fsId,
@@ -188,7 +188,7 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	project_libraries: { // {{{
 		singular: 'project library',
-		async initState({id, relation, supabasey}: {db: PostgresSql, id: string, relation?: string, supabasey: BoundSupabaseyFunction}) {
+		async initState({id, relation, supabasey}: {HYPERDRIVE: PostgresSql, id: string, relation?: string, supabasey: BoundSupabaseyFunction}) {
 			if (!relation || !/_\*$/.test(relation)) throw new Error('Project library relation missing, path should resemble "project_library::${PROJECT}::${LIBRARY_FILE_ID}_*"');
 
 			const fileId = relation.replace(/_\*$/, '');
@@ -237,8 +237,8 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	test: { // {{{
 		singular: 'test',
-		async initState({db, id}: {db: PostgresSql, id: string}) {
-			let rows = await db`
+		async initState({HYPERDRIVE, id}: {HYPERDRIVE: PostgresSql, id: string}) {
+			let rows = await HYPERDRIVE`
 				SELECT data
 				FROM test
 				WHERE id = ${id}
@@ -251,7 +251,7 @@ const syncroConfig: SyncroConfig = {
 			}
 		},
 		flushState({supabasey, state, fsId}) {
-			// FIXME: Better to reuse `env.db` instead of supabasey here in future
+			// FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
 			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'test',
 				entity_id: fsId,
@@ -261,8 +261,8 @@ const syncroConfig: SyncroConfig = {
 	}, // }}}
 	users: { // {{{
 		singular: 'user',
-		async initState({db, id}: {db: PostgresSql, id: string}) {
-			let user = await db`
+		async initState({HYPERDRIVE, id}: {HYPERDRIVE: PostgresSql, id: string}) {
+			let user = await HYPERDRIVE`
 				SELECT data
 				FROM users
 				WHERE id = ${id}
@@ -272,7 +272,7 @@ const syncroConfig: SyncroConfig = {
 
 			// User row doesn't already exist - this shouldn't happen if the user has correctly gone through the onboarding process
 			// but... *shrugs*, who knows
-			let newUser = await db`
+			let newUser = await HYPERDRIVE`
 				INSERT INTO users
 				(
 					id,
@@ -280,7 +280,7 @@ const syncroConfig: SyncroConfig = {
 				)
 				VALUES (
 					${id},
-					${db.json({
+					${HYPERDRIVE.json({
 						id,
 						credits: 1000,
 					})}::JSONB
@@ -291,7 +291,7 @@ const syncroConfig: SyncroConfig = {
 
 		},
 		flushState({supabasey, state, fsId}) {
-			// FIXME: Better to reuse `env.db` instead of supabasey here in future
+			// FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
 			return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
 				table_name: 'users',
 				entity_id: fsId,
