@@ -3,6 +3,38 @@ import detectPort from 'detect-port';
 import Proxy from 'http-proxy';
 export class TeraProxy {
     /**
+    * Setup a local loopback proxy for TERA-tools.com
+    *
+    * @param {Object} [options] Additional options to mutate behaviour
+    * @param {Boolean} [options.force=false] Restart the server even if its apparently running
+    * @param {Boolean} [options.autoStart=true] Automatically start the proxy without calling `Plugin.start()`
+    * @param {String} [options.host='0.0.0.0'] Host IP to listen on
+    * @param {Number} [options.port=7334] Host port to listen on
+    * @param {String} [options.targetProtocol='https'] Target protocol to forward to
+    * @param {String} [options.targetHost='tera-tools.com'] Target host to forward to
+    * @param {Number} [options.targetPort=443] Target port to forward to
+    * @param {'ignore'|'throw'} [options.portConflict='ignore'] Action to take when something is already listening on the allocated port
+    * @param {Function} [options.onLog=console.log] Function to call with any logging output. Defaults to using console.log. Called as `(level:'INFO|'WARN', ...msg:any)`
+    *
+    * @returns {VitePlugin}
+    */
+    settings = {
+        autoStart: true,
+        force: false,
+        host: '0.0.0.0',
+        port: 7334,
+        targetProtocol: 'https',
+        targetHost: 'dev.tera-tools.com',
+        targetPort: 443,
+        portConflict: 'ignore', // Add type assertion for stricter checking if needed elsewhere
+        onLog: (level, ...msg) => console.log(...msg),
+    };
+    /**
+    * Eventual proxy server when the plugin has booted
+    * @type {ProxyServer}
+    */
+    proxyServer;
+    /**
     * Boot the proxy
     *
     * @returns {Promise} A promise which resolves when the operation has completed
@@ -77,33 +109,6 @@ export class TeraProxy {
             .then(() => this.proxyServer && new Promise(resolve => this.proxyServer.close(() => resolve()))); // Use non-null assertion if sure it exists here
     }
     constructor(options) {
-        /**
-        * Setup a local loopback proxy for TERA-tools.com
-        *
-        * @param {Object} [options] Additional options to mutate behaviour
-        * @param {Boolean} [options.force=false] Restart the server even if its apparently running
-        * @param {Boolean} [options.autoStart=true] Automatically start the proxy without calling `Plugin.start()`
-        * @param {String} [options.host='0.0.0.0'] Host IP to listen on
-        * @param {Number} [options.port=7334] Host port to listen on
-        * @param {String} [options.targetProtocol='https'] Target protocol to forward to
-        * @param {String} [options.targetHost='tera-tools.com'] Target host to forward to
-        * @param {Number} [options.targetPort=443] Target port to forward to
-        * @param {'ignore'|'throw'} [options.portConflict='ignore'] Action to take when something is already listening on the allocated port
-        * @param {Function} [options.onLog=console.log] Function to call with any logging output. Defaults to using console.log. Called as `(level:'INFO|'WARN', ...msg:any)`
-        *
-        * @returns {VitePlugin}
-        */
-        this.settings = {
-            autoStart: true,
-            force: false,
-            host: '0.0.0.0',
-            port: 7334,
-            targetProtocol: 'https',
-            targetHost: 'dev.tera-tools.com',
-            targetPort: 443,
-            portConflict: 'ignore', // Add type assertion for stricter checking if needed elsewhere
-            onLog: (level, ...msg) => console.log(...msg),
-        };
         if (options)
             Object.assign(this.settings, options);
         // Auto start?

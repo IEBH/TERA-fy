@@ -34,8 +34,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
     /**
     * Init the project including create a reactive mount for the active project
     *
-    * @param {Object} options Additional options to mutate behaviour
-    * @param {*} [options...] see TeraFyPluginFirebase
+    * @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
     */
     init(options: Record<string, any>): Promise<void>;
     /** @override */

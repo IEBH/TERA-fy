@@ -8,6 +8,157 @@ import ProjectFile from './projectFile.js';
 * @class TeraFy
 */
 export default class TeraFy {
+    /**
+    * Various settings to configure behaviour
+    *
+    * @type {Object}
+    * @property {String} session Unique session signature for this instance of TeraFy, used to sign server messages, if falsy `getEntropicString(16)` is used to populate
+    * @property {Boolean} devMode Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerant of weird iframe origins
+    * @property {Number} verbosity Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
+    * @property {'detect'|'parent'|'child'|'popup'} mode How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to `modeFallback` if communication fails
+    * @property {String} modeFallback Method to use when all method detection fails
+    * @property {Object<Object<Function>>} modeOverrides Functions to run when switching to specific modes, these are typically used to augment config. Called as `(config:Object)`
+    * @property {Number} modeTimeout How long entities have in 'detect' mode to identify themselves
+    * @property {String} siteUrl The TERA URL to connect to
+    * @property {String} restrictOrigin URL to restrict communications to
+    * @property {Array<String>} List of sandbox allowables for the embedded if in embed mode
+    * @property {Number} handshakeInterval Interval in milliseconds when scanning for a handshake
+    * @property {Number} handshakeTimeout Interval in milliseconds for when to give up trying to handshake
+    * @property {Array<String|Array<String>>} [debugPaths] List of paths (in either dotted or array notation) to enter debugging mode if a change is detected in dev mode e.g. `{debugPaths: ['foo.bar.baz']}`. This really slows down state writes so should only be used for debugging
+    */
+    settings = {
+        session: null,
+        // client: 'tera-fy', // Reserved by terafy.bootstrapper.js
+        // clientType: 'esm', // Reserved by terafy.bootstrapper.js
+        devMode: false,
+        verbosity: 1,
+        mode: 'detect',
+        modeTimeout: 300,
+        modeFallback: 'child', // ENUM: 'child' (use iframes), 'popup' (use popup windows)
+        modeOverrides: {
+            child(config) {
+                if (config.siteUrl == 'https://tera-tools.com/embed') { // Only if we're using the default URL...
+                    config.siteUrl = 'https://dev.tera-tools.com/embed'; // Repoint URL to dev site
+                }
+            },
+            // eslint-disable-next-line no-unused-vars
+        },
+        siteUrl: 'https://tera-tools.com/embed',
+        restrictOrigin: '*',
+        frameSandbox: [
+            'allow-forms',
+            'allow-modals',
+            'allow-orientation-lock',
+            'allow-pointer-lock',
+            'allow-popups',
+            'allow-popups-to-escape-sandbox',
+            'allow-presentation',
+            'allow-same-origin',
+            'allow-scripts',
+            'allow-top-navigation',
+        ],
+        handshakeInterval: 1000, // ~1s
+        handshakeTimeout: 10_000, // ~10s
+        debugPaths: null, // Transformed into a Array<String> (in Lodash dotted notation) on init()
+    };
+    /**
+    * Event emitter subscription endpoint
+    * @type {Mitt}
+    */
+    // @ts-ignore - Because mitt is exported as cjs typescript has trouble resolving default export
+    events = Mitt();
+    /**
+    * DOMElements for this TeraFy instance
+    *
+    * @type {Object}
+    * @property {DOMElement} el The main tera-fy div wrapper
+    * @property {DOMElement} iframe The internal iFrame element  (if `settings.mode == 'child'`)
+    * @property {Window} popup The popup window context (if `settings.mode == 'popup'`)
+    * @property {DOMElement} stylesheet The corresponding stylesheet
+    */
+    dom = {
+        el: null,
+        iframe: null,
+        popup: null,
+        stylesheet: null,
+    };
+    /**
+    * List of function stubs mapped from the server to here
+    * This array is forms the reference of `TeraFy.METHOD()` objects to provide locally which will be mapped via `TeraFy.rpc(METHOD, ...args)`
+    *
+    * @type {Array<String>}
+    */
+    methods = [
+        // Messages
+        'handshake',
+        'setServerVerbosity',
+        // Session
+        'getUser',
+        'requireUser',
+        'getCredentials',
+        'getKindeToken',
+        // Projects
+        'bindProject',
+        'getProject',
+        'getProjects',
+        'setActiveProject',
+        'requireProject',
+        'selectProject',
+        // Project namespaces
+        // 'mountNamespace', // Handled by this library
+        // 'unmountNamespace', // Handled by this library
+        'getNamespace',
+        'setNamespace',
+        'listNamespaces',
+        // Project State
+        'getProjectState',
+        'setProjectState',
+        'setProjectStateDefaults',
+        'setProjectStateRefresh',
+        // Project files
+        // 'selectProjectFile', - Handled below (requires return collection mapped to ProjectFile)
+        // 'getProjectFiles', - Handled below (requires return collection mapped to ProjectFile)
+        // 'getProjectFile', - Handled below (requires return mapped to ProjectFile)
+        'getProjectFileContents',
+        // 'createProjectFile', - Handled below (requires return mapped to ProjectFile)
+        // 'moveProjectFile', - Handled below (requires return mapped to ProjectFile)
+        'deleteProjectFile',
+        'setProjectFileContents',
+        // Project folders
+        'createProjectFolder',
+        'deleteProjectFolder',
+        // Project Libraries
+        'selectProjectLibrary',
+        'getProjectLibrary',
+        'setProjectLibrary',
+        // Project Logging
+        'projectLog',
+        // Webpages
+        'setPage',
+        // UI
+        'uiAlert',
+        'uiConfirm',
+        'uiJson',
+        'uiPanic',
+        'uiProgress',
+        'uiPrompt',
+        'uiThrow',
+        'uiSplat',
+        'uiWindow',
+    ];
+    /**
+    * Loaded plugins via Use()
+    * @type {Array<TeraFyPlugin>}
+    */
+    plugins = [];
+    /**
+    * Active namespaces we are subscribed to
+    * Each key is the namespace name with the value as the local reactive \ observer \ object equivalent
+    * The key string is always of the form `${ENTITY}::${ID}` e.g. `projects:1234`
+    *
+    * @type {Object<Object>}
+    */
+    namespaces = {};
     // Messages - send(), sendRaw(), rpc(), acceptMessage() {{{
     /**
     * Send a message + wait for a response object
@@ -139,6 +290,10 @@ export default class TeraFy {
             return Promise.resolve();
         }
     }
+    /**
+    * Listening postboxes, these correspond to outgoing message IDs that expect a response
+    */
+    acceptPostboxes = {};
     // }}}
     // Project namespace - mountNamespace(), unmountNamespace() {{{
     /**
@@ -205,166 +360,10 @@ export default class TeraFy {
     * @param {Object} [options] Additional options to merge into `settings` via `set`
     */
     constructor(options) {
-        /**
-        * Various settings to configure behaviour
-        *
-        * @type {Object}
-        * @property {String} session Unique session signature for this instance of TeraFy, used to sign server messages, if falsy `getEntropicString(16)` is used to populate
-        * @property {Boolean} devMode Operate in Dev-Mode - i.e. force outer refresh when encountering an existing TeraFy instance + be more tolerant of weird iframe origins
-        * @property {Number} verbosity Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
-        * @property {'detect'|'parent'|'child'|'popup'} mode How to communicate with TERA. 'parent' assumes that the parent of the current document is TERA, 'child' spawns an iFrame and uses TERA there, 'detect' tries parent and switches to `modeFallback` if communication fails
-        * @property {String} modeFallback Method to use when all method detection fails
-        * @property {Object<Object<Function>>} modeOverrides Functions to run when switching to specific modes, these are typically used to augment config. Called as `(config:Object)`
-        * @property {Number} modeTimeout How long entities have in 'detect' mode to identify themselves
-        * @property {String} siteUrl The TERA URL to connect to
-        * @property {String} restrictOrigin URL to restrict communications to
-        * @property {Array<String>} List of sandbox allowables for the embedded if in embed mode
-        * @property {Number} handshakeInterval Interval in milliseconds when scanning for a handshake
-        * @property {Number} handshakeTimeout Interval in milliseconds for when to give up trying to handshake
-        * @property {Array<String|Array<String>>} [debugPaths] List of paths (in either dotted or array notation) to enter debugging mode if a change is detected in dev mode e.g. `{debugPaths: ['foo.bar.baz']}`. This really slows down state writes so should only be used for debugging
-        */
-        this.settings = {
-            session: null,
-            // client: 'tera-fy', // Reserved by terafy.bootstrapper.js
-            // clientType: 'esm', // Reserved by terafy.bootstrapper.js
-            devMode: false,
-            verbosity: 1,
-            mode: 'detect',
-            modeTimeout: 300,
-            modeFallback: 'child', // ENUM: 'child' (use iframes), 'popup' (use popup windows)
-            modeOverrides: {
-                child(config) {
-                    if (config.siteUrl == 'https://tera-tools.com/embed') { // Only if we're using the default URL...
-                        config.siteUrl = 'https://dev.tera-tools.com/embed'; // Repoint URL to dev site
-                    }
-                },
-                // eslint-disable-next-line no-unused-vars
-            },
-            siteUrl: 'https://tera-tools.com/embed',
-            restrictOrigin: '*',
-            frameSandbox: [
-                'allow-forms',
-                'allow-modals',
-                'allow-orientation-lock',
-                'allow-pointer-lock',
-                'allow-popups',
-                'allow-popups-to-escape-sandbox',
-                'allow-presentation',
-                'allow-same-origin',
-                'allow-scripts',
-                'allow-top-navigation',
-            ],
-            handshakeInterval: 1000, // ~1s
-            handshakeTimeout: 10000, // ~10s
-            debugPaths: null, // Transformed into a Array<String> (in Lodash dotted notation) on init()
-        };
-        /**
-        * Event emitter subscription endpoint
-        * @type {Mitt}
-        */
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - Because mitt is exported as cjs typescript has trouble resolving default export
-        this.events = Mitt();
-        /**
-        * DOMElements for this TeraFy instance
-        *
-        * @type {Object}
-        * @property {DOMElement} el The main tera-fy div wrapper
-        * @property {DOMElement} iframe The internal iFrame element  (if `settings.mode == 'child'`)
-        * @property {Window} popup The popup window context (if `settings.mode == 'popup'`)
-        * @property {DOMElement} stylesheet The corresponding stylesheet
-        */
-        this.dom = {
-            el: null,
-            iframe: null,
-            popup: null,
-            stylesheet: null,
-        };
-        /**
-        * List of function stubs mapped from the server to here
-        * This array is forms the reference of `TeraFy.METHOD()` objects to provide locally which will be mapped via `TeraFy.rpc(METHOD, ...args)`
-        *
-        * @type {Array<String>}
-        */
-        this.methods = [
-            // Messages
-            'handshake',
-            'setServerVerbosity',
-            // Session
-            'getUser',
-            'requireUser',
-            'getCredentials',
-            'getKindeToken',
-            // Projects
-            'bindProject',
-            'getProject',
-            'getProjects',
-            'setActiveProject',
-            'requireProject',
-            'selectProject',
-            // Project namespaces
-            // 'mountNamespace', // Handled by this library
-            // 'unmountNamespace', // Handled by this library
-            'getNamespace',
-            'setNamespace',
-            'listNamespaces',
-            // Project State
-            'getProjectState',
-            'setProjectState',
-            'setProjectStateDefaults',
-            'setProjectStateRefresh',
-            // Project files
-            // 'selectProjectFile', - Handled below (requires return collection mapped to ProjectFile)
-            // 'getProjectFiles', - Handled below (requires return collection mapped to ProjectFile)
-            // 'getProjectFile', - Handled below (requires return mapped to ProjectFile)
-            'getProjectFileContents',
-            // 'createProjectFile', - Handled below (requires return mapped to ProjectFile)
-            // 'moveProjectFile', - Handled below (requires return mapped to ProjectFile)
-            'deleteProjectFile',
-            'setProjectFileContents',
-            // Project folders
-            'createProjectFolder',
-            'deleteProjectFolder',
-            // Project Libraries
-            'selectProjectLibrary',
-            'getProjectLibrary',
-            'setProjectLibrary',
-            // Project Logging
-            'projectLog',
-            // Webpages
-            'setPage',
-            // UI
-            'uiAlert',
-            'uiConfirm',
-            'uiJson',
-            'uiPanic',
-            'uiProgress',
-            'uiPrompt',
-            'uiThrow',
-            'uiSplat',
-            'uiWindow',
-        ];
-        /**
-        * Loaded plugins via Use()
-        * @type {Array<TeraFyPlugin>}
-        */
-        this.plugins = [];
-        /**
-        * Active namespaces we are subscribed to
-        * Each key is the namespace name with the value as the local reactive \ observer \ object equivalent
-        * The key string is always of the form `${ENTITY}::${ID}` e.g. `projects:1234`
-        *
-        * @type {Object<Object>}
-        */
-        this.namespaces = {};
-        /**
-        * Listening postboxes, these correspond to outgoing message IDs that expect a response
-        */
-        this.acceptPostboxes = {};
-        this.initPromise = null;
         if (options)
             this.set(options);
     }
+    initPromise = null;
     /**
     * Initialize the TERA client singleton
     * This function can only be called once and will return the existing init() worker Promise if its called against
@@ -382,7 +381,7 @@ export default class TeraFy {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const context = this;
         this.initPromise = Promise.resolve()
-            .then(() => { var _a; return (_a = this.settings).session || (_a.session = 'tfy-' + this.getEntropicString(16)); })
+            .then(() => this.settings.session ||= 'tfy-' + this.getEntropicString(16))
             .then(() => this.debug('INFO', 4, '[0/6] Init', 'Session', this.settings.session, 'against', this.settings.siteUrl))
             .then(() => {
             if (!this.settings.devMode)

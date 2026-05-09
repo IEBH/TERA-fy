@@ -49,11 +49,10 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
     /**
     * Install into Vue@2
     *
-    * @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
+    * @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase for additional options
     * @param {Object} options.app Root level Vue app to bind against
     * @param {Vue} options.Vue Vue@2 instance to bind against
     * @param {String} [options.globalName='$tera'] Global property to allocate this service as within Vue2
-    * @param {*...} [options...] see TeraFyPluginFirebase
     *
     * @returns {Promise} A Promise which will resolve when the init process has completed
     */

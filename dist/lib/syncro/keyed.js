@@ -11,6 +11,29 @@ import SyncroEntities from './entities.js';
 */
 export default class SyncroKeyed extends Syncro {
     /**
+    * Config used by this instance to configure behaviour
+    *
+    * @type {Object}
+    * @property {Number} maxKeys The maximum number of keys a member can contain before needing to add a member
+    */
+    keyedConfig = {
+        maxKeys: 2,
+    };
+    /**
+    * Various storage about keyed path
+    */
+    keyedPath = {
+        getKey(path, index) {
+            return path + '_' + index;
+        },
+    };
+    /**
+    * Member Syncros which form part of this meta Syncro
+    *
+    * @type {Array<Syncro>}
+    */
+    members = [];
+    /**
     * Instance constructor
     *
     * @param {String} path Mount path for the Syncro. Should be in the form `${ENTITY}::${ID}(::${RELATION})?_*` (must contain a '*' operator)
@@ -18,29 +41,6 @@ export default class SyncroKeyed extends Syncro {
     */
     constructor(path, options) {
         super(path, options);
-        /**
-        * Config used by this instance to configure behaviour
-        *
-        * @type {Object}
-        * @property {Number} maxKeys The maximum number of keys a member can contain before needing to add a member
-        */
-        this.keyedConfig = {
-            maxKeys: 2,
-        };
-        /**
-        * Various storage about keyed path
-        */
-        this.keyedPath = {
-            getKey(path, index) {
-                return path + '_' + index;
-            },
-        };
-        /**
-        * Member Syncros which form part of this meta Syncro
-        *
-        * @type {Array<Syncro>}
-        */
-        this.members = [];
         if (!/\*/.test(path))
             throw new Error('SyncroKeyed paths must contain at least one asterisk as an object pagination indicator');
         const { prefix, suffix } = /^(?<prefix>.+)\*(?<suffix>.*)$/.exec(path).groups;

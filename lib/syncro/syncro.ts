@@ -21,16 +21,23 @@ import {
 // @ts-expect-error No declaration file for marshal
 import marshal from '@momsfriendlydevco/marshal';
 import {nanoid} from 'nanoid';
+import PromiseThrottle from 'p-throttle';
 import PromiseRetry from 'p-retry';
 import {FirebaseApp, FirebaseError} from 'firebase/app';
 import { BoundSupabaseyFunction } from '@iebh/supabasey';
 
+interface ThrottleOptions<T = any> {
+	limit: number,
+	interval: number,
+	strict: boolean,
+}
 
 interface ReactiveWrapper<T = any> {
 	doc: T;
 	setState: (newState: T) => void;
 	getState: () => T;
 	watch: (cb: (newState: T) => void) => void;
+	throttle?: ThrottleOptions | true,
 }
 
 interface PathSplitResult {
@@ -169,7 +176,7 @@ export default class Syncro {
 	* @param {*...} [msg] The message to output
 	*/
 	debugError(...msg: any[]) {
-		console.log(`[Syncro ${this.path}]`, ...msg);
+		console.warn(`[Syncro ${this.path}]`, ...msg);
 	}
 
 
@@ -532,6 +539,25 @@ export default class Syncro {
 				// Construct a reactive component
 				reactive = this.getReactive(initialState);
 				if (!reactive.doc || !reactive.setState || !reactive.getState || !reactive.watch) throw new Error('Syncro.getReactive() requires a returned `doc`, `setState()`, `getState()` + `watch()`');
+
+				// Accept throttling for reactiveWrapper if present
+				if (reactive.throttle) { // Wanting to throttle - handed either truthy or an object of throttle settings
+					let throttleSettings = {
+						limit: 2,
+						interval: 100, // i.e. 2 calls within 100ms, otherwise throttle
+						strict: false,
+						...(typeof reactive.throttle == 'object' && reactive.throttle), // Import throttle settings if any
+					};
+
+					// Wrap original reactive.setState() in a throttle function
+					let originalSetState = reactive.setState;
+					reactive.setState = PromiseThrottle({
+						limit: throttleSettings.limit,
+						interval: throttleSettings.interval,
+						onDelay: ()=> this.debug('Throttling excessive Syncro.setState() writes'),
+					})(originalSetState);
+				}
+
 				this.value = doc = reactive.doc;
 
 				this.debug('Initial state', {doc});
@@ -562,8 +588,8 @@ export default class Syncro {
 				// Setup local state watcher
 				reactive.watch(throttle((newState: any) => {
 					this.debug('Local change', {newState});
-					this.markDirty(); // eslint-disable-line @typescript-eslint/no-floating-promises
-					this.setFirestoreState(newState, {method: 'merge'});
+					this.markDirty();
+					this.setFirestoreState(newState, {method: 'merge'}); // eslint-disable-line @typescript-eslint/no-floating-promises
 				}, this.throttle));
 
 				await this.setHeartbeat(true, {

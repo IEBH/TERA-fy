@@ -24,29 +24,36 @@ import TeraFyPluginFirebase from './firebase.js';
 * await terafy.init({app});
 */
 export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
-    constructor() {
-        super(...arguments);
-        /**
-        * The bound, reactive state of the active TERA project
-        *
-        * @type {Object | null}
-        */
-        this.project = null;
-        /**
-        * Simple incrementor to ensure unique IDs for $watch expressions
-        *
-        * @type {Number}
-        */
-        this.reactiveId = 1001;
-    }
+    /**
+    * Local Vue@2 library to use, set during constructor
+    *
+    * @type {Vue}
+    */
+    Vue;
+    /**
+    * The root Vue app instance
+    * @type {any}
+    */
+    app;
+    /**
+    * The bound, reactive state of the active TERA project
+    *
+    * @type {Object | null}
+    */
+    project = null;
+    /**
+    * Simple incrementor to ensure unique IDs for $watch expressions
+    *
+    * @type {Number}
+    */
+    reactiveId = 1001;
     /**
     * Install into Vue@2
     *
-    * @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
+    * @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase for additional options
     * @param {Object} options.app Root level Vue app to bind against
     * @param {Vue} options.Vue Vue@2 instance to bind against
     * @param {String} [options.globalName='$tera'] Global property to allocate this service as within Vue2
-    * @param {*...} [options...] see TeraFyPluginFirebase
     *
     * @returns {Promise} A Promise which will resolve when the init process has completed
     */

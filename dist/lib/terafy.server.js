@@ -11,7 +11,37 @@ import { reactive } from 'vue';
 *
 * @class TeraFyServer
 */
-class TeraFyServer {
+export default class TeraFyServer {
+    /**
+    * Various settings to configure behaviour
+    *
+    * @type {Object}
+    * @property {Boolean} devMode Operate in devMode - i.e. force outer refresh when encountering an existing TeraFy instance
+    * @property {Number} verbosity Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
+    * @property {Number} subscribeTimeout Acceptable timeout period for subscribers to acklowledge a project change event, failing to respond will result in the subscriber being removed from the available subscriber list
+    * @property {String} restrictOrigin URL to restrict communications to
+    * @property {String} projectId The project to use as the default reference when calling various APIs
+    * @property {Number} serverMode The current server mode matching `SERVERMODE_*`
+    * @property {String} siteUrl The main site absolute URL
+    * @property {String} sitePathLogin Either an absolute URL or the relative path (taken from `siteUrl`) when trying to log in the user
+    * @property {Boolean} embedWorkaround Try to use `getUserViaEmbedWorkaround()` to force a login via popup if the user is running in local mode (see function docs for more details). This is toggled to false after the first run
+    */
+    settings = {
+        devMode: false,
+        verbosity: 9,
+        restrictOrigin: '*',
+        subscribeTimeout: 2000,
+        projectId: null,
+        serverMode: 0,
+        siteUrl: window.location.href,
+        sitePathLogin: '/login',
+        embedWorkaround: true,
+    };
+    static SERVERMODE_NONE = 0;
+    static SERVERMODE_EMBEDDED = 1;
+    static SERVERMODE_FRAME = 2;
+    static SERVERMODE_POPUP = 3;
+    static SERVERMODE_TERA = 4; // Terafy is running as the main TERA site
     // Contexts - createContext(), getClientContext(), messageEvent, senderRpc() {{{
     /**
     * Create a context based on a shallow copy of this instance + additional functionality for the incoming MessageEvent
@@ -105,6 +135,13 @@ class TeraFyServer {
                 throw new Error('SERVERMODE_POPUP getClientContext not implemented');
         }
     }
+    /**
+    * MessageEvent context
+    * Only available if the context was created via `createContext()`
+    *
+    * @type {MessageEvent}
+    */
+    messageEvent = null;
     /**
     * Request an RPC call from the original sender of a mesasge
     * This function only works if the context was sub-classed via `createContext()`
@@ -283,6 +320,10 @@ class TeraFyServer {
             }
         });
     }
+    /**
+    * Listening postboxes, these correspond to outgoing message IDs that expect a response
+    */
+    acceptPostboxes = {};
     /**
     * Wrapper function which runs a callback after the frontend UI has obtained focus
     * This is to fix the issue where the front-end needs to switch between a regular webpage and a focused TERA iFrame wrapper
@@ -499,7 +540,7 @@ class TeraFyServer {
                 return;
             }
             catch (e) {
-                throw new Error(`Failed to decode local dev state - ${e.toString()}`);
+                throw new Error(`Failed to decode local dev state - ${e.toString()}`, { cause: e });
             }
         }
         this.debug('INFO', 4, 'localStorage failed - using popup auth instead');
@@ -816,7 +857,6 @@ class TeraFyServer {
         }
         else { // Called as (value, options?) - Populate entire project layout
             actualValue = path; // The first argument is the value
-            settings = { ...value }; // The second argument holds the options
             pathTools.defaults(target, actualValue);
             this.debug('INFO', 1, 'setProjectStateDefaults', {
                 defaults: actualValue,
@@ -1144,7 +1184,7 @@ class TeraFyServer {
         catch (error) {
             this.debug('ERROR', 1, `Error during project file move from "${sourceStoragePath}" to "${targetStoragePath}":`, error);
             // Re-throw a more specific error or the original error for the caller to handle.
-            throw new Error(`Failed to move project file "${sourceId}" to "${newName}": ${error.message || String(error)}`);
+            throw new Error(`Failed to move project file "${sourceId}" to "${newName}": ${error.message || String(error)}`, { cause: error });
         }
     }
     /**
@@ -1178,7 +1218,7 @@ class TeraFyServer {
     */
     setProjectFileContents(id, contents, options) {
         // Argument Mangling Logic (Simplified)
-        let fileId = null;
+        let fileId = null; // eslint-disable-line no-useless-assignment
         let fileContents;
         let mergedOptions;
         if (typeof id === 'string') {
@@ -1301,7 +1341,7 @@ class TeraFyServer {
         }
         catch (error) {
             this.debug('ERROR', 1, `Failed to create/ensure project folder "${cleanFolderPath}" via placeholder "${relativePlaceholderPath}"`, error);
-            throw new Error(`Failed to create project folder "${cleanFolderPath}": ${error.message || String(error)}`);
+            throw new Error(`Failed to create project folder "${cleanFolderPath}": ${error.message || String(error)}`, { cause: error });
         }
     }
     /**
@@ -1364,7 +1404,7 @@ class TeraFyServer {
         }
         catch (error) {
             this.debug('ERROR', 1, `Failed to delete contents of project folder "${cleanFolderPath}" (prefix "${pathPrefix}")`, error);
-            throw new Error(`Failed to delete project folder "${cleanFolderPath}": ${error.message || String(error)}`);
+            throw new Error(`Failed to delete project folder "${cleanFolderPath}": ${error.message || String(error)}`, { cause: error });
         }
         return null;
     }
@@ -1476,7 +1516,7 @@ class TeraFyServer {
     */
     setProjectLibrary(id, refs, options) {
         // Argument Mangling Logic (Simplified)
-        let fileId = null;
+        let fileId = null; // eslint-disable-line no-useless-assignment
         let libraryRefs;
         let mergedOptions;
         if (typeof id === 'string') {
@@ -1614,46 +1654,6 @@ class TeraFyServer {
     * @param {Object} [options] Additional options to merge into `settings`
     */
     constructor(options) {
-        /**
-        * Various settings to configure behaviour
-        *
-        * @type {Object}
-        * @property {Boolean} devMode Operate in devMode - i.e. force outer refresh when encountering an existing TeraFy instance
-        * @property {Number} verbosity Verbosity level, the higher the more chatty TeraFY will be. Set to zero to disable all `debug()` call output
-        * @property {Number} subscribeTimeout Acceptable timeout period for subscribers to acklowledge a project change event, failing to respond will result in the subscriber being removed from the available subscriber list
-        * @property {String} restrictOrigin URL to restrict communications to
-        * @property {String} projectId The project to use as the default reference when calling various APIs
-        * @property {Number} serverMode The current server mode matching `SERVERMODE_*`
-        * @property {String} siteUrl The main site absolute URL
-        * @property {String} sitePathLogin Either an absolute URL or the relative path (taken from `siteUrl`) when trying to log in the user
-        * @property {Boolean} embedWorkaround Try to use `getUserViaEmbedWorkaround()` to force a login via popup if the user is running in local mode (see function docs for more details). This is toggled to false after the first run
-        */
-        this.settings = {
-            devMode: false,
-            verbosity: 9,
-            restrictOrigin: '*',
-            subscribeTimeout: 2000,
-            projectId: null,
-            serverMode: 0,
-            siteUrl: window.location.href,
-            sitePathLogin: '/login',
-            embedWorkaround: true,
-        };
-        /**
-        * MessageEvent context
-        * Only available if the context was created via `createContext()`
-        *
-        * @type {MessageEvent}
-        */
-        this.messageEvent = null;
-        /**
-        * Listening postboxes, these correspond to outgoing message IDs that expect a response
-        */
-        this.acceptPostboxes = {};
-        this._uiProgress = {
-            options: null,
-            promise: null,
-        };
         Object.assign(this.settings, options);
     }
     /**
@@ -1852,6 +1852,10 @@ class TeraFyServer {
             return Promise.resolve();
         }
     }
+    _uiProgress = {
+        options: null,
+        promise: null,
+    };
     /**
     * Prompt the user for an input, responding with a Promisable value
     *
@@ -2055,10 +2059,4 @@ class TeraFyServer {
         console[method]('%c[TERA-FY SERVER]', 'font-weight: bold; color: #4d659c;', ...msgArgs);
     }
 }
-TeraFyServer.SERVERMODE_NONE = 0;
-TeraFyServer.SERVERMODE_EMBEDDED = 1;
-TeraFyServer.SERVERMODE_FRAME = 2;
-TeraFyServer.SERVERMODE_POPUP = 3;
-TeraFyServer.SERVERMODE_TERA = 4; // Terafy is running as the main TERA site
-export default TeraFyServer;
 //# sourceMappingURL=terafy.server.js.map
