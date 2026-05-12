@@ -10,46 +10,47 @@ import { nanoid } from 'nanoid';
 *
 * @property {String} singular The singular noun for the item
 * @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({HYPERDRIVE:PostgresSql, supabasey:BoundSupabaseyFunction, id:String, relation?:string})` and expected to return the initial data object state
-* @property {Function} flushState Function called to flush state from Firebase to Supabase. Called the same as `initState` + `{state:Object}`
+* @property {Function} flushState Function called to flush state from Firebase to Postgres. Called the same as `initState` + `{state:Object}`
 */
 const syncroConfig = {
     institutes: {
         singular: 'institute',
         async initState({ HYPERDRIVE, id }) {
-            let institute = await HYPERDRIVE `
+            let rows = await HYPERDRIVE `
 				SELECT data
 				FROM institutes
 				WHERE id = ${id}
 				LIMIT 1
 			`;
-            if (institute.length > 0) {
-                return institute[0].data; // institute is valid and already exists
+            if (rows.length > 0) {
+                return rows[0].data; // institute is valid and already exists
             }
             else {
                 throw new Error(`Syncro institute "${id}" not found`);
             }
         },
-        flushState({ supabasey, state, id }) {
-            // FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
-            return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
-                table_name: 'institutes',
-                entity_id: id,
-                new_data: state,
-            }));
+        flushState({ HYPERDRIVE, state, id }) {
+            return HYPERDRIVE `
+				SELECT syncro_merge_data(
+					table_name => 'institutes',
+					entity_id => ${id}::UUID,
+					new_data => ${HYPERDRIVE.json(state)}::JSONB
+				)
+			`;
         },
     }, // }}}
     projects: {
         singular: 'project',
         async initState({ HYPERDRIVE, supabasey, id }) {
-            let projects = await HYPERDRIVE `
+            let rows = await HYPERDRIVE `
 				SELECT data
 				FROM projects
 				WHERE id = ${id}
 				LIMIT 1
 			`;
-            if (projects.length == 0)
+            if (rows.length == 0)
                 throw new Error(`Syncro project "${id}" not found`);
-            const data = projects[0].data;
+            const data = rows[0].data;
             // MIGRATION - Move data.temp{} into Supabase files + add pointer to filename {{{
             if (data.temp // Project contains temp subkey
                 && Object.values(data.temp).some((t) => typeof t == 'object') // Some of the temp keys are objects
@@ -88,13 +89,14 @@ const syncroConfig = {
             } // }}}
             return data;
         },
-        flushState({ supabasey, state, fsId }) {
-            // FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
-            return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
-                table_name: 'projects',
-                entity_id: fsId,
-                new_data: state,
-            }));
+        flushState({ HYPERDRIVE, state, fsId }) {
+            return HYPERDRIVE `
+				SELECT syncro_merge_data(
+					table_name => 'projects',
+					entity_id => ${fsId}::UUID,
+					new_data => ${HYPERDRIVE.json(state)}::JSONB
+				)
+			`;
         },
     }, // }}}
     project_libraries: {
@@ -154,26 +156,27 @@ const syncroConfig = {
                 throw new Error(`Syncro test "${id}" not found`);
             }
         },
-        flushState({ supabasey, state, fsId }) {
-            // FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
-            return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
-                table_name: 'test',
-                entity_id: fsId,
-                new_data: state,
-            }));
+        flushState({ HYPERDRIVE, state, fsId }) {
+            return HYPERDRIVE `
+				SELECT syncro_merge_data(
+					table_name => 'test',
+					entity_id => ${fsId}::UUID,
+					new_data => ${HYPERDRIVE.json(state)}::JSONB
+				)
+			`;
         },
     }, // }}}
     users: {
         singular: 'user',
         async initState({ HYPERDRIVE, id }) {
-            let user = await HYPERDRIVE `
+            let rows = await HYPERDRIVE `
 				SELECT data
 				FROM users
 				WHERE id = ${id}
 				LIMIT 1
 			`;
-            if (user.length > 0)
-                return user[0].data; // User is valid and already exists
+            if (rows.length > 0)
+                return rows[0].data; // User is valid and already exists
             // User row doesn't already exist - this shouldn't happen if the user has correctly gone through the onboarding process
             // but... *shrugs*, who knows
             let newUser = await HYPERDRIVE `
@@ -194,13 +197,14 @@ const syncroConfig = {
                 throw new Error(`Failed to create new user "${id}"`);
             return newUser[0].data; // Return back the data that eventually got created - allowing for database triggers, default field values etc.
         },
-        flushState({ supabasey, state, fsId }) {
-            // FIXME: Better to reuse `env.HYPERDRIVE` instead of supabasey here in future
-            return supabasey((supabase) => supabase.rpc('syncro_merge_data', {
-                table_name: 'users',
-                entity_id: fsId,
-                new_data: state,
-            }));
+        flushState({ HYPERDRIVE, state, fsId }) {
+            return HYPERDRIVE `
+				SELECT syncro_merge_data(
+					table_name => 'users',
+					entity_id => ${fsId}::UUID,
+					new_data => ${HYPERDRIVE.json(state)}::JSONB
+				)
+			`;
         },
     }, // }}}
 };

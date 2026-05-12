@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.10](https://github.com/IEBH/TERA-fy/compare/v2.3.9...v2.3.10) (2026-05-12)
+
+
+### refactor
+
+* Tidied up Syncro data fetching + force named arguments when calling merger ([220eef3](https://github.com/IEBH/TERA-fy/commit/220eef3c0b7d12b0cae87bfc169dfa67c87858f4))
+
 ## [2.3.9](https://github.com/IEBH/TERA-fy/compare/v2.3.8...v2.3.9) (2026-05-09)
 
 

@@ -12,8 +12,8 @@ interface SyncroEntityConfig {
         relation?: string;
     }) => Promise<any>;
     flushState: (args: {
-        HYPERDRIVE?: PostgresSql;
-        supabasey: BoundSupabaseyFunction;
+        HYPERDRIVE: PostgresSql;
+        supabasey?: BoundSupabaseyFunction;
         state: any;
         id?: string;
         fsId?: string;
@@ -28,7 +28,7 @@ type SyncroConfig = Record<string, SyncroEntityConfig>;
 *
 * @property {String} singular The singular noun for the item
 * @property {Function} initState Function called to initialize state when Firestore has no existing document. Called as `({HYPERDRIVE:PostgresSql, supabasey:BoundSupabaseyFunction, id:String, relation?:string})` and expected to return the initial data object state
-* @property {Function} flushState Function called to flush state from Firebase to Supabase. Called the same as `initState` + `{state:Object}`
+* @property {Function} flushState Function called to flush state from Firebase to Postgres. Called the same as `initState` + `{state:Object}`
 */
 declare const syncroConfig: SyncroConfig;
 export default syncroConfig;
