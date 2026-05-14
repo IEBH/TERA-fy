@@ -75,6 +75,27 @@ lodash-es/lodash.js:
    * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
    *)
 
+@firebase/util/dist/postinstall.mjs:
+@firebase/firestore/dist/common-edb5d170.esm.js:
+@firebase/firestore/dist/common-edb5d170.esm.js:
+@firebase/firestore/dist/common-edb5d170.esm.js:
+  (**
+   * @license
+   * Copyright 2025 Google LLC
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *   http://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *)
+
 @firebase/util/dist/index.esm.js:
 @firebase/util/dist/index.esm.js:
 @firebase/util/dist/index.esm.js:
@@ -1046,26 +1067,6 @@ firebase/app/dist/esm/index.esm.js:
   (**
    * @license
    * Copyright 2017 Google LLC
-   *
-   * Licensed under the Apache License, Version 2.0 (the "License");
-   * you may not use this file except in compliance with the License.
-   * You may obtain a copy of the License at
-   *
-   *   http://www.apache.org/licenses/LICENSE-2.0
-   *
-   * Unless required by applicable law or agreed to in writing, software
-   * distributed under the License is distributed on an "AS IS" BASIS,
-   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   * See the License for the specific language governing permissions and
-   * limitations under the License.
-   *)
-
-@firebase/firestore/dist/common-edb5d170.esm.js:
-@firebase/firestore/dist/common-edb5d170.esm.js:
-@firebase/firestore/dist/common-edb5d170.esm.js:
-  (**
-   * @license
-   * Copyright 2025 Google LLC
    *
    * Licensed under the Apache License, Version 2.0 (the "License");
    * you may not use this file except in compliance with the License.

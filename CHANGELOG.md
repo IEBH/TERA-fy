@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.11](https://github.com/IEBH/TERA-fy/compare/v2.3.10...v2.3.11) (2026-05-14)
+
+
+### fix
+
+* Fix firebase peerDep ([319029e](https://github.com/IEBH/TERA-fy/commit/319029ef64798ece1fdc458270343477cc09ae54))
+
 ## [2.3.10](https://github.com/IEBH/TERA-fy/compare/v2.3.9...v2.3.10) (2026-05-12)
 
 
