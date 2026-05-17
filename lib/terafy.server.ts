@@ -55,6 +55,7 @@ export default class TeraFyServer {
 	* @property {String} siteUrl The main site absolute URL
 	* @property {String} sitePathLogin Either an absolute URL or the relative path (taken from `siteUrl`) when trying to log in the user
 	* @property {Boolean} embedWorkaround Try to use `getUserViaEmbedWorkaround()` to force a login via popup if the user is running in local mode (see function docs for more details). This is toggled to false after the first run
+	* @property {String} ioUrl entrypoint for the TERA-io worker (used to get/set various TERA entities such as files)
 	*/
 	settings: any = {
 		devMode: false,
@@ -66,6 +67,7 @@ export default class TeraFyServer {
 		siteUrl: window.location.href,
 		sitePathLogin: '/login',
 		embedWorkaround: true,
+		ioUrl: app.service('$infra').workerUrls.io,
 	};
 
 	static SERVERMODE_NONE = 0;
@@ -1213,6 +1215,7 @@ export default class TeraFyServer {
 			})
 			.then((file: any) => file && settings.subkey ? (file)[settings.subkey] : file)
 	}
+
 
 	/**
 	* Fetch the raw contents of a file by its ID
