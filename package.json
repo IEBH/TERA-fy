@@ -99,7 +99,7 @@
     "detect-port": "^2.1.0",
     "filesize": "^11.0.17",
     "http-proxy": "^1.18.1",
-    "lodash-es": "^4.17.23",
+    "lodash-es": "^4.18.1",
     "mitt": "^3.0.1",
     "nanoid": "^5.1.6",
     "p-retry": "^7.1.1",
