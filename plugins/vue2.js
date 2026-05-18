@@ -99,7 +99,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 
 		return {
 			doc,
-			setState: (state) => {
+			setState: state => {
 				// Shallow copy all sub-keys into existing object (keeping the object pointer)
 				Object.entries(state || {})
 					.filter(([k]) => !isEqual(doc[k], state[k])) // Only accept changed keys
@@ -108,8 +108,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 			getState: () => {
 				return cloneDeep(doc);
 			},
-			// eslint-disable-next-line no-unused-vars
-			watch: (cb) => {
+			watch: cb => {
 				this.app.$watch(watcherPath, cb, {deep: true});
 			},
 		};
