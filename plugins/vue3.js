@@ -1,6 +1,6 @@
 import {cloneDeep} from 'lodash-es';
 import TeraFyPluginFirebase from './firebase.js';
-import {reactive as vueReactive, watch as vueWatch, App, WatchCallback} from 'vue';
+import {reactive as vueReactive, watch as vueWatch} from 'vue';
 
 /**
 * Vue observables plugin
@@ -33,7 +33,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 	*
 	* @type {Object}
 	*/
-	project: any = null;
+	project = null;
 
 
 	/**
@@ -41,22 +41,20 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 	*
 	* @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
 	*/
-	async init(options: Record<string, any>) {
+	async init(options) {
 		await super.init(options); // Initalize parent class Firebase functionality
 
 		// Mount the project namespace
-		// @ts-expect-error TODO: Track down why eslint throws error
 		this.project = await this.mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	// @ts-expect-error TODO: Work out why TS doesn't like overrides
-	getReactive(value: any) {
+	getReactive(value) {
 		const doc = vueReactive(value);
 		return {
 			doc,
-			setState(state: any) {
+			setState(state) {
 				// Shallow copy all sub-keys into existing object (keeping the object pointer)
 				Object.entries(state || {})
 					.forEach(([k, v]) => doc[k] = v)
@@ -64,7 +62,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 			getState() {
 				return cloneDeep(doc);
 			},
-			watch(cb: WatchCallback<any, any>) {
+			watch(cb) {
 				vueWatch(doc, cb, {deep: true});
 			},
 		};
@@ -77,7 +75,6 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 	* @returns {VuePlugin} A Vue@3 plugin spec
 	*/
 	vuePlugin() {
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const $tera = this;
 
 		return {
@@ -90,7 +87,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 			* @param {Object} [options] Additional options to mutate behaviour
 			* @param {String} [options.globalName='$tera'] Global property to allocate this service as
 			*/
-			install(app: App, options: Record<string, any>) {
+			install(app, options) {
 				const settings = {
 					globalName: '$tera',
 					...options,

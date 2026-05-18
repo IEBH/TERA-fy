@@ -17,14 +17,15 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @type {Object<Syncro>}
 	*/
-	syncros: Record<string, Syncro> = {};
-	namespaces: Record<string, any> = {}; // Declare namespaces property
+	syncros = {};
 
-	// Declare properties expected by the class methods or potentially inherited
-	getCredentials!: () => Promise<Record<string, any>>;
-	requireProject!: () => Promise<{ id: string }>;
-	// eslint-disable-next-line no-unused-vars
-	debug!: (...args: any[]) => void;
+
+	/**
+	* Available Namespaces
+	*
+	* @type {Object}
+	*/
+	namespaces = {};
 
 
 	/**
@@ -36,7 +37,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	* @name getReactive
 	* @type {Function} A reactive function as defined in Syncro
 	*/
-	getReactive?: () => any;
+	getReactive;
 
 
 	/**
@@ -53,7 +54,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
-	async init(options?: any): Promise<void> { // Add optional '?' and type 'any', keep async Promise<void>
+	async init(options) {
 		const settings = {
 			firebaseApiKey: null,
 			firebaseAuthDomain: null,
@@ -70,17 +71,17 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 			throw new Error('Firebase plugin requires mandatory options: ' + emptyValues.join(', '));
 
 		Syncro.firebase = Firebase({
-			apiKey: settings.firebaseApiKey!, // Add non-null assertion
-			authDomain: settings.firebaseAuthDomain!, // Add non-null assertion
-			projectId: settings.firebaseProjectId!, // Add non-null assertion
-			appId: settings.firebaseAppId!, // Add non-null assertion
+			apiKey: settings.firebaseApiKey,
+			authDomain: settings.firebaseAuthDomain,
+			projectId: settings.firebaseProjectId,
+			appId: settings.firebaseAppId,
 		});
-		Syncro.firestore = Firestore(Syncro.firebase); // Use Syncro.firebase
+		Syncro.firestore = Firestore(Syncro.firebase);
 
 		Syncro.supabasey = await Supabasey.init({
 			env: {
-				SUPABASE_URL: settings.supabaseUrl!,
-				SUPABASE_KEY: settings.supabaseKey!, // Add non-null assertions
+				SUPABASE_URL: settings.supabaseUrl,
+				SUPABASE_KEY: settings.supabaseKey,
 			},
 		});
 	}
@@ -93,8 +94,8 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	_mountNamespace(name: string): Promise<void> { // Add type 'string'
-		let syncro: Syncro; // Add type Syncro
+	_mountNamespace(name) {
+		let syncro;
 
 		return Promise.resolve()
 			.then(()=> this.requireProject())
@@ -104,7 +105,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 					: `project_namespaces::${project.id}::${name}`;
 
 				syncro = this.syncros[name] = new Syncro(path, {
-					debug: (...msg: any[]) => this.debug(`SYNCRO://${path}`, ...msg), // Add type any[]
+					debug: (...msg) => this.debug(`SYNCRO://${path}`, ...msg),
 					getReactive: this.getReactive, // Try to inherit this instances getReactive prop, otherwise Syncro will fall back to its default
 				});
 
@@ -124,7 +125,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	*
 	* @returns {Promise} A promise which resolves when the operation has completed
 	*/
-	_unmountNamespace(name: string): Promise<void | any[]> { // Add type 'string'
+	_unmountNamespace(name) {
 		const syncro = this.syncros[name]; // Create local alias for Syncro before we detach it
 
 		// Detach local state
@@ -132,7 +133,7 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 		delete this.syncros[name];
 
 		// Check if syncro exists before calling destroy
-		if (syncro) {
+		if (syncro) { // eslint-disable-line unicorn/prefer-ternary
 			return syncro.destroy(); // Trigger Syncro destruction
 		} else {
 			return Promise.resolve(); // Or handle the case where syncro doesn't exist

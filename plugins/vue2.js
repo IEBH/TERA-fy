@@ -31,13 +31,14 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	*
 	* @type {Vue}
 	*/
-	Vue: any;
+	Vue;
+
 
 	/**
 	* The root Vue app instance
 	* @type {any}
 	*/
-	app: any;
+	app;
 
 
 	/**
@@ -45,7 +46,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	*
 	* @type {Object | null}
 	*/
-	project: any = null;
+	project = null;
 
 
 	/**
@@ -66,7 +67,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	*
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
-	async init(options: any) {
+	async init(options) {
 		const settings = {
 			app: null,
 			Vue: null,
@@ -85,14 +86,12 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 			this.Vue.prototype[settings.globalName] = this;
 
 		await super.init(settings); // Initalize parent class Firebase functionality
-		// @ts-expect-error TODO: Track down why eslint throws error
 		this.project = await this.mountNamespace('_PROJECT');
 	}
 
 
 	/** @override */
-	// @ts-expect-error TODO: Work out why TS doesn't like overrides
-	getReactive(value: any) {
+	getReactive(value) {
 		const doc = this.Vue.observable(value);
 
 		const watcherPath = `_teraFy_${this.reactiveId++}`;
@@ -100,7 +99,7 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 
 		return {
 			doc,
-			setState: (state: any) => {
+			setState: (state) => {
 				// Shallow copy all sub-keys into existing object (keeping the object pointer)
 				Object.entries(state || {})
 					.filter(([k]) => !isEqual(doc[k], state[k])) // Only accept changed keys
@@ -109,8 +108,8 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 			getState: () => {
 				return cloneDeep(doc);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-			watch: (cb: Function) => {
+			// eslint-disable-next-line no-unused-vars
+			watch: (cb) => {
 				this.app.$watch(watcherPath, cb, {deep: true});
 			},
 		};

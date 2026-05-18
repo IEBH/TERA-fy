@@ -1,9 +1,8 @@
 import {globalIgnores} from 'eslint/config';
-import RulesMFDC, {JSCommon} from '@momsfriendlydevco/eslint-config';
-import tseslint from 'typescript-eslint';
+import RulesMFDC from '@momsfriendlydevco/eslint-config';
 import globals from 'globals';
 
-export default tseslint.config(
+export default [
 	globalIgnores([
 		'.*',
 		'docs/',
@@ -25,70 +24,20 @@ export default tseslint.config(
 	// Include the base configuration from MFDC
 	...RulesMFDC,
 
-	// Add browser defs to typescript
+	// Add browser globals to lib files
 	{
-		files: ['lib/**/*.ts'], // Apply this only to files in the 'lib' directory
+		files: ['lib/**/*.js'],
 		languageOptions: {
 			globals: {
-				...globals.browser, // Adds all browser globals like 'window', 'document', etc.
+				...globals.browser,
 			},
 		},
 	},
 
-	// Add TypeScript specific configurations
-	{
-		// Apply these settings ONLY to .ts files
-		files: ['**/*.ts'],
-		// Use recommended TypeScript rules (includes parser/plugin setup)
-		// Using recommendedTypeChecked enables rules that require type information
-		extends: [
-			...tseslint.configs.recommendedTypeChecked,
-		],
-		// Configure the parser to find your tsconfig.json for type-aware linting
-		languageOptions: {
-			parserOptions: {
-				project: true, // Tells TS ESLint to find and use tsconfig.json
-				tsconfigRootDir: import.meta.dirname, // Helps ESLint find tsconfig.json relative to eslint.config.js
-			},
-		},
-		rules: {
-			// Not needed with TS
-			'jsdoc/require-returns-type': 'off',
-			// This rule sometimes gives worse syntax
-			'unicorn/prefer-ternary': 'off',
-			// Loosen rules until proper TS annotation
-			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/no-unsafe-return': 'off',
-			'@typescript-eslint/no-unsafe-call': 'off',
-			'@typescript-eslint/no-unsafe-assignment': 'off',
-			'@typescript-eslint/no-unsafe-argument': 'off',
-			'@typescript-eslint/no-unsafe-member-access': 'off',
-			'@typescript-eslint/prefer-promise-reject-errors': 'off',
-			...JSCommon,
-		},
-	},
-
-	// Your existing global override - this will apply to both JS and TS files
-	// If you only want this for JS, you could add `files: ['**/*.js']` here.
+	// Global overrides
 	{
 		rules: {
 			'unicorn/prefer-global-this': 'off',
 		},
 	},
-
-	// MC overrides so the TypeScript linter can STFU
-	...(['rhino', 'slab', 'snow'].includes(process.env.NODE_ENV) ? [{
-		rules: {
-			'no-undef': 'warn',
-			'prefer-const': 'off',
-			'@typescript-eslint/ban-ts-comment': 'off', // Allow `// @ts-ignore`
-			'@typescript-eslint/no-explicit-any': 'off', // Stop complaining about `:any` definitions
-			'@typescript-eslint/no-unsafe-argument': 'off',
-			'@typescript-eslint/no-unsafe-assignment': 'off',
-			'@typescript-eslint/no-unsafe-call': 'off',
-			'@typescript-eslint/no-unsafe-member-access': 'off',
-			'@typescript-eslint/no-unsafe-return': 'off',
-			'unicorn/numeric-separators-style': 'warn',
-		},
-	}] : []),
-);
+];
