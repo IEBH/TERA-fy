@@ -31,7 +31,7 @@ export default {
 		* @type {null|ProjectFile}
 		*/
 		selected: null,
-	}},
+	} },
 	props: {
 		// Props passed to $teraFy.selectProjectFile()
 		save: {type: Boolean, default: false},
