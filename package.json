@@ -52,6 +52,14 @@
       "import": "./dist/lib/syncro/*.js",
       "default": "./dist/lib/syncro/*.js"
     },
+	"./TERAFile": {
+      "default": "./lib/teraFile.js",
+	  "require": "./dist/lib/teraFile.js"
+	},
+	"./TERAFileRaw": {
+      "default": "./lib/teraFileRaw.js",
+	  "require": "./dist/lib/teraFileRaw.js"
+	},
     "./plugins/*": {
       "import": "./dist/plugins/*.js",
       "default": "./dist/plugins/*.js"
