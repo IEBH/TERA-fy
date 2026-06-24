@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.13](https://github.com/IEBH/TERA-fy/compare/v2.3.12...v2.3.13) (2026-06-24)
+
+
+### fix
+
+* Fix misleading package exports ([c49e922](https://github.com/IEBH/TERA-fy/commit/c49e9228a5262962533d150c0f803e37091dc5d1))
+
 ## [2.3.12](https://github.com/IEBH/TERA-fy/compare/v2.3.11...v2.3.12) (2026-06-24)
 
 

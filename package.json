@@ -1,6 +1,6 @@
 {
   "name": "@iebh/tera-fy",
-  "version": "2.3.12",
+  "version": "2.3.13",
   "description": "TERA website worker",
   "scripts": {
     "dev": "esbuild --platform=browser --format=esm --bundle lib/terafy.client.js --outfile=dist/terafy.js --minify --serve --servedir=.",
@@ -23,7 +23,7 @@
     "#utils/*": "./utils/*.js"
   },
   "exports": {
-	  ".": {
+    ".": {
       "browser": "./lib/terafy.client.js",
       "import": "./lib/terafy.client.js",
       "require": "./dist/terafy.js",
