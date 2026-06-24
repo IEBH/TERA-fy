@@ -23,40 +23,18 @@
     "#utils/*": "./utils/*.js"
   },
   "exports": {
-    ".": {
-      "browser": "./dist/lib/terafy.client.js",
-      "import": "./dist/lib/terafy.client.js",
+	  ".": {
+      "browser": "./lib/terafy.client.js",
+      "import": "./lib/terafy.client.js",
       "require": "./dist/terafy.js",
       "default": "./dist/terafy.js"
     },
-    "./bootstrap": {
-      "import": "./dist/lib/terafy.bootstrapper.js",
-      "default": "./dist/lib/terafy.bootstrapper.js"
-    },
-    "./projectFile": {
-      "import": "./dist/lib/projectFile.js",
-      "default": "./dist/lib/projectFile.js"
-    },
-    "./proxy": {
-      "import": "./dist/lib/terafy.proxy.js",
-      "default": "./dist/lib/terafy.proxy.js"
-    },
-    "./server": {
-      "import": "./dist/lib/terafy.server.js",
-      "default": "./dist/lib/terafy.server.js"
-    },
-    "./syncro": {
-      "import": "./dist/lib/syncro/syncro.js",
-      "default": "./dist/lib/syncro/syncro.js"
-    },
-    "./syncro/*": {
-      "import": "./dist/lib/syncro/*.js",
-      "default": "./dist/lib/syncro/*.js"
-    },
-    "./plugins/*": {
-      "import": "./dist/plugins/*.js",
-      "default": "./dist/plugins/*.js"
-    },
+    "./bootstrap": "./lib/terafy.bootstrap.js",
+    "./dist/*": "./dist/*",
+    "./projectFile": "./lib/projectFile.js",
+    "./proxy": "./lib/terafy.proxy.js",
+    "./server": "./lib/terafy.server.js",
+    "./plugins/*": "./plugins/*.js",
     "./widgets/*": "./widgets/*"
   },
   "repository": {
