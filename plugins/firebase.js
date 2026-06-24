@@ -37,7 +37,6 @@ export default class TeraFyPluginFirebase extends TeraFyPluginBase {
 	* @name getReactive
 	* @type {Function} A reactive function as defined in Syncro
 	*/
-	getReactive;
 
 
 	/**
