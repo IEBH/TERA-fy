@@ -247,7 +247,7 @@ Type: [String][168]
 
 ### modified
 
-A date representing when the file was created
+A date representing when the file was modifed
 
 Type: [Date][170]
 
@@ -297,7 +297,7 @@ Type: [Object][169]
 
 Whether this is a folder or not
 
-Type: [boolean][172]
+Type: [Boolean][172]
 
 ### files
 
@@ -335,7 +335,7 @@ Returns **[Promise][174]\<void>** A promise which resolves when the operation ha
 
 Fetch the file contents as an array of Reflib refs
 
-Returns **[Promise][174]<[Array][173]\<RefLibRef>>** An eventual array of RefLib references
+Returns **[Promise][174]<[Array][173]>** An eventual array of RefLib references
 
 ### setRefs
 
@@ -345,7 +345,7 @@ Overwrite the contents of a file with a new collection of Reflib refs
 
 #### Parameters
 
-*   `refs` **[Array][173]\<RefLibRef>** Collection of references for the selected library
+*   `refs` **[Array][173]** Collection of references for the selected library
 
 Returns **[Promise][174]\<void>** A promise which resolves when the operation has completed
 
@@ -434,7 +434,7 @@ Active namespaces we are subscribed to
 Each key is the namespace name with the value as the local reactive \ observer \ object equivalent
 The key string is always of the form `${ENTITY}::${ID}` e.g. `projects:1234`
 
-Type: [Object][169]<[Object][169]>
+Type: [Object][169]
 
 ### send
 
@@ -632,7 +632,7 @@ This is an pre-requisite step for requireProject()
 
 #### Parameters
 
-*   `options` **any?**&#x20;
+*   `options` &#x20;
 
 Returns **[Promise][174]** A promise which will resolve if the there is a user and they are logged in
 
@@ -969,12 +969,9 @@ The file's unique ID (UUID) remains the same, but its 'name' (relative path) and
 *   `options` **[Object][169]?** Additional options to mutate behaviour.
 
     *   `options.autoRequire` **[Boolean][172]** Run `requireProject()` automatically before continuing. (optional, default `true`)
-    *   `options.overwrite` **[Boolean][172]** If true (default), moving a file to a `newName` that already exists will overwrite the existing file.
-        This aligns with the default behavior of the underlying Supabase storage `move` operation.
-        If set to false, the function would ideally check and prevent overwrite, but current implementation relies on underlying storage behavior. (optional, default `true`)
+    *   `options.overwrite` **[Boolean][172]** If true (default), moving a file to a `newName` that already exists will overwrite the existing file. This aligns with the default behavior of the underlying Supabase storage `move` operation. If set to false, the function would ideally check and prevent overwrite, but current implementation relies on underlying storage behavior. (optional, default `true`)
 
-Returns **[Promise][174]<([ProjectFile][1] | null)>** A promise which resolves to the updated ProjectFile object for the moved file if found after the operation,
-or null if the file could not be located post-move (e.g., if its ID changed unexpectedly or it was deleted).
+Returns **[Promise][174]<([ProjectFile][1] | null)>** A promise which resolves to the updated ProjectFile object for the moved file if found after the operation, or null if the file could not be located post-move (e.g., if its ID changed unexpectedly or it was deleted).
 
 ## deleteProjectFile
 
