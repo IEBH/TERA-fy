@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.14](https://github.com/IEBH/TERA-fy/compare/v2.3.13...v2.3.14) (2026-06-24)
+
+
+### docs
+
+* Minor Eslint fix ([d6deb35](https://github.com/IEBH/TERA-fy/commit/d6deb35e84c8a61fe8c749a2691e47b35ac31496))
+
+### fix
+
+* Ignore more meta functions that shouldnt be overriden in a mixin ([02f233b](https://github.com/IEBH/TERA-fy/commit/02f233b56bed87143820c9750dff332b1cecdfd6))
+* Prototype polution when inheriting from a super-class ([94d5c87](https://github.com/IEBH/TERA-fy/commit/94d5c879e298048de8144b70fa66c3d144c3cfb0))
+
 ## [2.3.13](https://github.com/IEBH/TERA-fy/compare/v2.3.12...v2.3.13) (2026-06-24)
 
 
