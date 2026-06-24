@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.3.12](https://github.com/IEBH/TERA-fy/compare/v2.3.11...v2.3.12) (2026-06-24)
+
+
+### feat
+
+* Added ioUrl option to start moving everything over to it instead of using $supabase ([63d2e96](https://github.com/IEBH/TERA-fy/commit/63d2e96e16f177c5d0332e33660098a2163b2afe))
+
+### fix
+
+* Clean out dist/ before building - avoids .ts artefacts ([36553ca](https://github.com/IEBH/TERA-fy/commit/36553cabf0847134e7ae66015ab94eb23c63d053))
+* Missing global to keep eslint happy ([977afb2](https://github.com/IEBH/TERA-fy/commit/977afb2ae9798459f24aa615369f668b85b0f251))
+* Tweak Syncro heartbeat interval 2m -> 5m to reduce server load ([6d22117](https://github.com/IEBH/TERA-fy/commit/6d221177cfcc63845448b9e50c5ad910c9ac8553))
+
+### refactor
+
+* Eslint cleaning ([0a5166e](https://github.com/IEBH/TERA-fy/commit/0a5166e64e96ab5579778167f7eff55b9ab08b72))
+* Eslint cleanup ([a0d4f45](https://github.com/IEBH/TERA-fy/commit/a0d4f45be2b483a0d44ce8c25c3dca0fcaaf97cc))
+
+### task
+
+* Bump NPM:eslint rules to latest ([b9f8c75](https://github.com/IEBH/TERA-fy/commit/b9f8c75087d426c04b3fd0a2c2bb9e800ce6f13e))
+* Misc NPM bumps ([fa5dea8](https://github.com/IEBH/TERA-fy/commit/fa5dea8e44f7877c32a03186bea53953a4baba5d))
+* Misc NPM bumps #2 ([7fa9229](https://github.com/IEBH/TERA-fy/commit/7fa92296f1e504f47e36ac7b088452fda2cd106f)), closes [#2](https://github.com/IEBH/TERA-fy/issues/2)
+* Removed TypeScript ([b8ca9a2](https://github.com/IEBH/TERA-fy/commit/b8ca9a2a27d5b4ff133c4edf6b0be3ed87fa4c4e))
+
 ## [2.3.11](https://github.com/IEBH/TERA-fy/compare/v2.3.10...v2.3.11) (2026-05-14)
 
 
