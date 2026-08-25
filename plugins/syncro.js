@@ -1,3 +1,4 @@
+import {merge} from 'lodash-es';
 import Syncro from '../lib/syncro/syncro.js';
 import TeraFyPluginBase from './base.js';
 
@@ -44,17 +45,13 @@ export default class TeraFyPluginSyncro extends TeraFyPluginBase {
 	* Configure the shared Syncro engine
 	*
 	* @param {Object} options Additional options to mutate behaviour (defaults to the main teraFy settings)
-	* @param {String} [options.syncUrl] Base URL of the tera-io worker used for replication + snapshots
-	* @param {Object} [options.syncHttp] Axios-like HTTP client to use for replication calls, defaults to the built-in fetch adapter
-	* @param {Function} [options.syncGetToken] Async function resolving with an auth bearer token, defaults to the TeraFy `getKindeToken()` RPC
+	* @param {Function} [options.syncGetPrototypeRequest] Async function to populate Syncro.settings.request() behaviour
 	*
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
 	init(options) {
 		let settings = {
-			syncUrl: null,
-			syncHttp: null,
-			syncGetToken: null,
+			syncGetPrototypeRequest: null,
 			...options,
 		};
 
@@ -65,10 +62,21 @@ export default class TeraFyPluginSyncro extends TeraFyPluginBase {
 				getReactive: this.getReactive
 					? (...args) => this.getReactive(...args)
 					: null,
-				getToken: settings.syncGetToken
-					|| (()=> this.getKindeToken()),
-				...(settings.syncUrl && {url: settings.syncUrl}),
-				...(settings.syncHttp && {http: settings.syncHttp}),
+				...(settings.syncGetPrototypeRequest && {request: settings.syncGetPrototypeRequest}),
+				request: (options) => Promise.resolve() // Populate base from upstream call to syncGetPrototypeRequest
+					.then(()=> this.getPrototypeRequest('syncFetch'))
+					.then(useSyncPrototypeReq => {
+						console.log('TAP', {useSyncPrototypeReq});
+						return useSyncPrototypeReq;
+					})
+					.then(prototypeReq => merge(prototypeReq, options))
+					.then(req => Syncro._requestFlatten(merge(req))),
+				getWSRequest: ()=> Promise.resolve()
+					.then(()=> this.getPrototypeRequest('syncWS'))
+					.then(tapWSReq => {
+						console.log('TAP', {tapWSReq});
+						return tapWSReq;
+					}),
 			}))
 	}
 
