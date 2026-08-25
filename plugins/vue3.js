@@ -1,6 +1,49 @@
-import {cloneDeep} from 'lodash-es';
-import TeraFyPluginFirebase from './firebase.js';
-import {reactive as vueReactive, watch as vueWatch} from 'vue';
+import {cloneDeep, isEqual} from 'lodash-es';
+import {reactive as vueReactive, toRaw, watch as vueWatch} from 'vue';
+import TeraFyPluginSyncro from './syncro.js';
+
+
+/**
+* Vue@3 implementation of the Syncro reactive adapter
+* Provides a Vue reactive as the document mirror with sync-flushed deep watching
+* Exported standalone so non-plugin consumers (e.g. the main TERA `$sync` service) can inject it via `Syncro.setup({getReactive})`
+*
+* @param {Object} value Initial value of the reactive
+*
+* @returns {Object} A reactive object prototype as expected by `Syncro.settings.getReactive`
+* @property {VueReactive} doc The reactive object
+* @property {Function} setState Apply an incoming document state over `doc`, keeping the object pointer + only touching changed keys so Vue only re-renders affected subtrees
+* @property {Function} getState Fetch a detached (raw + deep-cloned) snapshot of the current state
+* @property {Function} watch Set up a deep, sync-flushed state watcher, returns its un-watch function
+*/
+export function getReactive(value) {
+	let doc = vueReactive(value ?? {});
+
+	return {
+		doc,
+		setState(state) {
+			let stateKeys = new Set(Object.keys(state || {}));
+
+			// Remove local keys that no longer exist upstream
+			Object.keys(doc)
+				.filter(key => !stateKeys.has(key))
+				.forEach(key => delete doc[key]);
+
+			// Shallow copy changed sub-keys into the existing object (keeping the object pointer)
+			Object.entries(state || {})
+				.forEach(([key, val]) => {
+					if (!isEqual(toRaw(doc[key]), val)) doc[key] = cloneDeep(val); // Clone as RxDB deep-freezes its documents
+				});
+		},
+		getState() {
+			return cloneDeep(toRaw(doc));
+		},
+		watch(cb) { // flush:'sync' so inbound applies echo synchronously + the Syncro `applying` guard can suppress them
+			return vueWatch(doc, cb, {deep: true, flush: 'sync'});
+		},
+	};
+}
+
 
 /**
 * Vue observables plugin
@@ -11,7 +54,7 @@ import {reactive as vueReactive, watch as vueWatch} from 'vue';
 *
 * @example Implementation within a Vue3 / Vite project within `src/main.js`:
 * import TeraFy from '@iebh/tera-fy';
-* import TerafyVue from '@iebh/tera-fy/plugins/vue';
+* import TerafyVue from '@iebh/tera-fy/plugins/vue3';
 * let terafy = new TeraFy()
 *   .set('devMode', import.meta.env.DEV)
 *   .set('siteUrl', 'http://localhost:7334/embed') // Uncomment this line if running TERA locally
@@ -26,7 +69,7 @@ import {reactive as vueReactive, watch as vueWatch} from 'vue';
 * @example Accessing project state - within a Vue component
 * this.$tera.active
 */
-export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
+export default class TeraFyPluginVue3 extends TeraFyPluginSyncro {
 
 	/**
 	* The bound, reactive state of the active TERA project
@@ -39,33 +82,22 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 	/**
 	* Init the project including create a reactive mount for the active project
 	*
-	* @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase
+	* @param {Object} options Additional options to mutate behaviour, see TeraFyPluginSyncro
+	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
-	async init(options) {
-		await super.init(options); // Initalize parent class Firebase functionality
-
-		// Mount the project namespace
-		this.project = await this.mountNamespace('_PROJECT');
+	init(options) {
+		return Promise.resolve()
+			.then(()=> super.init(options)) // Initalize parent class Syncro functionality
+			.then(()=> this.mountNamespace('_PROJECT')) // Mount the project namespace
+			.then(()=> this.project = this.namespaces['_PROJECT'])
 	}
 
 
-	/** @override */
+	/**
+	* @override
+	*/
 	getReactive(value) {
-		const doc = vueReactive(value);
-		return {
-			doc,
-			setState(state) {
-				// Shallow copy all sub-keys into existing object (keeping the object pointer)
-				Object.entries(state || {})
-					.forEach(([k, v]) => doc[k] = v)
-			},
-			getState() {
-				return cloneDeep(doc);
-			},
-			watch(cb) {
-				vueWatch(doc, cb, {deep: true});
-			},
-		};
+		return getReactive(value);
 	}
 
 
@@ -75,7 +107,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 	* @returns {VuePlugin} A Vue@3 plugin spec
 	*/
 	vuePlugin() {
-		const $tera = this;
+		let $tera = this;
 
 		return {
 
@@ -88,7 +120,7 @@ export default class TeraFyPluginVue3 extends TeraFyPluginFirebase {
 			* @param {String} [options.globalName='$tera'] Global property to allocate this service as
 			*/
 			install(app, options) {
-				const settings = {
+				let settings = {
 					globalName: '$tera',
 					...options,
 				};

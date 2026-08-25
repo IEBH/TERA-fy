@@ -711,7 +711,7 @@ Returns **[Promise][174]<[User][90]>** The current logged in user or null if non
 
 ## getCredentials
 
-Provide an object of credentials for 3rd party services like Firebase/Supabase
+Provide an object of credentials for 3rd party services like Supabase
 
 Returns **[Object][169]** An object containing 3rd party service credentials
 

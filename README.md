@@ -18,7 +18,7 @@ Quick Start
 
 ```javascript
 import TeraFy from '@iebh/tera-fy';
-import TerafyVue from '@iebh/tera-fy/plugins/vue';
+import TerafyVue from '@iebh/tera-fy/plugins/vue3';
 let terafy = new TeraFy()
 	.set('devMode', true) // Set this option to see debugging messages
 	.use(TerafyVue); // Add the Vue plugin
@@ -48,13 +48,65 @@ Generally importing the source code TERA-fy client (`import terafy from '@iebh/t
 More versions can be added upon request or PR of the build command in the scripts section of `package.json`.
 
 
+Syncro
+======
+Syncro is the data sync engine used by TERA + TERA-fy. Each Syncro instance mounts one remote TERA entity (a Supabase row exposed via the tera-io worker) as a local-first RxDB document (persisted to IndexedDB via Dexie) with a framework-native reactive mirror of its `data` payload. Changes replicate both ways - live over a shared multiplexed WebSocket (with polling fallback + cross-tab leader election) with conflicts resolved via a field-level three-way merge.
+
+Most consumers should use the framework plugins below (which wire Syncro up automatically) but the class is importable directly:
+
+```javascript
+import Syncro from '@iebh/tera-fy/syncro';
+
+// One-off global configuration
+Syncro.setup({
+  url: 'https://io.example.com', // Base URL of the tera-io worker
+  getToken: ()=> myAuth.getToken(), // Async function resolving with an auth bearer token
+  getReactive, // Framework reactive adapter, e.g. `import {getReactive} from '@iebh/tera-fy/plugins/vue3'`
+});
+
+// Mount a document + use its reactive `value`
+let syncro = await Syncro.mount('projects::SOME-UUID');
+syncro.value.title = 'Hello'; // Mutations replicate automatically (debounced)
+
+await syncro.set({color: 'blue'}); // ...or merge + flush immediately
+await syncro.flush(); // Force a replication cycle
+await syncro.destroy(); // Unmount (local copy is retained in IndexedDB to warm-start the next mount)
+```
+
+Other useful APIs (see the source JSDoc in `lib/syncro/syncro.js` for the full set):
+
+| API                               | Type     | Description                                                                         |
+|-----------------------------------|----------|-------------------------------------------------------------------------------------|
+| `Syncro.setup(options)`           | Static   | Merge global engine configuration (URLs, auth, reactivity adapter, timing tunables) |
+| `Syncro.mount(path)`              | Static   | Mount (or reuse) the Syncro for a given `ENTITY::ID` path                           |
+| `Syncro.destroy(path)`            | Static   | Unmount the Syncro at a given path                                                  |
+| `Syncro.getSnapshot(path)`        | Static   | One-off fetch of a paths server state                                               |
+| `Syncro.setSnapshot(path, state)` | Static   | One-off merge against a paths server state                                          |
+| `Syncro.events`                   | Static   | Mitt emitter signalling `socketState` / `socketSession` / `pathState` / `leader`    |
+| `Syncro.states`                   | Static   | Per-path stream state (`'local'` / `'polling'` / `'live'`)                          |
+| `syncro.value`                    | Instance | The mounted reactive document mirror                                                |
+| `syncro.set(key, val)`            | Instance | Merge one or more values then flush                                                 |
+| `syncro.flush()`                  | Instance | Commit pending writes + wait for the replication to settle in-sync                  |
+| `syncro.destroy()`                | Instance | Unmount this instance                                                               |
+
+
 Plugins
 =======
 This module exports various plugins which are availble as `import from '@iebh/tera-fy/plugins/*'`.
 
 
+`@iebh/tera-fy/plugins/syncro`
+------------------------------
+The base Syncro plugin which wires the Syncro engine into the TeraFy client - providing namespace mounting (`mountNamespace()` / `unmountNamespace()`) backed by RxDB replication, with auth tokens fetched over the TeraFy RPC bridge.
+
+This plugin is framework agnostic (documents mount as plain POJOs) - usually you want one of the framework plugins below instead, which extend it with a proper reactivity adapter.
+
+
+
 `@iebh/tera-fy/plugins/vue2`
 ----------------------------
+Extends the Syncro plugin with a Vue@2 reactivity adapter (via `Vue.observable` + `Vue.set`/`Vue.delete`).
+
 ```javascript
 // Somewhere in your boot process - usually src/main.js
 import TeraFy from '@iebh/tera-fy';
@@ -63,7 +115,7 @@ let terafy = new TeraFy()
   .set('devMode', false) // Uncomment this line if you want TeraFy to be chatty and use all `setIfDev` settings
   .setIfDev('siteUrl', 'http://localhost:7334/embed')
   .use(TerafyVue, { // Add the Vue plugin
-    vue: window.Vue, // Assumes Vue is available on the window object
+    Vue: window.Vue, // Assumes Vue is available on the window object
   })
 
 // Include after app boot
@@ -75,10 +127,12 @@ await terafy.init({app});
 
 `@iebh/tera-fy/plugins/vue3`
 ----------------------------
+Extends the Syncro plugin with a Vue@3 reactivity adapter. The adapter is also exported standalone as `getReactive` for direct use with `Syncro.setup()`.
+
 ```javascript
 // Somewhere in your boot process - usually src/main.js
 import TeraFy from '@iebh/tera-fy';
-import TerafyVue from '@iebh/tera-fy/plugins/vue';
+import TerafyVue from '@iebh/tera-fy/plugins/vue3';
 let terafy = new TeraFy()
   .set('devMode', import.meta.env.DEV) // TeraFy should be chatty and use all `setIfDev` settings
   .setIfDev('siteUrl', 'http://localhost:7334/embed')

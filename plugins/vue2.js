@@ -1,5 +1,5 @@
 import {cloneDeep, isEqual} from 'lodash-es';
-import TeraFyPluginFirebase from './firebase.js';
+import TeraFyPluginSyncro from './syncro.js';
 
 /**
 * Vue@2 observables plugin
@@ -16,7 +16,7 @@ import TeraFyPluginFirebase from './firebase.js';
 *   .set('devMode', true) // Uncomment this line if you want TeraFy to be chatty
 *   .set('siteUrl', 'http://localhost:7334/embed') // Uncomment this line if running TERA locally
 *   .use(TerafyVue, { // Add the Vue plugin
-*   	vue: window.Vue, // Assumes Vue is available on the window object
+*   	Vue: window.Vue, // Assumes Vue is available on the window object
 *   })
 *
 * // Include after app boot
@@ -24,7 +24,7 @@ import TeraFyPluginFirebase from './firebase.js';
 * app.$mount("#app");
 * await terafy.init({app});
 */
-export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
+export default class TeraFyPluginVue2 extends TeraFyPluginSyncro {
 
 	/**
 	* Local Vue@2 library to use, set during constructor
@@ -60,15 +60,15 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 	/**
 	* Install into Vue@2
 	*
-	* @param {Object} options Additional options to mutate behaviour, see TeraFyPluginFirebase for additional options
+	* @param {Object} options Additional options to mutate behaviour, see TeraFyPluginSyncro for additional options
 	* @param {Object} options.app Root level Vue app to bind against
 	* @param {Vue} options.Vue Vue@2 instance to bind against
 	* @param {String} [options.globalName='$tera'] Global property to allocate this service as within Vue2
 	*
 	* @returns {Promise} A Promise which will resolve when the init process has completed
 	*/
-	async init(options) {
-		const settings = {
+	init(options) {
+		let settings = {
 			app: null,
 			Vue: null,
 			globalName: '$tera',
@@ -85,31 +85,49 @@ export default class TeraFyPluginVue2 extends TeraFyPluginFirebase {
 		if (settings.globalName)
 			this.Vue.prototype[settings.globalName] = this;
 
-		await super.init(settings); // Initalize parent class Firebase functionality
-		this.project = await this.mountNamespace('_PROJECT');
+		return Promise.resolve()
+			.then(()=> super.init(settings)) // Initalize parent class Syncro functionality
+			.then(()=> this.mountNamespace('_PROJECT')) // Mount the project namespace
+			.then(()=> this.project = this.namespaces['_PROJECT'])
 	}
 
 
-	/** @override */
+	/**
+	* @override
+	* Vue@2 implementation of the Syncro reactive adapter
+	* NOTE: Vue@2 watchers flush asynchronously (there is no supported sync flush) so echo suppression of
+	*       inbound applies relies on the Syncro write comparing state before committing rather than the
+	*       synchronous `applying` guard
+	*
+	* @param {Object} value Initial value of the reactive
+	* @returns {Object} A reactive object prototype as expected by `Syncro.settings.getReactive`
+	*/
 	getReactive(value) {
-		const doc = this.Vue.observable(value);
+		let doc = this.Vue.observable(value ?? {});
 
-		const watcherPath = `_teraFy_${this.reactiveId++}`;
+		let watcherPath = `_teraFy_${this.reactiveId++}`;
 		this.app[watcherPath] = doc; // Attach onto app so we can use $watch later on
 
 		return {
 			doc,
 			setState: state => {
-				// Shallow copy all sub-keys into existing object (keeping the object pointer)
+				let stateKeys = new Set(Object.keys(state || {}));
+
+				// Remove local keys that no longer exist upstream (Vue.delete so Vue@2 notices the removal)
+				Object.keys(doc)
+					.filter(key => !stateKeys.has(key))
+					.forEach(key => this.Vue.delete(doc, key));
+
+				// Shallow copy changed sub-keys into the existing object (Vue.set so new keys become reactive)
 				Object.entries(state || {})
-					.filter(([k]) => !isEqual(doc[k], state[k])) // Only accept changed keys
-					.forEach(([k, v]) => doc[k] = v)
+					.filter(([key, val]) => !isEqual(doc[key], val)) // Only accept changed keys
+					.forEach(([key, val]) => this.Vue.set(doc, key, cloneDeep(val))); // Clone as RxDB deep-freezes its documents
 			},
 			getState: () => {
 				return cloneDeep(doc);
 			},
 			watch: cb => {
-				this.app.$watch(watcherPath, cb, {deep: true});
+				return this.app.$watch(watcherPath, cb, {deep: true});
 			},
 		};
 	}
