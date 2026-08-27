@@ -63,10 +63,10 @@ export default class TeraFyPluginSyncro extends TeraFyPluginBase {
 					? (...args) => this.getReactive(...args)
 					: null,
 				...(settings.syncGetPrototypeRequest && {request: settings.syncGetPrototypeRequest}),
-				request: (options) => Promise.resolve() // Populate base from upstream call to syncGetPrototypeRequest
+				request: options => Promise.resolve() // Populate base from upstream call to syncGetPrototypeRequest
 					.then(()=> this.getPrototypeRequest('syncFetch'))
 					.then(useSyncPrototypeReq => {
-						console.log('TAP', {useSyncPrototypeReq});
+						console.log('DEBUG: TAP Syncro Plugin', {useSyncPrototypeReq});
 						return useSyncPrototypeReq;
 					})
 					.then(prototypeReq => merge(prototypeReq, options))
