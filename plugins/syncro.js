@@ -70,7 +70,7 @@ export default class TeraFyPluginSyncro extends TeraFyPluginBase {
 						return useSyncPrototypeReq;
 					})
 					.then(prototypeReq => merge(prototypeReq, options))
-					.then(req => Syncro._requestFlatten(merge(req))),
+					.then(req => Syncro.xhr(merge(req))),
 				getWSRequest: ()=> Promise.resolve()
 					.then(()=> this.getPrototypeRequest('syncWS'))
 					.then(tapWSReq => {
