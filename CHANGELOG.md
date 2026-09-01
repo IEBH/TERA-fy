@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.3.15](https://github.com/IEBH/TERA-fy/compare/v2.3.14...v2.3.15) (2026-09-01)
+
+
+### devops
+
+* Minor post-release cleanup ([532bada](https://github.com/IEBH/TERA-fy/commit/532badab5f0e51ddb55df0ba3649c9d49e8eafcc))
+
+### fix
+
+* Downstream patches ([78df586](https://github.com/IEBH/TERA-fy/commit/78df58691012e07956a84934476e8af798301b8e))
+
 ## [2.3.14](https://github.com/IEBH/TERA-fy/compare/v2.3.13...v2.3.14) (2026-06-24)
 
 
