@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.16](https://github.com/IEBH/TERA-fy/compare/v2.3.15...v2.3.16) (2026-09-01)
+
+
+### fix
+
+* Override default URL so app doesnt crash during bootstrap ([0324e48](https://github.com/IEBH/TERA-fy/commit/0324e4814c5de60c4de1a3986cf440796352b74e))
+
 ## [2.3.15](https://github.com/IEBH/TERA-fy/compare/v2.3.14...v2.3.15) (2026-09-01)
 
 
