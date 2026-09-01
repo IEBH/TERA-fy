@@ -34,6 +34,8 @@
     "./projectFile": "./lib/projectFile.js",
     "./proxy": "./lib/terafy.proxy.js",
     "./server": "./lib/terafy.server.js",
+    "./syncro": "./lib/syncro/syncro.js",
+    "./syncro/keyed": "./lib/syncro/keyed.js",
     "./plugins/*": "./plugins/*.js",
     "./widgets/*": "./widgets/*"
   },
@@ -121,7 +123,8 @@
       "before:bump": [
         "npm run build",
         "git add -f api.md docs/ dist/"
-      ]
+      ],
+      "after:release": "git rm --cached -r dist && echo 'Untracked dist/ for subsequent commits.'"
     },
     "plugins": {
       "@release-it/conventional-changelog": {
