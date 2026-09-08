@@ -37,7 +37,8 @@
     "./syncro": "./lib/syncro/syncro.js",
     "./syncro/keyed": "./lib/syncro/keyed.js",
     "./plugins/*": "./plugins/*.js",
-    "./widgets/*": "./widgets/*"
+    "./widgets/*": "./widgets/*",
+    "./webmcp": "./lib/webmcp.js"
   },
   "repository": {
     "type": "git",
