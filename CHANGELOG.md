@@ -1,5 +1,16 @@
 # Changelog
 
+# [2.4.0](https://github.com/IEBH/TERA-fy/compare/v2.3.16...v2.4.0) (2026-09-24)
+
+
+### feat
+
+* Prototype WebMCP functionality ([ef1b1f2](https://github.com/IEBH/TERA-fy/commit/ef1b1f216b7d90dcc20a0aeaf082ec2ae94b9153))
+
+### fix
+
+* Error scan and cleanup ([5fe9726](https://github.com/IEBH/TERA-fy/commit/5fe9726a42c5e67f51b71a868bd7c052366ef801))
+
 ## [2.3.16](https://github.com/IEBH/TERA-fy/compare/v2.3.15...v2.3.16) (2026-09-01)
 
 
