@@ -61,7 +61,7 @@ export default {
 		async choose() {
 			this.selected = await this.$tera.selectProjectFile({
 				save: this.save,
-				saveFiename: this.saveFilename,
+				saveFilename: this.saveFilename,
 				title: this.title,
 				hint: this.hint,
 				allowUpload: this.allowUpload,

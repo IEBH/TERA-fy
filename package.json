@@ -29,7 +29,7 @@
       "require": "./dist/terafy.js",
       "default": "./dist/terafy.js"
     },
-    "./bootstrap": "./lib/terafy.bootstrap.js",
+    "./bootstrap": "./lib/terafy.bootstrapper.js",
     "./dist/*": "./dist/*",
     "./projectFile": "./lib/projectFile.js",
     "./proxy": "./lib/terafy.proxy.js",
