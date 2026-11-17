@@ -1,5 +1,25 @@
 # Changelog
 
+# [2.5.0](https://github.com/IEBH/TERA-fy/compare/v2.4.0...v2.5.0) (2026-11-17)
+
+
+### docs
+
+* @context -> @this ([96e1383](https://github.com/IEBH/TERA-fy/commit/96e1383c417809d4966f42c3397054c8ea47223a))
+
+### fix
+
+* Collapse write bursts when throttling into one eventual write object ([fa640d3](https://github.com/IEBH/TERA-fy/commit/fa640d3ff4040d31e9b7dfb68beb4a618d7e76ac))
+* Fix for when rapid writes get throttled but intermediate object key writes get ignored ([bb13bcd](https://github.com/IEBH/TERA-fy/commit/bb13bcd7a9ebbe8bd44bbe8e0f8aacd8ef8103da))
+* Flush write cache if any pending throttles exist when destroying the Syncro object ([09e0c19](https://github.com/IEBH/TERA-fy/commit/09e0c19692da0bb8c9e7929f94687ad4f9e658b3))
+* Key deletions would never propagate correctly ([261fcfc](https://github.com/IEBH/TERA-fy/commit/261fcfca0d4f395af313b8ba1166dfbd557ea33c))
+* Restore the dirty flag when writes fail ([1565bc2](https://github.com/IEBH/TERA-fy/commit/1565bc25cea89e8484ef1028988e61189b73493a))
+* TypeError when using Syncro.set(key, val, options?) ([06ac8d7](https://github.com/IEBH/TERA-fy/commit/06ac8d717b824e44fcb83a1b8f90da4900201e1c))
+
+### refactor
+
+* Dropped NPM:p-throttle for NPM version ([0464491](https://github.com/IEBH/TERA-fy/commit/0464491ae98b6c6f7f8054d185f7ffc7bf752057))
+
 # [2.4.0](https://github.com/IEBH/TERA-fy/compare/v2.3.16...v2.4.0) (2026-09-24)
 
 
